@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Hero Variation 8 - Button Variations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@700&display=swap"
+        rel="stylesheet" />
+    <style>
+        .font-serif-display {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .font-display {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+        }
+
+        /* Enhanced Dark Glass with deeper shadow */
+        .inner-dark-glass-enhanced {
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                inset 0 4px 20px rgba(0, 0, 0, 0.4),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.3),
+                0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button Style 1: Classic Gradient with Glow */
+        .btn-gradient-glow {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.9) 0%, rgba(251, 146, 60, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 4px 15px rgba(249, 115, 22, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+        .btn-gradient-glow:hover {
+            box-shadow: 
+                0 6px 25px rgba(249, 115, 22, 0.6),
+                inset 0 1px 2px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Button Style 2: Glass Button */
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Button Style 3: Solid with Inner Shadow */
+        .btn-solid-inner {
+            background: rgba(249, 115, 22, 0.85);
+            border: 1px solid rgba(251, 146, 60, 0.6);
+            box-shadow: 
+                0 4px 15px rgba(249, 115, 22, 0.3),
+                inset 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        .btn-solid-inner:hover {
+            background: rgba(249, 115, 22, 0.95);
+            box-shadow: 
+                0 6px 20px rgba(249, 115, 22, 0.5),
+                inset 0 2px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Button Style 4: Outline with Neon */
+        .btn-outline-neon {
+            background: transparent;
+            border: 2px solid rgba(249, 115, 22, 0.8);
+            box-shadow: 
+                0 0 15px rgba(249, 115, 22, 0.3),
+                inset 0 0 10px rgba(249, 115, 22, 0.1);
+        }
+        .btn-outline-neon:hover {
+            background: rgba(249, 115, 22, 0.1);
+            box-shadow: 
+                0 0 25px rgba(249, 115, 22, 0.5),
+                inset 0 0 15px rgba(249, 115, 22, 0.2);
+        }
+
+        /* Button Style 5: Soft Dark */
+        .btn-soft-dark {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(249, 115, 22, 0.4);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.3),
+                inset 0 1px 3px rgba(249, 115, 22, 0.2);
+        }
+        .btn-soft-dark:hover {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(249, 115, 22, 0.6);
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.4),
+                inset 0 1px 5px rgba(249, 115, 22, 0.3);
+        }
+
+        /* Button Style 6: Elevated Glass */
+        .btn-elevated-glass {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.25),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2);
+        }
+        .btn-elevated-glass:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                inset 0 2px 6px rgba(255, 255, 255, 0.25);
+        }
+
+        .section-title {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .variation-container {
+            position: relative;
+            padding-top: 50px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f45c25",
+                        "background-light": "#f8f6f5",
+                        "background-dark": "#221510",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Sans KR"],
+                        "serif-display": ["Noto Serif KR", "serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark">
+    <div class="min-h-screen py-12 px-4">
+        <h1 class="text-center text-3xl font-bold mb-4 text-gray-800">Variation 8: 다크 글라스 - 버튼 바리에이션</h1>
+        <p class="text-center text-gray-600 mb-12">버튼이 내부로 이동하고 깊이감 있는 섹도우 강화</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+
+            <!-- Button Style 1: Classic Gradient with Glow -->
+            <div class="variation-container">
+                <span class="section-title text-white">Button 1: 클래식 그라데이션 + 글로우</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-gradient-glow w-full rounded-full py-3.5 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Style 2: Glass Button -->
+            <div class="variation-container">
+                <span class="section-title text-white">Button 2: 글라스 버튼</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-glass w-full rounded-full py-3.5 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Style 3: Solid with Inner Shadow -->
+            <div class="variation-container">
+                <span class="section-title text-white">Button 3: 솔리드 + 내부 셉도우</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-solid-inner w-full rounded-full py-3.5 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Style 4: Outline with Neon -->
+            <div class="variation-container">
+                <span class="section-title text-white">Button 4: 아웃라인 + 네온</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-outline-neon w-full rounded-full py-3.5 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Style 5: Soft Dark -->
+            <div class="variation-container">
+                <span class="section-title text-white">Button 5: 소프트 다크</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-soft-dark w-full rounded-full py-3.5 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Style 6: Elevated Glass -->
+            <div class="variation-container">
+                <span class="section-title text-white">Button 6: 엘리베이트 글라스</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-elevated-glass w-full rounded-full py-3.5 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
