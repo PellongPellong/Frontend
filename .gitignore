@@ -1,0 +1,22 @@
+# 빌드 결과물
+dist/
+build/
+.next/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# 환경 변수
+.env
+.env.local
+.env.*.local
+
+# 임시 파일
+*.log
+.cache/
