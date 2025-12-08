@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>V2 Hover 5 with Shine Effect</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@700&display=swap"
+        rel="stylesheet" />
+    <style>
+        .font-serif-display {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .font-display {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+        }
+
+        .inner-dark-glass-enhanced {
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                inset 0 4px 20px rgba(0, 0, 0, 0.4),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.3),
+                0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Base button style with shine effect */
+        .btn-shine {
+            background: rgba(249, 115, 22, 0.85);
+            border: 1px solid rgba(251, 146, 60, 0.6);
+            box-shadow: 
+                0 4px 15px rgba(249, 115, 22, 0.3),
+                inset 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shine effect - 빛이 지나가는 효과 */
+        .btn-shine::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-shine:hover::before {
+            left: 100%;
+        }
+
+        .btn-shine:hover {
+            background: rgba(251, 146, 60, 0.9);
+            border: 1px solid rgba(253, 186, 116, 0.7);
+            box-shadow: 
+                0 8px 25px rgba(249, 115, 22, 0.45),
+                inset 0 4px 12px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Shine Variation 1: Faster shine */
+        .btn-shine-fast::before {
+            transition: left 0.3s ease;
+        }
+
+        /* Shine Variation 2: Slower shine */
+        .btn-shine-slow::before {
+            transition: left 0.8s ease;
+        }
+
+        /* Shine Variation 3: Wider shine */
+        .btn-shine-wide::before {
+            width: 150%;
+            left: -150%;
+        }
+
+        .btn-shine-wide:hover::before {
+            left: 100%;
+        }
+
+        /* Shine Variation 4: Double shine */
+        .btn-shine-double::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease 0.1s;
+        }
+
+        .btn-shine-double:hover::after {
+            left: 100%;
+        }
+
+        /* Shine Variation 5: Diagonal shine */
+        .btn-shine-diagonal::before {
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            width: 150%;
+            left: -150%;
+        }
+
+        .btn-shine-diagonal:hover::before {
+            left: 100%;
+        }
+
+        /* Shine Variation 6: Bright shine */
+        .btn-shine-bright::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+
+        .section-title {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .variation-container {
+            position: relative;
+            padding-top: 50px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f45c25",
+                        "background-light": "#f8f6f5",
+                        "background-dark": "#221510",
+                    },
+                    fontFamily: {
+                        "display": ["Noto Sans KR"],
+                        "serif-display": ["Noto Serif KR", "serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark">
+    <div class="min-h-screen py-12 px-4">
+        <h1 class="text-center text-3xl font-bold mb-4 text-gray-800">Hover 5 + Shine Effect</h1>
+        <p class="text-center text-gray-600 mb-12">빛이 지나가는 효과(Shine Effect) 바리에이션</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+
+            <!-- Shine 1: Standard Speed -->
+            <div class="variation-container">
+                <span class="section-title text-white">Shine 1: 기본 속도 (0.5s)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-shine w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shine 2: Fast -->
+            <div class="variation-container">
+                <span class="section-title text-white">Shine 2: 빠른 속도 (0.3s)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-shine btn-shine-fast w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shine 3: Slow -->
+            <div class="variation-container">
+                <span class="section-title text-white">Shine 3: 느린 속도 (0.8s)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-shine btn-shine-slow w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shine 4: Wide -->
+            <div class="variation-container">
+                <span class="section-title text-white">Shine 4: 넓은 빛</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-shine btn-shine-wide w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shine 5: Double -->
+            <div class="variation-container">
+                <span class="section-title text-white">Shine 5: 이중 빛</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-shine btn-shine-double w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shine 6: Diagonal -->
+            <div class="variation-container">
+                <span class="section-title text-white">Shine 6: 대각선 빛</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-shine btn-shine-diagonal w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shine 7: Bright -->
+            <div class="variation-container">
+                <span class="section-title text-white">Shine 7: 강한 빛</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-shine btn-shine-bright w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shine 8: Original Hover 5 (No Shine) -->
+            <div class="variation-container">
+                <span class="section-title text-white">Shine 8: 효과 없음 (비교용)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg"
+                        alt="Jeju" class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-panel flex w-full flex-col gap-6 rounded-xl p-10 shadow-2xl">
+                                <div class="inner-dark-glass-enhanced rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white"
+                                            style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90"
+                                            style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-shine w-full rounded-2xl py-3 text-white active:scale-95" style="overflow: visible;">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
