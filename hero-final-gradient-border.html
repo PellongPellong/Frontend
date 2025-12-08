@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gradient Border Variations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Serif+KR:wght@700&display=swap" rel="stylesheet" />
+    <style>
+        .font-serif-display { font-family: 'Noto Serif KR', serif; }
+        .font-display { font-family: 'Noto Sans KR', sans-serif; }
+        
+        /* 1. 부드러운 페이드 */
+        .glass-border-1 {
+            background: radial-gradient(ellipse at 25% 25%,
+                rgba(255, 255, 255, 0.35) 0%,
+                rgba(255, 255, 255, 0.25) 20%,
+                rgba(255, 255, 255, 0.18) 40%,
+                rgba(255, 255, 255, 0.12) 60%,
+                rgba(255, 255, 255, 0.06) 80%,
+                rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 0.75rem;
+            position: relative;
+            box-shadow: 
+                inset 0 0 60px rgba(255, 255, 255, 0.2),
+                inset 5px 5px 30px rgba(255, 255, 255, 0.5),
+                inset -2px -2px 15px rgba(255, 255, 255, 0.05),
+                0 15px 55px rgba(0, 0, 0, 0.35),
+                -10px -10px 45px rgba(255, 255, 255, 0.15),
+                5px 5px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .glass-border-1::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 0.75rem;
+            padding: 4px;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.9) 0%,
+                rgba(255, 255, 255, 0.6) 15%,
+                rgba(255, 255, 255, 0.3) 40%,
+                rgba(255, 255, 255, 0.1) 70%,
+                transparent 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* 2. 긔이 나는 테두리 */
+        .glass-border-2 {
+            background: radial-gradient(ellipse at 20% 20%,
+                rgba(255, 255, 255, 0.38) 0%,
+                rgba(255, 255, 255, 0.28) 20%,
+                rgba(255, 255, 255, 0.2) 40%,
+                rgba(255, 255, 255, 0.14) 60%,
+                rgba(255, 255, 255, 0.08) 80%,
+                rgba(255, 255, 255, 0.03) 100%);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border-radius: 0.75rem;
+            position: relative;
+            box-shadow: 
+                inset 0 0 70px rgba(255, 255, 255, 0.25),
+                inset 6px 6px 35px rgba(255, 255, 255, 0.55),
+                inset -3px -3px 18px rgba(255, 255, 255, 0.08),
+                0 18px 60px rgba(0, 0, 0, 0.38),
+                -12px -12px 50px rgba(255, 255, 255, 0.18),
+                6px 6px 25px rgba(0, 0, 0, 0.18);
+        }
+        
+        .glass-border-2::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 0.75rem;
+            padding: 5px;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(255, 255, 255, 0.75) 12%,
+                rgba(255, 255, 255, 0.45) 35%,
+                rgba(255, 255, 255, 0.15) 65%,
+                transparent 90%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* 3. 다중 레이어 */
+        .glass-border-3 {
+            background: radial-gradient(ellipse at 30% 30%,
+                rgba(255, 255, 255, 0.42) 0%,
+                rgba(255, 255, 255, 0.3) 18%,
+                rgba(255, 255, 255, 0.22) 38%,
+                rgba(255, 255, 255, 0.16) 58%,
+                rgba(255, 255, 255, 0.1) 78%,
+                rgba(255, 255, 255, 0.04) 100%);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border-radius: 0.75rem;
+            position: relative;
+            box-shadow: 
+                inset 0 0 65px rgba(255, 255, 255, 0.22),
+                inset 7px 7px 32px rgba(255, 255, 255, 0.52),
+                inset -2px -2px 16px rgba(255, 255, 255, 0.06),
+                0 16px 58px rgba(0, 0, 0, 0.36),
+                -11px -11px 48px rgba(255, 255, 255, 0.16),
+                5px 5px 22px rgba(0, 0, 0, 0.16);
+        }
+        
+        .glass-border-3::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 0.75rem;
+            padding: 6px;
+            background: linear-gradient(130deg,
+                rgba(255, 255, 255, 0.95) 0%,
+                rgba(255, 255, 255, 0.8) 10%,
+                rgba(255, 255, 255, 0.55) 28%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.12) 75%,
+                transparent 95%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* 4. 빛 발산 */
+        .glass-border-4 {
+            background: radial-gradient(circle at 22% 22%,
+                rgba(255, 255, 255, 0.45) 0%,
+                rgba(255, 255, 255, 0.32) 18%,
+                rgba(255, 255, 255, 0.24) 35%,
+                rgba(255, 255, 255, 0.18) 52%,
+                rgba(255, 255, 255, 0.12) 70%,
+                rgba(255, 255, 255, 0.05) 88%,
+                rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(34px);
+            -webkit-backdrop-filter: blur(34px);
+            border-radius: 0.75rem;
+            position: relative;
+            box-shadow: 
+                inset 0 0 75px rgba(255, 255, 255, 0.28),
+                inset 8px 8px 38px rgba(255, 255, 255, 0.58),
+                inset -3px -3px 20px rgba(255, 255, 255, 0.1),
+                0 20px 65px rgba(0, 0, 0, 0.4),
+                -14px -14px 55px rgba(255, 255, 255, 0.2),
+                7px 7px 28px rgba(0, 0, 0, 0.2);
+        }
+        
+        .glass-border-4::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 0.75rem;
+            padding: 5px;
+            background: radial-gradient(circle at 22% 22%,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(255, 255, 255, 0.85) 8%,
+                rgba(255, 255, 255, 0.6) 22%,
+                rgba(255, 255, 255, 0.35) 45%,
+                rgba(255, 255, 255, 0.15) 70%,
+                transparent 92%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* 5. 깊은 입체감 */
+        .glass-border-5 {
+            background: radial-gradient(ellipse at 28% 28%,
+                rgba(255, 255, 255, 0.48) 0%,
+                rgba(255, 255, 255, 0.35) 16%,
+                rgba(255, 255, 255, 0.26) 34%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.14) 68%,
+                rgba(255, 255, 255, 0.08) 84%,
+                rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(36px);
+            -webkit-backdrop-filter: blur(36px);
+            border-radius: 0.75rem;
+            position: relative;
+            box-shadow: 
+                inset 0 0 80px rgba(255, 255, 255, 0.3),
+                inset 9px 9px 40px rgba(255, 255, 255, 0.6),
+                inset -4px -4px 22px rgba(255, 255, 255, 0.12),
+                0 22px 70px rgba(0, 0, 0, 0.42),
+                -15px -15px 58px rgba(255, 255, 255, 0.22),
+                8px 8px 30px rgba(0, 0, 0, 0.22);
+        }
+        
+        .glass-border-5::before {
+            content: '';
+            position: absolute;
+            inset: -7px;
+            border-radius: 0.75rem;
+            padding: 7px;
+            background: linear-gradient(132deg,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(255, 255, 255, 0.88) 8%,
+                rgba(255, 255, 255, 0.68) 22%,
+                rgba(255, 255, 255, 0.45) 42%,
+                rgba(255, 255, 255, 0.25) 65%,
+                rgba(255, 255, 255, 0.08) 85%,
+                transparent 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* 6. 극대화 두께 */
+        .glass-border-6 {
+            background: radial-gradient(ellipse at 26% 26%,
+                rgba(255, 255, 255, 0.5) 0%,
+                rgba(255, 255, 255, 0.38) 14%,
+                rgba(255, 255, 255, 0.28) 30%,
+                rgba(255, 255, 255, 0.22) 46%,
+                rgba(255, 255, 255, 0.16) 62%,
+                rgba(255, 255, 255, 0.1) 78%,
+                rgba(255, 255, 255, 0.04) 92%,
+                rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(38px);
+            -webkit-backdrop-filter: blur(38px);
+            border-radius: 0.75rem;
+            position: relative;
+            box-shadow: 
+                inset 0 0 85px rgba(255, 255, 255, 0.32),
+                inset 10px 10px 45px rgba(255, 255, 255, 0.65),
+                inset -4px -4px 24px rgba(255, 255, 255, 0.14),
+                0 24px 75px rgba(0, 0, 0, 0.45),
+                -16px -16px 62px rgba(255, 255, 255, 0.24),
+                9px 9px 32px rgba(0, 0, 0, 0.24);
+        }
+        
+        .glass-border-6::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 0.75rem;
+            padding: 8px;
+            background: linear-gradient(133deg,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(255, 255, 255, 0.92) 6%,
+                rgba(255, 255, 255, 0.75) 18%,
+                rgba(255, 255, 255, 0.55) 35%,
+                rgba(255, 255, 255, 0.35) 55%,
+                rgba(255, 255, 255, 0.18) 75%,
+                rgba(255, 255, 255, 0.05) 92%,
+                transparent 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        /* Inner Glass */
+        .inner-glass {
+            background: linear-gradient(45deg,
+                rgba(0, 0, 0, 0.4) 0%,
+                rgba(0, 0, 0, 0.25) 50%,
+                rgba(0, 0, 0, 0.4) 100%);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                inset -2px 2px 50px rgba(255, 255, 255, 0.15),
+                inset 0 4px 20px rgba(0, 0, 0, 0.4),
+                inset 0 -2px 10px rgba(0, 0, 0, 0.3),
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                0 0 0 4px rgba(0, 0, 0, 0.3),
+                0 0 0 5px rgba(255, 255, 255, 0.1),
+                3px -3px 20px rgba(255, 255, 255, 0.08);
+        }
+        
+        .btn-final {
+            background: rgba(249, 115, 22, 0.85);
+            border: 1px solid rgba(251, 146, 60, 0.6);
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3), inset 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-final::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.8s ease;
+        }
+        .btn-final:hover::before { left: 100%; }
+        .btn-final:hover { box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4), inset 0 2px 8px rgba(0, 0, 0, 0.2); }
+        
+        .section-title {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .variation-container { position: relative; padding-top: 50px; }
+    </style>
+</head>
+<body class="bg-background-light">
+    <div class="min-h-screen py-12 px-4">
+        <h1 class="text-center text-3xl font-bold mb-4 text-gray-800">투명한 그라디언트 보더</h1>
+        <p class="text-center text-gray-600 mb-12">6번 기반 + 두꺼운 보더 + 투명도 그라디언트</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            
+            <div class="variation-container">
+                <span class="section-title text-white">1: 부드러운 페이드 (4px)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg" alt="Jeju" class="absolute inset-0 h-full w-full object-cover"/>
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-border-1 flex w-full flex-col gap-6 p-10 shadow-2xl">
+                                <div class="inner-glass rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white" style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90" style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-final w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="variation-container">
+                <span class="section-title text-white">2: 긔이 나는 (5px)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg" alt="Jeju" class="absolute inset-0 h-full w-full object-cover"/>
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-border-2 flex w-full flex-col gap-6 p-10 shadow-2xl">
+                                <div class="inner-glass rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white" style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90" style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-final w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="variation-container">
+                <span class="section-title text-white">3: 다중 레이어 (6px)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg" alt="Jeju" class="absolute inset-0 h-full w-full object-cover"/>
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-border-3 flex w-full flex-col gap-6 p-10 shadow-2xl">
+                                <div class="inner-glass rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white" style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90" style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-final w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="variation-container">
+                <span class="section-title text-white">4: 빛 발산 (5px)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg" alt="Jeju" class="absolute inset-0 h-full w-full object-cover"/>
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-border-4 flex w-full flex-col gap-6 p-10 shadow-2xl">
+                                <div class="inner-glass rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white" style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90" style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-final w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="variation-container">
+                <span class="section-title text-white">5: 깊은 입체감 (7px)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg" alt="Jeju" class="absolute inset-0 h-full w-full object-cover"/>
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-border-5 flex w-full flex-col gap-6 p-10 shadow-2xl">
+                                <div class="inner-glass rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white" style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90" style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-final w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="variation-container">
+                <span class="section-title text-white">6: 극대화 두께 (8px)</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <img src="https://t1.daumcdn.net/news/202406/20/speaktravel/20240620170001186zzkq.jpg" alt="Jeju" class="absolute inset-0 h-full w-full object-cover"/>
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="flex w-full max-w-sm flex-col items-center gap-8 rounded-xl">
+                            <div class="glass-border-6 flex w-full flex-col gap-6 p-10 shadow-2xl">
+                                <div class="inner-glass rounded-lg p-8 -mx-2 flex flex-col gap-6">
+                                    <div class="flex flex-col gap-3 text-center">
+                                        <h1 class="font-serif-display text-4xl font-bold leading-tight text-white" style="text-shadow: 0 2px 8px rgba(0,0,0,0.4);">제주숨곳 AI</h1>
+                                        <h2 class="text-base font-normal leading-normal text-white/90" style="text-shadow: 0 1px 4px rgba(0,0,0,0.3);">ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
+                                    </div>
+                                    <button class="btn-final w-full rounded-2xl py-3 text-white active:scale-95">
+                                        <span class="text-base font-bold tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러 가기</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
