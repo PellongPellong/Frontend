@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Minimal Card with Animations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        .font-display { font-family: 'Noto Sans KR', sans-serif; }
+        
+        #background-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+        
+        /* Base Card */
+        .card-base {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-minimal {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+            border: none;
+            border-radius: 3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .btn-minimal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* 1. 회전 홀로그램 */
+        .anim-holo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.08) 50%,
+                transparent 70%);
+            animation: rotate 4s linear infinite;
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 2. 파동 효과 */
+        .anim-wave::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent);
+            animation: wave 3s ease-in-out infinite;
+        }
+        @keyframes wave {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+        
+        /* 3. 펄스 */
+        .anim-pulse::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center,
+                rgba(255, 255, 255, 0.15) 0%,
+                transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.95); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        /* 4. 그라디언트 시프트 */
+        .anim-gradient::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg,
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0.05) 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* 5. 빛줄기 */
+        .anim-beam::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 20%;
+            height: 200%;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.15),
+                transparent);
+            transform: rotate(45deg);
+            animation: beam 5s linear infinite;
+        }
+        @keyframes beam {
+            0% { left: -30%; }
+            100% { left: 130%; }
+        }
+        
+        /* 6. 부드러운 깨빡임 */
+        .anim-blink::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top,
+                rgba(255, 255, 255, 0.12) 0%,
+                transparent 60%);
+            animation: blink 3s ease-in-out infinite;
+        }
+        .anim-blink::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at bottom,
+                rgba(255, 255, 255, 0.08) 0%,
+                transparent 60%);
+            animation: blink 3s ease-in-out infinite 1.5s;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* 7. 반짝이는 별 */
+        .anim-sparkle::before,
+        .anim-sparkle::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.3) 0%,
+                transparent 70%);
+            border-radius: 50%;
+            animation: sparkle 4s ease-in-out infinite;
+        }
+        .anim-sparkle::before {
+            top: 10%;
+            right: 15%;
+        }
+        .anim-sparkle::after {
+            bottom: 15%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+        
+        /* 8. 오로라 파동 */
+        .anim-aurora::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: linear-gradient(135deg,
+                rgba(138, 43, 226, 0.1) 0%,
+                rgba(75, 0, 130, 0.08) 25%,
+                rgba(0, 191, 255, 0.1) 50%,
+                rgba(138, 43, 226, 0.08) 75%,
+                rgba(0, 191, 255, 0.1) 100%);
+            background-size: 400% 400%;
+            animation: aurora 8s ease infinite;
+            filter: blur(30px);
+        }
+        @keyframes aurora {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .section-title {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .variation-container { position: relative; padding-top: 50px; }
+        .content-wrapper { position: relative; z-index: 1; }
+    </style>
+</head>
+<body class="bg-black">
+    <div class="min-h-screen py-12 px-4">
+        <h1 class="text-center text-3xl font-bold mb-4 text-white">미니메 카드 애니메이션</h1>
+        <p class="text-center text-gray-400 mb-12">1번 스타일 + 다양한 내부 애니메이션 8가지</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-7xl mx-auto">
+            
+            <!-- 1. 회전 홀로그램 -->
+            <div class="variation-container">
+                <span class="section-title text-white">1: 회전 홀로그램</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-base anim-holo p-12 max-w-md w-full">
+                            <div class="content-wrapper">
+                                <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                                <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                                <button class="btn-minimal w-full py-4 active:scale-95">
+                                    <span class="text-sm">나만의 제주 찾으러 가기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2. 파동 -->
+            <div class="variation-container">
+                <span class="section-title text-white">2: 파동</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-base anim-wave p-12 max-w-md w-full">
+                            <div class="content-wrapper">
+                                <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                                <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                                <button class="btn-minimal w-full py-4 active:scale-95">
+                                    <span class="text-sm">나만의 제주 찾으러 가기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3. 펄스 -->
+            <div class="variation-container">
+                <span class="section-title text-white">3: 펄스</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-base anim-pulse p-12 max-w-md w-full">
+                            <div class="content-wrapper">
+                                <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                                <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                                <button class="btn-minimal w-full py-4 active:scale-95">
+                                    <span class="text-sm">나만의 제주 찾으러 가기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 4. 그라디언트 시프트 -->
+            <div class="variation-container">
+                <span class="section-title text-white">4: 그라디언트 시프트</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-base anim-gradient p-12 max-w-md w-full">
+                            <div class="content-wrapper">
+                                <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                                <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                                <button class="btn-minimal w-full py-4 active:scale-95">
+                                    <span class="text-sm">나만의 제주 찾으러 가기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 5. 빛줄기 -->
+            <div class="variation-container">
+                <span class="section-title text-white">5: 빛줄기</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-base anim-beam p-12 max-w-md w-full">
+                            <div class="content-wrapper">
+                                <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                                <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                                <button class="btn-minimal w-full py-4 active:scale-95">
+                                    <span class="text-sm">나만의 제주 찾으러 가기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 6. 부드러운 깨빡임 -->
+            <div class="variation-container">
+                <span class="section-title text-white">6: 부드러운 깨빡임</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-base anim-blink p-12 max-w-md w-full">
+                            <div class="content-wrapper">
+                                <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                                <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                                <button class="btn-minimal w-full py-4 active:scale-95">
+                                    <span class="text-sm">나만의 제주 찾으러 가기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 7. 반짝이는 별 -->
+            <div class="variation-container">
+                <span class="section-title text-white">7: 반짝이는 별</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-base anim-sparkle p-12 max-w-md w-full">
+                            <div class="content-wrapper">
+                                <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                                <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                                <button class="btn-minimal w-full py-4 active:scale-95">
+                                    <span class="text-sm">나만의 제주 찾으러 가기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 8. 오로라 파동 -->
+            <div class="variation-container">
+                <span class="section-title text-white">8: 오로라 파동</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-base anim-aurora p-12 max-w-md w-full">
+                            <div class="content-wrapper">
+                                <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                                <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                                <button class="btn-minimal w-full py-4 active:scale-95">
+                                    <span class="text-sm">나만의 제주 찾으러 가기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
