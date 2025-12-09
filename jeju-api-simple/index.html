@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제주 관광 지도 - 카카오 맵 API</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>제주 관광 정보</h1>
+            <div class="weather-info" id="weatherInfo">
+                <span class="loading">날씨 정보 로딩 중...</span>
+            </div>
+        </header>
+
+        <div class="search-section">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="검색어를 입력하세요 (예: 카페, 음식점)">
+                <button id="searchBtn">검색</button>
+            </div>
+            
+            <div class="category-buttons">
+                <button class="category-btn" data-category="AT4">관광지</button>
+                <button class="category-btn" data-category="FD6">음식점</button>
+                <button class="category-btn" data-category="CE7">카페</button>
+                <button class="category-btn" data-category="AD5">숙박</button>
+                <button class="category-btn" data-category="CS2">편의점</button>
+                <button class="category-btn" data-category="PM9">약국</button>
+                <button class="category-btn" data-category="HP8">병원</button>
+                <button class="category-btn" data-category="OL7">주유소</button>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="results-panel" id="resultsPanel">
+                <h3>검색 결과</h3>
+                <div id="resultsList" class="results-list">
+                    <p class="empty-message">카테고리를 선택하거나 검색어를 입력하세요</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
