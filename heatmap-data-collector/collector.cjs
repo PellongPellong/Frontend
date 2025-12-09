@@ -14,10 +14,11 @@ const API_CONFIG = {
         GET: 'TRUE',
         DB: 'sql_file',
         TABLE: 'mms_cell_new_최신유동인구',
-        SELECT: '(M_POP_00+M_POP_10+M_POP_20+M_POP_30+M_POP_40+M_POP_50+M_POP_60+M_POP_70+M_POP_80+M_POP_90+W_POP_00+W_POP_10+W_POP_20+W_POP_30+W_POP_40+W_POP_50+W_POP_60+W_POP_70+W_POP_80+W_POP_90) as total_pop,MEGA_CD,CELL_ID,LAT,LON',
+        // 기본 컴럼만 요청 (SQL 집계 함수 제거)
+        SELECT: '*',  // 모든 컴럼
         METHOD: '11',
-        EXTENT_PRJ: '3',  // 좌표계 (3 = WGS84)
-        SEARCH_R: '10',   // 검색 반경
+        EXTENT_PRJ: '3',
+        SEARCH_R: '10',
     }
 };
 
@@ -27,14 +28,14 @@ const API_CONFIG = {
 const REGION_BOUNDS = {
     // 제주도 전체 영역
     '50': {
-        BOTTOM_X: 126.15,  // 서쪽 경계
-        BOTTOM_Y: 33.10,   // 남쪽 경계
-        TOP_X: 127.00,     // 동쪽 경계
-        TOP_Y: 33.65,      // 북쪽 경계
-        W: 1920,           // 이미지 너비 (px)
-        H: 1080            // 이미지 높이 (px)
+        BOTTOM_X: 126.15,
+        BOTTOM_Y: 33.10,
+        TOP_X: 127.00,
+        TOP_Y: 33.65,
+        W: 1920,
+        H: 1080
     },
-    // 서울 (예시)
+    // 서울
     '11': {
         BOTTOM_X: 126.76,
         BOTTOM_Y: 37.42,
@@ -43,7 +44,7 @@ const REGION_BOUNDS = {
         W: 1920,
         H: 1080
     },
-    // 기본값 (제주도)
+    // 기본값
     'default': {
         BOTTOM_X: 126.15,
         BOTTOM_Y: 33.10,
@@ -81,13 +82,11 @@ function httpsGet(url) {
  * URL 구성
  */
 function buildApiUrl(regionCode = '50') {
-    // 지역별 바운딩 박스 가져오기
     const bounds = REGION_BOUNDS[regionCode] || REGION_BOUNDS['default'];
     
     const params = new URLSearchParams({
         ...API_CONFIG.params,
         WHERE: `mega_cd IN ('${regionCode}')`,
-        // EXTENT 파라미터 추가
         BOTTOM_X: bounds.BOTTOM_X,
         BOTTOM_Y: bounds.BOTTOM_Y,
         TOP_X: bounds.TOP_X,
@@ -184,14 +183,32 @@ function processData(rawData) {
 
     // 배열인 경우
     if (Array.isArray(rawData)) {
-        points = rawData.map(item => ({
-            cell_id: item.CELL_ID || item.cell_id,
-            region_code: item.MEGA_CD || item.mega_cd,
-            latitude: parseFloat(item.LAT || item.lat || 0),
-            longitude: parseFloat(item.LON || item.lon || 0),
-            population: parseInt(item.total_pop || item.TOTAL_POP || 0),
-            timestamp: timestamp
-        })).filter(p => p.latitude !== 0 && p.longitude !== 0); // 유효한 좌표만
+        points = rawData.map(item => {
+            // 모든 연령대 합산
+            let totalPop = 0;
+            const popFields = [
+                'M_POP_00', 'M_POP_10', 'M_POP_20', 'M_POP_30', 'M_POP_40', 
+                'M_POP_50', 'M_POP_60', 'M_POP_70', 'M_POP_80', 'M_POP_90',
+                'W_POP_00', 'W_POP_10', 'W_POP_20', 'W_POP_30', 'W_POP_40',
+                'W_POP_50', 'W_POP_60', 'W_POP_70', 'W_POP_80', 'W_POP_90'
+            ];
+
+            popFields.forEach(field => {
+                const val = parseInt(item[field] || item[field.toLowerCase()] || 0);
+                totalPop += val;
+            });
+
+            return {
+                cell_id: item.CELL_ID || item.cell_id,
+                region_code: item.MEGA_CD || item.mega_cd,
+                latitude: parseFloat(item.LAT || item.lat || 0),
+                longitude: parseFloat(item.LON || item.lon || 0),
+                population: totalPop,
+                timestamp: timestamp,
+                // 원본 데이터 포함 (디버깅용)
+                raw: item
+            };
+        }).filter(p => p.latitude !== 0 && p.longitude !== 0); // 유효한 좌표만
     } else if (rawData && typeof rawData === 'object') {
         return {
             timestamp: timestamp,
