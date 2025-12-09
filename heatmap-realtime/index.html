@@ -95,9 +95,14 @@
         </div>
     </main>
 
-    <!-- 원본 XRayMap 히트맵 라이브러리 -->
-    <!-- 주의: 이 라이브러리는 Kakao Maps API에 의존하므로 Kakao SDK 먼저 로드해야 함 -->
-    <script src="https://www.policymap.or.kr/lib/xraymap/heatmap_20231212geonet.js"></script>
+    <!-- 
+        원본 XRayMap 히트맵 라이브러리
+        첫 번째 파일에서 본 경로 사용
+    -->
+    <script type="text/javascript" src="https://www.policymap.or.kr/lib/xraymap/heatmap_20231212geonet.js"></script>
+    
+    <!-- 대체 경로 (위 경로가 안 되면 주석 해제) -->
+    <!-- <script type="text/javascript" src="http://www.policymap.or.kr/lib/xraymap/heatmap/20231212geonet.js"></script> -->
     
     <!-- 스크립트 -->
     <script src="./js/api-client.js"></script>
