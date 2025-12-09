@@ -1,108 +1,190 @@
 // api-client.js
 // -------------------------------------------------------------
-// 이 파일은 백엔드 내부 API와 통신하는 책임만 가집니다.
-// - fetch 기반으로 구현하고, Axios 등 외부 라이브러리는 사용하지 않습니다.
-// - 실제 배포 시에는 BASE_URL만 바꿔서 사용할 수 있도록 설계합니다.
+// 원본 data.ijto.or.kr API 서버와 직접 통신합니다.
+// - mms.gislab.co.kr:444 (Biz 파일)
+// - heatmap2021.geocoding.kr (마스크 데이터)
+// -------------------------------------------------------------
 
 (function(window) {
     "use strict";
 
     // ---------------------------------------------------------
-    // 내부 API의 기본 URL을 정의합니다.
+    // 원본 API 서버 URL 정의
     // ---------------------------------------------------------
-    var BASE_URL = "/api/heatmap"; // 예: /api/heatmap/tb_list, /api/heatmap/getPoints 등
+    var BIZ_API_URL = "https://mms.gislab.co.kr:444/heatmap_api";
+    var MASK_API_URL = "https://heatmap2021.geocoding.kr/mms";
 
     // ---------------------------------------------------------
     // 공통 fetch 래퍼: 에러 처리와 JSON 변환을 담당합니다.
     // ---------------------------------------------------------
-    function request(path, options) {
-        // path: "/tb_list" 처럼 베이스 URL 이후 경로
-        // options: fetch 옵션 (method, headers, body 등)
-        var url = BASE_URL + path;
-
+    function request(url, options) {
         return fetch(url, options).then(function(response) {
             if (!response.ok) {
-                // HTTP 상태 코드가 200-299가 아니면 에러로 처리
                 throw new Error("API 요청 실패: " + response.status + " " + response.statusText);
             }
 
-            // JSON 응답을 기대하는 경우
             var contentType = response.headers.get("Content-Type") || "";
             if (contentType.indexOf("application/json") !== -1) {
                 return response.json();
             }
 
-            // 텍스트 응답인 경우 그대로 반환
             return response.text();
         });
     }
 
     // ---------------------------------------------------------
-    // 테이블 목록 조회: tb_list.txt 역할을 내부 API로 구현한다고 가정합니다.
+    // 테이블 목록 조회: 원본 API의 tb_list.txt
     // ---------------------------------------------------------
     function getTableList() {
-        // GET /tb_list 요청 후, 서버에서 pipe 형태가 아니라 JSON으로 내려준다고 가정합니다.
-        return request("/tb_list", {
-            method: "GET"
+        var url = BIZ_API_URL + "/tb_list.txt";
+        return request(url, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit"
+        }).then(function(text) {
+            // 파이프 구분 텍스트를 파싱하여 배열로 변환
+            var lines = text.split("\n").filter(function(line) {
+                return line.trim() !== "";
+            });
+
+            return lines.map(function(line) {
+                var parts = line.split("#|#");
+                return {
+                    name: parts[0] || "",
+                    columns: parts[1] ? parts[1].split("|") : [],
+                    whereColumns: parts[2] ? parts[2].split("|") : []
+                };
+            });
         });
     }
 
     // ---------------------------------------------------------
     // Biz 설정 조회: 레이어/범례/심볼 정보 반환
+    // 예: getBiz.php?FILE=mms1_any_mega.biz
     // ---------------------------------------------------------
     function getBizConfig(fileName) {
-        // GET /getBiz?file={name}
-        var query = "?file=" + encodeURIComponent(fileName || "");
-        return request("/getBiz" + query, {
-            method: "GET"
+        if (!fileName) {
+            fileName = "mms1_any_mega.biz"; // 기본값
+        }
+
+        var url = BIZ_API_URL + "/biz/getBiz.php?FILE=" + encodeURIComponent(fileName);
+        
+        return request(url, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+            headers: {
+                "accept": "*/*"
+            }
         });
     }
 
     // ---------------------------------------------------------
-    // 포인트 데이터 조회: 실시간 혼잡도 데이터를 가져옵니다.
+    // 포인트 데이터 조회
+    // 원본 API는 직접 포인트 데이터를 제공하지 않고,
+    // Biz 파일 내부에서 데이터 소스를 정의합니다.
+    // 
+    // 임시로 목업 데이터를 반환하거나,
+    // 실제 원본 API의 데이터 엔드포인트가 있다면 여기서 호출합니다.
     // ---------------------------------------------------------
     function getPoints(params) {
-        // params: { table, where, columns }
-        // POST /getPoints
-        return request("/getPoints", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
+        // 원본 API에서 실시간 포인트 데이터를 제공하는 엔드포인트가 있다면 사용
+        // 현재는 목업 데이터를 반환합니다.
+        
+        console.warn("getPoints: 원본 API에 실시간 포인트 엔드포인트가 없어 목업 데이터 사용");
+        
+        // 제주 주요 관광지 샘플 데이터
+        var mockPoints = [
+            {
+                content: "성산일출봉",
+                label: "성산일출봉",
+                weight: 85,
+                location: [126.9419, 33.4595]
             },
-            body: JSON.stringify(params || {})
+            {
+                content: "한라산",
+                label: "한라산",
+                weight: 72,
+                location: [126.5333, 33.3616]
+            },
+            {
+                content: "제주공항",
+                label: "제주공항",
+                weight: 90,
+                location: [126.4930, 33.5066]
+            },
+            {
+                content: "중문관광단지",
+                label: "중문관광단지",
+                weight: 68,
+                location: [126.4167, 33.2500]
+            },
+            {
+                content: "애월해안도로",
+                label: "애월해안도로",
+                weight: 55,
+                location: [126.3194, 33.4647]
+            },
+            {
+                content: "우도",
+                label: "우도",
+                weight: 45,
+                location: [126.9508, 33.5022]
+            },
+            {
+                content: "섭지코지",
+                label: "섭지코지",
+                weight: 62,
+                location: [126.9289, 33.4242]
+            },
+            {
+                content: "함덕해수욕장",
+                label: "함덕해수욕장",
+                weight: 58,
+                location: [126.6694, 33.5433]
+            }
+        ];
+
+        return Promise.resolve({
+            point: mockPoints
         });
     }
 
     // ---------------------------------------------------------
-    // 마스크 데이터 조회: 특정 영역을 제외하거나 강조할 때 사용합니다.
+    // 마스크 데이터 조회: 특정 영역을 제외하거나 강조할 때 사용
+    // 예: getList.php?FILE=mms_mask_설정을위한_제외리스트_광역&WHERE=50
     // ---------------------------------------------------------
     function getMask(fileName, regionCode) {
-        // GET /getMask?file={fileName}&where={regionCode}
-        var query = "?file=" + encodeURIComponent(fileName || "") +
-                    "&where=" + encodeURIComponent(regionCode || "");
+        if (!fileName) {
+            fileName = "mms_mask_설정을위한_제외리스트_광역";
+        }
+        if (!regionCode) {
+            regionCode = "50"; // 제주도 코드
+        }
 
-        return request("/getMask" + query, {
-            method: "GET"
+        var url = MASK_API_URL + "/getList.php?FILE=" + 
+                  encodeURIComponent(fileName) + 
+                  "&WHERE=" + encodeURIComponent(regionCode);
+        
+        return request(url, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+            headers: {
+                "accept": "*/*",
+                "cache-control": "no-cache",
+                "pragma": "no-cache"
+            }
         });
     }
 
     // ---------------------------------------------------------
-    // 커스텀 데이터 업로드: 추후 관리자 페이지 등에서 활용 가능
+    // 커스텀 데이터 업로드: 원본 API에는 없는 기능
+    // 향후 내부 백엔드 구축 시 사용
     // ---------------------------------------------------------
     function uploadCustomLayer(layerName, points) {
-        // POST /uploadData
-        var payload = {
-            layerName: layerName,
-            points: points || []
-        };
-
-        return request("/uploadData", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
+        console.warn("uploadCustomLayer: 원본 API에는 업로드 기능이 없습니다.");
+        return Promise.reject(new Error("Not implemented"));
     }
 
     // ---------------------------------------------------------
