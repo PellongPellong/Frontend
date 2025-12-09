@@ -10,6 +10,26 @@
     "use strict";
 
     // ---------------------------------------------------------
+    // Promise.finally polyfill (구형 브라우저 지원)
+    // ---------------------------------------------------------
+    if (!Promise.prototype.finally) {
+        Promise.prototype.finally = function(callback) {
+            return this.then(
+                function(value) {
+                    return Promise.resolve(callback()).then(function() {
+                        return value;
+                    });
+                },
+                function(reason) {
+                    return Promise.resolve(callback()).then(function() {
+                        throw reason;
+                    });
+                }
+            );
+        };
+    }
+
+    // ---------------------------------------------------------
     // Kakao 지도 초기화 관련 설정값입니다.
     // ---------------------------------------------------------
     var centerLat = 33.3846;
