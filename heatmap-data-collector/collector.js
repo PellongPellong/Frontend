@@ -89,14 +89,19 @@ function fetchPopulationData(lng, lat, radius) {
   });
 }
 
-// 데이터 파싱
+// 데이터 파싱 (수정됨)
 function parsePopulationData(rawData) {
-  if (!rawData || !Array.isArray(rawData) || rawData.length < 8) {
+  if (!rawData || !Array.isArray(rawData) || rawData.length < 16) {
     return null;
   }
 
+  // 올바른 인덱스:
+  // [0]: 현재 도민
+  // [1-7]: 도민 일~토
+  // [8]: 현재 관광객
+  // [9-15]: 관광객 일~토
   const residentNow = rawData[0];
-  const touristNow = rawData[7];
+  const touristNow = rawData[8];
 
   const ages = ['00', '10', '20', '30', '40', '50', '60', '70', '80', '90'];
 
@@ -121,7 +126,9 @@ function parsePopulationData(rawData) {
   }));
 
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const weeklyResident = rawData.slice(1, 7).map((dayData, idx) => ({
+  
+  // 도민 일~토 (1-7)
+  const weeklyResident = rawData.slice(1, 8).map((dayData, idx) => ({
     day: weekDays[idx],
     hourly: Object.keys(dayData)
       .filter((key) => key !== 'IN_WEEK')
@@ -132,7 +139,8 @@ function parsePopulationData(rawData) {
       .sort((a, b) => a.hour - b.hour),
   }));
 
-  const weeklyTourist = rawData.slice(8, 14).map((dayData, idx) => ({
+  // 관광객 일~토 (9-15)
+  const weeklyTourist = rawData.slice(9, 16).map((dayData, idx) => ({
     day: weekDays[idx],
     hourly: Object.keys(dayData)
       .filter((key) => key !== 'OUT_WEEK')
