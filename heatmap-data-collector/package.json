@@ -1,0 +1,23 @@
+{
+  "name": "heatmap-data-collector",
+  "version": "1.0.0",
+  "description": "실시간 유동인구 데이터를 수집하여 JSON 파일로 저장하는 Node.js 스크립트",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "collect": "node collector.js",
+    "schedule": "node scheduler.js"
+  },
+  "keywords": [
+    "heatmap",
+    "population",
+    "data-collector",
+    "jeju"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
