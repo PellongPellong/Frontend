@@ -13,20 +13,19 @@ const API_CONFIG = {
     params: {
         GET: 'TRUE',
         DB: 'sql_file',
-        TABLE: 'mms_cell_new_최신유동인구',
-        // 기본 컴럼만 요청 (SQL 집계 함수 제거)
-        SELECT: '*',  // 모든 컴럼
-        METHOD: '11',
+        // 주요 지점 테이블 사용
+        TABLE: 'mms_area_기준초과',  // 또는 'mms_area_기준이하'
+        SELECT: '*',
+        METHOD: '51',  // Polygon/Point 데이터
         EXTENT_PRJ: '3',
-        SEARCH_R: '10',
+        SEARCH_R: '',  // 빈 값
     }
 };
 
 /**
- * 지역별 바운딩 박스 (위도/경도)
+ * 지역별 바운딩 박스
  */
 const REGION_BOUNDS = {
-    // 제주도 전체 영역
     '50': {
         BOTTOM_X: 126.15,
         BOTTOM_Y: 33.10,
@@ -35,7 +34,6 @@ const REGION_BOUNDS = {
         W: 1920,
         H: 1080
     },
-    // 서울
     '11': {
         BOTTOM_X: 126.76,
         BOTTOM_Y: 37.42,
@@ -44,7 +42,6 @@ const REGION_BOUNDS = {
         W: 1920,
         H: 1080
     },
-    // 기본값
     'default': {
         BOTTOM_X: 126.15,
         BOTTOM_Y: 33.10,
@@ -84,9 +81,12 @@ function httpsGet(url) {
 function buildApiUrl(regionCode = '50') {
     const bounds = REGION_BOUNDS[regionCode] || REGION_BOUNDS['default'];
     
+    // WHERE 절 수정: CTY_CD 사용
+    const whereClause = `CTY_CD IN ('${regionCode}')`;
+    
     const params = new URLSearchParams({
         ...API_CONFIG.params,
-        WHERE: `mega_cd IN ('${regionCode}')`,
+        WHERE: whereClause,
         BOTTOM_X: bounds.BOTTOM_X,
         BOTTOM_Y: bounds.BOTTOM_Y,
         TOP_X: bounds.TOP_X,
@@ -119,8 +119,8 @@ async function fetchPopulationData(regionCode = '50') {
 
         // 에러 메시지 체크
         if (text.includes('ERROR:')) {
-            console.error(`❌ API 에러: ${text}`);
-            throw new Error(`API Error: ${text}`);
+            console.error(`❌ API 에러: ${text.substring(0, 500)}`);
+            throw new Error(`API Error: ${text.substring(0, 200)}`);
         }
 
         // JSON 파싱 시도
@@ -138,6 +138,7 @@ async function fetchPopulationData(regionCode = '50') {
         }
 
         // 원본 텍스트 반환
+        console.log('⚠️  예상치 못한 응답 형식:', text.substring(0, 200));
         return { raw: text };
 
     } catch (error) {
@@ -184,31 +185,18 @@ function processData(rawData) {
     // 배열인 경우
     if (Array.isArray(rawData)) {
         points = rawData.map(item => {
-            // 모든 연령대 합산
-            let totalPop = 0;
-            const popFields = [
-                'M_POP_00', 'M_POP_10', 'M_POP_20', 'M_POP_30', 'M_POP_40', 
-                'M_POP_50', 'M_POP_60', 'M_POP_70', 'M_POP_80', 'M_POP_90',
-                'W_POP_00', 'W_POP_10', 'W_POP_20', 'W_POP_30', 'W_POP_40',
-                'W_POP_50', 'W_POP_60', 'W_POP_70', 'W_POP_80', 'W_POP_90'
-            ];
-
-            popFields.forEach(field => {
-                const val = parseInt(item[field] || item[field.toLowerCase()] || 0);
-                totalPop += val;
-            });
-
             return {
-                cell_id: item.CELL_ID || item.cell_id,
-                region_code: item.MEGA_CD || item.mega_cd,
-                latitude: parseFloat(item.LAT || item.lat || 0),
-                longitude: parseFloat(item.LON || item.lon || 0),
-                population: totalPop,
+                id: item.ID || item.id,
+                name: item.NM || item.name || item.NAME,
+                region_code: item.CTY_CD || item.cty_cd || item.MEGA_CD || item.mega_cd,
+                latitude: parseFloat(item.LAT || item.lat || item.Y || item.y || 0),
+                longitude: parseFloat(item.LON || item.lon || item.X || item.x || 0),
+                population: parseInt(item['현재인구'] || item.current_pop || item.POP || 0),
                 timestamp: timestamp,
-                // 원본 데이터 포함 (디버깅용)
+                // 원본 데이터 포함
                 raw: item
             };
-        }).filter(p => p.latitude !== 0 && p.longitude !== 0); // 유효한 좌표만
+        }).filter(p => p.latitude !== 0 && p.longitude !== 0);
     } else if (rawData && typeof rawData === 'object') {
         return {
             timestamp: timestamp,
@@ -248,14 +236,12 @@ function processData(rawData) {
 async function saveToFile(data, filename = null) {
     const outputDir = path.join(process.cwd(), 'output');
     
-    // output 폴더 생성
     try {
         await fs.mkdir(outputDir, { recursive: true });
     } catch (error) {
         // 이미 존재하면 무시
     }
 
-    // 파일명 생성
     if (!filename) {
         const now = new Date();
         const dateStr = now.toISOString().replace(/[:.]/g, '-').slice(0, -5);
@@ -263,12 +249,9 @@ async function saveToFile(data, filename = null) {
     }
 
     const filepath = path.join(outputDir, filename);
-
-    // JSON 파일로 저장
     await fs.writeFile(filepath, JSON.stringify(data, null, 2), 'utf-8');
 
     console.log(`✅ 파일 저장 완료: ${filepath}`);
-
     return filepath;
 }
 
@@ -279,20 +262,15 @@ async function collect(regionCode = '50') {
     try {
         console.log('\n🚀 실시간 유동인구 데이터 수집 시작...');
 
-        // 1. 데이터 수집
         const rawData = await fetchPopulationData(regionCode);
         
         console.log('📦 원본 데이터 (Sample):');
         const sampleText = JSON.stringify(rawData, null, 2);
-        console.log(sampleText.substring(0, 500) + (sampleText.length > 500 ? '...' : ''));
+        console.log(sampleText.substring(0, 800) + (sampleText.length > 800 ? '\n...' : ''));
         
-        // 2. 데이터 가공
         const processedData = processData(rawData);
-
-        // 3. 파일 저장
         const filepath = await saveToFile(processedData);
 
-        // 4. 결과 출력
         console.log('\n📊 수집 결과:');
         console.log(`  - 데이터 개수: ${processedData.data_count.toLocaleString()}`);
         console.log(`  - 총 인구: ${processedData.summary.total_population.toLocaleString()}명`);
