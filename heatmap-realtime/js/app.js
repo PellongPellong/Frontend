@@ -70,14 +70,18 @@
         console.log('✅ Kakao 지도 초기화 완료');
         console.log('  - map:', map);
         console.log('  - div_map:', mapContainer);
+        console.log('  - div_map.id:', mapContainer.id);
 
         // 히트맵 엔진 초기화 (원본 라이브러리가 있으면 생략 가능)
         if (window.HeatmapEngine) {
             window.HeatmapEngine.init(map, mapContainer);
         }
 
-        // XRayMap 라이브러리를 사용하여 Biz 파일 로드
-        loadBizFileWithXRayMap();
+        // 중요: 지도 완전 초기화 후 XRayMap 호출
+        // setTimeout으로 다음 이벤트 루프로 미룸
+        setTimeout(function() {
+            loadBizFileWithXRayMap();
+        }, 100);
 
         // 포인트 데이터 로드
         refreshData();
@@ -87,19 +91,34 @@
     // XRayMap 라이브러리를 사용하여 Biz 파일 로드
     // ---------------------------------------------------------
     function loadBizFileWithXRayMap() {
+        // 지도 객체가 준비되었는지 확인
+        if (!window.map || !window.div_map) {
+            console.error('❌ 지도 객체가 아직 준비되지 않았습니다. 재시도합니다...');
+            setTimeout(loadBizFileWithXRayMap, 100);
+            return;
+        }
+
         var bizUrl = BIZ_API_URL + "/biz/getBiz.php?FILE=" + encodeURIComponent(BIZ_FILE_NAME);
         
         console.log("📄 Biz 파일 로드 시도:", bizUrl);
+        console.log("📍 지도 상태:", {
+            map: window.map,
+            div_map: window.div_map,
+            'div_map.id': window.div_map.id
+        });
 
         // XRayMap 라이브러리 함수가 있는지 확인
         if (typeof window.HM_loadLayersByUrlFileAndRepalceTag === 'function') {
             console.log("✅ XRayMap 라이브러리 발견! 원본 방식으로 로드합니다.");
             
-            // 원본 라이브러리 호출
-            // 파라미터: (bizUrl, placeholderKey, replacementValue)
-            window.HM_loadLayersByUrlFileAndRepalceTag(bizUrl, '#CD#', REGION_CODE);
-            
-            console.log("✅ Biz 파일 로드 완료");
+            try {
+                // 원본 라이브러리 호출
+                // 파라미터: (bizUrl, placeholderKey, replacementValue)
+                window.HM_loadLayersByUrlFileAndRepalceTag(bizUrl, '#CD#', REGION_CODE);
+                console.log("✅ Biz 파일 로드 완료");
+            } catch (error) {
+                console.error("🚨 XRayMap 호출 중 오류:", error);
+            }
         } else if (window.HeatmapEngine && window.HeatmapEngine.loadBizFile) {
             // XRayMap 라이브러리가 없으면 자체 구현 사용
             console.warn("⚠️ XRayMap 라이브러리가 없습니다. 자체 파싱을 사용합니다.");
