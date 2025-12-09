@@ -23,20 +23,20 @@
         /* Glass Base - 반투명 유리 */
         .glass-base {
             background: radial-gradient(circle at 20% 20%,
-                    rgba(255, 255, 255, 0.065) 0%,
-                    rgba(255, 255, 255, 0.015) 25%,
+                    rgba(255, 255, 255, 0.035) 0%,
+                    rgba(255, 255, 255, 0.007) 25%,
                     transparent 50%),
                 radial-gradient(circle at 80% 20%,
-                    rgba(255, 255, 255, 0.075) 0%,
-                    rgba(255, 255, 255, 0.03) 25%,
+                    rgba(255, 255, 255, 0.035) 0%,
+                    rgba(255, 255, 255, 0.015) 25%,
                     transparent 50%),
                 radial-gradient(circle at 20% 80%,
-                    rgba(255, 255, 255, 0.055) 0%,
+                    rgba(255, 255, 255, 0.025) 0%,
                     rgba(255, 255, 255, 0.005) 25%,
                     transparent 50%),
                 radial-gradient(circle at 80% 80%,
-                    rgba(255, 255, 255, 0.075) 0%,
-                    rgba(255, 255, 255, 0.025) 25%,
+                    rgba(255, 255, 255, 0.035) 0%,
+                    rgba(255, 255, 255, 0.015) 25%,
                     transparent 50%),
                 rgba(255, 255, 255, 0.005);
             backdrop-filter: blur(35px);
@@ -52,75 +52,7 @@
                 0 18px 55px rgba(0, 0, 0, 0.36);
         }
 
-        .glass-base::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 1rem;
-            padding: 3px;
-            background: radial-gradient(circle at 20% 20%,
-                    rgba(255, 255, 255, 0.465) 0%,
-                    rgba(255, 255, 255, 0.265) 18%,
-                    transparent 40%),
-                radial-gradient(circle at 80% 20%,
-                    rgba(255, 255, 255, 0.44) 0%,
-                    rgba(255, 255, 255, 0.24) 18%,
-                    transparent 40%),
-                radial-gradient(circle at 20% 80%,
-                    rgba(255, 255, 255, 0.44) 0%,
-                    rgba(255, 255, 255, 0.24) 18%,
-                    transparent 40%),
-                radial-gradient(circle at 80% 80%,
-                    rgba(255, 255, 255, 0.465) 0%,
-                    rgba(255, 255, 255, 0.265) 18%,
-                    transparent 40%);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
 
-
-        /* 내부 글로우 효과 */
-        .glass-base::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 0.75rem;
-            background: radial-gradient(circle at 30% 30%,
-                    rgba(255, 255, 255, 0.22) 0%,
-                    rgba(255, 255, 255, 0.12) 28%,
-                    transparent 60%),
-                radial-gradient(circle at 70% 70%,
-                    rgba(255, 255, 255, 0.2) 0%,
-                    rgba(255, 255, 255, 0.1) 30%,
-                    transparent 62%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Inner Glass */
-        .inner-glass {
-            background: linear-gradient(45deg,
-                    rgba(0, 0, 0, 0.4) 0%,
-                    rgba(0, 0, 0, 0.25) 50%,
-                    rgba(0, 0, 0, 0.4) 100%);
-            backdrop-filter: blur(12px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow:
-                inset -2px 2px 50px rgba(255, 255, 255, 0.15),
-                inset 0 4px 20px rgba(0, 0, 0, 0.4),
-                inset 0 -2px 10px rgba(0, 0, 0, 0.3),
-                0 8px 32px rgba(0, 0, 0, 0.2),
-                0 0 0 4px rgba(0, 0, 0, 0.3),
-                0 0 0 5px rgba(255, 255, 255, 0.1),
-                3px -3px 20px rgba(255, 255, 255, 0.08);
-        }
 
         .btn-final {
             background: rgba(249, 115, 22, 0.85);
@@ -176,6 +108,13 @@
                 0 3px 6px rgba(0, 0, 0, 0.5),
                 0 1.5px 3px rgba(0, 0, 0, 0.3);
         }
+
+        .btn-final {
+            border: 2px solid transparent;
+            border-image: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%) 1;
+            position: relative;
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 
@@ -186,26 +125,25 @@
                 <source src="vid/back.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
-            <div class="absolute inset-0 bg-black/20"></div>
         </div>
         <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
             <div class="flex w-full max-w-[480px] flex-col items-center gap-8 rounded-xl">
-                <div class="glass-base flex w-full flex-col gap-6 p-10 shadow-2xl">
-                    <div class="content-wrapper flex w-full flex-col gap-6">
-                        <div class="inner-glass rounded-lg pt-8 px-8 pb-4 flex flex-col gap-6">
-                            <div class="flex flex-col gap-3 text-center">
-                                <h1
-                                    class="font-serif-display text-4xl font-bold leading-tight text-white text-shadow-default">
-                                    제주숨곳 AI</h1>
-                                <h2
-                                    class="font-display text-base font-normal leading-normal text-white/90 subtitle-shadow-default">
-                                    ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
-                            </div>
-                            <button class="btn-final w-full rounded-2xl py-3 text-white active:scale-95 mt-4">
-                                <span class="text-base tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러
-                                    가기</span>
-                            </button>
+                <div class="glass-base flex w-full flex-col gap-10 px-10 py-6 shadow-2xl">
+                    <div class="content-wrapper flex w-full flex-col gap-10">
+
+                        <div class="flex flex-col gap-3 text-center">
+                            <h1
+                                class="font-serif-display text-4xl font-bold leading-tight text-white text-shadow-default">
+                                제주숨곳 AI</h1>
+                            <h2
+                                class="font-display text-base font-normal leading-normal text-white/90 subtitle-shadow-default">
+                                ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
                         </div>
+                        <button class="btn-final w-full rounded-2xl py-3 active:scale-95 mt-4">
+                            <span class="text-base tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러
+                                가기</span>
+                        </button>
+
                     </div>
                 </div>
             </div>
