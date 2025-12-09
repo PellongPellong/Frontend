@@ -7,9 +7,16 @@
     <link rel="stylesheet" href="./styles/main.css">
     
     <!-- 
-        XRayMap 히트맹 라이브러리
-        로컬에 커밋된 파일을 사용합니다.
+        의존성 로드 순서:
+        1. jQuery (XRayMap 라이브러리가 필요로 함)
+        2. XRayMap 히트맵 라이브러리
+        3. 내 스크립트들
     -->
+    
+    <!-- 1. jQuery (XRayMap이 사용) -->
+    <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    
+    <!-- 2. XRayMap 히트맵 라이브러리 -->
     <script type="text/javascript" src="./www.policymap.or.kr/lib_xraymap/heatmap_20231212_geonet.js"></script>
 </head>
 <body>
@@ -101,31 +108,30 @@
         </div>
     </main>
 
-    <!-- 내 스크립트들 -->
+    <!-- 3. 내 스크립트들 -->
     <script src="./js/api-client.js"></script>
     <script src="./js/heatmap-engine.js"></script>
     <script src="./js/ui-manager.js"></script>
     <script src="./js/app.js"></script>
     
-    <!-- 디버깅: XRayMap 라이브러리 로드 확인 -->
+    <!-- 디버깅 -->
     <script>
-        console.log('🔍 XRayMap 라이브러리 로드 상태:');
+        console.log('🔍 라이브러리 로드 상태:');
+        console.log('  - jQuery:', typeof $);
         console.log('  - HM_loadLayersByUrlFileAndRepalceTag:', typeof HM_loadLayersByUrlFileAndRepalceTag);
-        console.log('  - HM_createPointFromDataString:', typeof HM_createPointFromDataString);
         
-        if (typeof HM_loadLayersByUrlFileAndRepalceTag !== 'function') {
+        if (typeof $ === 'undefined') {
+            console.error('❌ jQuery 로드 실패!');
+        } else if (typeof HM_loadLayersByUrlFileAndRepalceTag !== 'function') {
             console.error('❌ XRayMap 라이브러리 로드 실패!');
-            console.log('🔧 확인 사항:');
-            console.log('  1. 파일 경로: ./www.policymap.or.kr/lib_xraymap/heatmap_20231212_geonet.js');
-            console.log('  2. 파일이 존재하는지 확인');
-            console.log('  3. 브라우저 콘솔에서 스크립트 로드 오류 확인');
         } else {
-            console.log('✅ XRayMap 라이브러리 로드 성공!');
-            console.log('📊 사용 가능한 함수들:');
-            console.log('  - HM_loadLayersByUrlFileAndRepalceTag');
-            console.log('  - HM_createPointFromDataString');
-            console.log('  - 기타 히트맵 렌더링 함수들');
+            console.log('✅ 모든 라이브러리 로드 성공!');
         }
+        
+        // XRayMap이 필요로 하는 더미 함수들 정의
+        window.__sendMapLoaded = function() {
+            console.log('📡 __sendMapLoaded 호출됨 (더미)');
+        };
     </script>
 </body>
 </html>
