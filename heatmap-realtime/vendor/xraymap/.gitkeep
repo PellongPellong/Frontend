@@ -1,0 +1,11 @@
+# XRayMap 라이브러리 폴더
+
+이 폴더에 원본 XRayMap 히트맵 라이브러리 파일을 보관합니다.
+
+## 파일 목록
+- heatmap.js - 메인 히트맵 라이브러리
+- geonet.js - 지리 네트워크 함수들
+
+## 설치 방법
+1. 로컬에 있는 `data.ijto.or.kr/www.policymap.or.kr/lib_xraymap/` 폴더의 파일들을
+2. 이 폴더에 복사하십시오.
