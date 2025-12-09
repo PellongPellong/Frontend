@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>실시간 혼잡도 히트맵 - 제주</title>
     <link rel="stylesheet" href="./styles/main.css">
+    
+    <!-- 
+        중요: 스크립트 로딩 순서
+        1. XRayMap 라이브러리 (가장 먼저!)
+        2. 내 스크립트들
+        3. app.js는 DOMContentLoaded에서 Kakao SDK를 동적 로드
+    -->
+    
+    <!-- 1. XRayMap 히트맵 라이브러리 (동기 로드) -->
+    <script type="text/javascript" src="https://www.policymap.or.kr/lib/xraymap/heatmap_20231212geonet.js"></script>
 </head>
 <body>
     <!-- 헤더 영역 -->
@@ -95,19 +105,27 @@
         </div>
     </main>
 
-    <!-- 
-        원본 XRayMap 히트맵 라이브러리
-        첫 번째 파일에서 본 경로 사용
-    -->
-    <script type="text/javascript" src="https://www.policymap.or.kr/lib/xraymap/heatmap_20231212geonet.js"></script>
-    
-    <!-- 대체 경로 (위 경로가 안 되면 주석 해제) -->
-    <!-- <script type="text/javascript" src="http://www.policymap.or.kr/lib/xraymap/heatmap/20231212geonet.js"></script> -->
-    
-    <!-- 스크립트 -->
+    <!-- 2. 내 스크립트들 (반드시 XRayMap 다음에 로드) -->
     <script src="./js/api-client.js"></script>
     <script src="./js/heatmap-engine.js"></script>
     <script src="./js/ui-manager.js"></script>
     <script src="./js/app.js"></script>
+    
+    <!-- 디버깅: XRayMap 라이브러리 로드 확인 -->
+    <script>
+        console.log('🔍 XRayMap 라이브러리 로드 상태:');
+        console.log('  - HM_loadLayersByUrlFileAndRepalceTag:', typeof HM_loadLayersByUrlFileAndRepalceTag);
+        console.log('  - HM_createPointFromDataString:', typeof HM_createPointFromDataString);
+        
+        if (typeof HM_loadLayersByUrlFileAndRepalceTag !== 'function') {
+            console.error('❌ XRayMap 라이브러리 로드 실패!');
+            console.log('🔧 대안:');
+            console.log('  1. 브라우저 캐시 완전 삭제 (Ctrl+Shift+Delete)');
+            console.log('  2. 시크릿 모드/프라이빗 모드에서 테스트');
+            console.log('  3. HTTPS 서버에서 실행 (HTTP에서는 HTTPS 리소스 차단될 수 있음)');
+        } else {
+            console.log('✅ XRayMap 라이브러리 로드 성공!');
+        }
+    </script>
 </body>
 </html>
