@@ -2,7 +2,7 @@
 // -------------------------------------------------------------
 // 이 파일은 전체 앱의 진입점입니다.
 // - Kakao 지도를 초기화합니다.
-// - 원본 API의 Biz 파일 URL을 HeatmapEngine에 전달합니다.
+// - XRayMap 라이브러리를 사용하여 Biz 파일을 로드합니다.
 // - 포인트 데이터를 가져와서 히트맵에 표시합니다.
 // -------------------------------------------------------------
 
@@ -22,7 +22,8 @@
     // 원본 API 설정
     // ---------------------------------------------------------
     var BIZ_API_URL = "https://mms.gislab.co.kr:444/heatmap_api";
-    var BIZ_FILE_NAME = "mms1_any_mega.biz"; // 실제 사용하는 Biz 파일명
+    var BIZ_FILE_NAME = "mms1_any_mega.biz";
+    var REGION_CODE = "50"; // 제주도 코드
 
     // ---------------------------------------------------------
     // 지도 초기화 함수
@@ -38,41 +39,44 @@
 
         map = new kakao.maps.Map(container, options);
 
-        // 히트맵 엔진 초기화
+        // 히트맵 엔진 초기화 (원본 라이브러리가 있으면 생략 가능)
         if (window.HeatmapEngine) {
             window.HeatmapEngine.init(map, container);
-            
-            // Biz 파일 URL을 직접 로드
-            loadBizFile();
         }
+
+        // XRayMap 라이브러리를 사용하여 Biz 파일 로드
+        loadBizFileWithXRayMap();
 
         // 포인트 데이터 로드
         refreshData();
     }
 
     // ---------------------------------------------------------
-    // Biz 파일 로드
-    // HeatmapEngine이 내부적으로 Biz 파일을 처리하도록 URL만 전달합니다.
+    // XRayMap 라이브러리를 사용하여 Biz 파일 로드
     // ---------------------------------------------------------
-    function loadBizFile() {
-        // 원본 API의 Biz 파일 전체 URL
+    function loadBizFileWithXRayMap() {
         var bizUrl = BIZ_API_URL + "/biz/getBiz.php?FILE=" + encodeURIComponent(BIZ_FILE_NAME);
         
         console.log("📄 Biz 파일 로드 시도:", bizUrl);
 
-        // HeatmapEngine이 XRayMap 라이브러리 함수를 사용하는 경우
-        if (typeof HM_loadLayersByUrlFileAndRepalceTag === 'function') {
-            // 원본 방식: HM_loadLayersByUrlFileAndRepalceTag 사용
-            HM_loadLayersByUrlFileAndRepalceTag(bizUrl, '#CD#', '50'); // 50은 제주 지역코드
-            console.log("✅ HM_loadLayersByUrlFileAndRepalceTag 호출 완료");
+        // XRayMap 라이브러리 함수가 있는지 확인
+        if (typeof window.HM_loadLayersByUrlFileAndRepalceTag === 'function') {
+            console.log("✅ XRayMap 라이브러리 발견! 원본 방식으로 로드합니다.");
+            
+            // 원본 라이브러리 호출
+            // 파라미터: (bizUrl, placeholderKey, replacementValue)
+            window.HM_loadLayersByUrlFileAndRepalceTag(bizUrl, '#CD#', REGION_CODE);
+            
+            // 추가 플레이스홀더 치환 (필요시)
+            // #COMPANY_ID# 같은 다른 플레이스홀더가 있다면 여기서 처리
+            
+            console.log("✅ Biz 파일 로드 완료");
+        } else if (window.HeatmapEngine && window.HeatmapEngine.loadBizFile) {
+            // XRayMap 라이브러리가 없으면 자체 구현 사용
+            console.warn("⚠️ XRayMap 라이브러리가 없습니다. 자체 파싱을 사용합니다.");
+            window.HeatmapEngine.loadBizFile(bizUrl);
         } else {
-            // 자체 HeatmapEngine을 사용하는 경우
-            if (window.HeatmapEngine && window.HeatmapEngine.loadBizFile) {
-                window.HeatmapEngine.loadBizFile(bizUrl);
-                console.log("✅ HeatmapEngine.loadBizFile 호출 완료");
-            } else {
-                console.warn("⚠️ HeatmapEngine에 Biz 로딩 함수가 없습니다.");
-            }
+            console.error("🚨 Biz 파일을 로드할 방법이 없습니다!");
         }
     }
 
@@ -101,11 +105,11 @@
     // 메인 새로고침 함수
     // ---------------------------------------------------------
     function refreshData() {
-        if (!window.ApiClient || !window.HeatmapEngine || !window.UiManager) return;
+        if (!window.ApiClient || !window.UiManager) return;
 
         window.UiManager.showLoading();
 
-        // 포인트 데이터만 가져옵니다 (Biz는 loadBizFile에서 별도 처리)
+        // 포인트 데이터만 가져옵니다 (Biz는 loadBizFileWithXRayMap에서 별도 처리)
         fetchRealtimePoints()
             .then(function (pointsResponse) {
                 var points = pointsResponse && pointsResponse.point
@@ -120,8 +124,10 @@
                 var stats = window.UiManager.calculateStats(points);
                 window.UiManager.updateStatsUI(stats);
 
-                // 히트맵 엔진에 포인트 전달
-                window.HeatmapEngine.setPoints(points);
+                // 히트맵 엔진에 포인트 전달 (자체 HeatmapEngine 사용 시)
+                if (window.HeatmapEngine && window.HeatmapEngine.setPoints) {
+                    window.HeatmapEngine.setPoints(points);
+                }
             })
             .catch(function (error) {
                 console.error("🚨 데이터 로드 실패", error);
@@ -156,7 +162,7 @@
     // ---------------------------------------------------------
     window.AppController = {
         refreshData: refreshData,
-        loadBizFile: loadBizFile
+        loadBizFile: loadBizFileWithXRayMap
     };
 
     // ---------------------------------------------------------
