@@ -1,0 +1,71 @@
+{
+    "dataList" : [
+        {
+            "id" : "district_00",
+            "label" : "진행/예정",
+            "title" : "서귀포매일올레시장",
+            "imgUrl" : "/bigdatamap/html/jeju/widget/img/festival_thum_00.jpg",
+            "lat" : 33.2501555,
+            "lot" : 126.5632342,
+            "radius" : 150,
+            "addr" : "제주특별자치도 서귀포시 서귀동 340"
+        },
+        {
+            "id" : "district_01",
+            "label" : "진행/예정",
+            "title" : "제주시청",
+            "imgUrl" : "/bigdatamap/html/jeju/widget/img/festival_thum_01.jpg",
+            "lat" : 33.499246127899525,
+            "lot" : 126.52996682364062,
+            "radius" : 240,
+            "addr" : "제주특별자치도 제주시 이도2동"
+        },
+        {
+            "id" : "district_02",
+            "label" : "진행중",
+            "title" : "칠성로 상점가",
+            "imgUrl" : "/bigdatamap/html/jeju/widget/img/festival_thum_02.jpg",
+            "lat" : 33.5148852,
+            "lot" : 126.5255016,
+            "radius" : 200,
+            "addr" : "제주특별자치도 제주시 이도1동",
+            "url" : "https://place.map.kakao.com/27175880"
+        },
+        {
+            "id" : "district_03",
+            "label" : "진행/예정",
+            "title" : "중앙로 상점가",
+            "imgUrl" : "/bigdatamap/html/jeju/widget/img/festival_thum_03.jpg",
+            "lat" : 33.5124502,
+            "lot" : 126.5253077,
+            "radius" : 90,
+            "addr" : "제주특별자치도 제주시 이도1동",
+            "url" : "https://place.map.kakao.com/18525450"
+        },
+        {
+            "id" : "district_04",
+            "label" : "진행/예정",
+            "title" : "신산시장",
+            "imgUrl" : "/bigdatamap/html/jeju/widget/img/festival_thum_04.jpg",
+            "lat" : 33.5059027,
+            "lot" : 126.5421594,
+            "radius" : 90,
+            "addr" : "제주특별자치도 제주시 일도2동",
+            "url" : "https://place.map.kakao.com/7968309"
+        },
+        {   
+            "id" : "district_05",
+            "label" : "진행/예정",
+            "title" : "누웨마루거리상점가",
+            "imgUrl" : "/bigdatamap/html/jeju/widget/img/festival_thum_05.jpg",
+            "lat" : 33.4878663,
+            "lot" : 126.4907463,
+            "radius" : 260,
+            "addr" : "제주특별자치도 제주시 연동",
+            "url" : "https://place.map.kakao.com/21811778"
+        }
+        
+    
+    ]
+}
+

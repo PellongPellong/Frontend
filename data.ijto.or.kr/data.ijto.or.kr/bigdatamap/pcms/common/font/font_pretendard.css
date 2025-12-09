@@ -1,0 +1,63 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 100;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-Thin.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 200;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-ExtraLight.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 300;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-Light.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 400;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-Regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 500;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-Medium.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 600;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-SemiBold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 700;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-Bold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 800;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-ExtraBold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 900;
+    font-display: swap;
+    src: url('/bigdatamap/pcms/common/font/Pretendard/Pretendard-Black.woff') format('woff');
+}

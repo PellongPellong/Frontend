@@ -1,0 +1,10 @@
+@charset "UTF-8";
+:root {
+    --main-color: #1D85FF;
+    --main-color-hover: #0F77F0;
+    --main-color-deep: #3B75DA;
+    --sub-color: #DA3B3B;
+    --point-color: #FF8200;
+    --point-color2: #13aa32;
+    --basic-color: #101010;
+}

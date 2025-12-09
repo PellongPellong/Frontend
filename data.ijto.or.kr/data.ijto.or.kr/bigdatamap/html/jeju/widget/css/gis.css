@@ -1,0 +1,1607 @@
+@charset "utf-8";
+@import url(/bigdatamap/html/jeju/widget/css/basic.css);
+html,
+html body {
+    font-family: "Pretendard", sans-serif;
+    color: var(--basic-color);
+}
+
+/* 카테고리 */
+
+#category li span {
+    background-image: url('/bigdatamap/images/gs/CategoryIcon.png');
+    background-size: 212px 534px;
+    border-radius: 0;
+}
+
+#category li span.gmart {
+    background-position: -142px 0px;
+}
+
+#category li span.gstore {
+    background-position: -142px -27px;
+}
+
+#category li span.gchildren {
+    background-position: -142px -54px;
+}
+
+#category li span.gschool {
+    background-position: -142px -79px;
+}
+
+#category li span.ginstitude {
+    background-position: -142px -106px;
+}
+
+#category li span.gparking {
+    background-position: -143px -132px;
+}
+
+#category li span.goil {
+    background-position: -142px -158px;
+}
+
+#category li span.gbank {
+    background-position: -142px -184px;
+}
+
+#category li span.gculture {
+    background-position: -142px -211px;
+}
+
+#category li span.gagency {
+    background-position: -170px 0px;
+}
+
+#category li span.ggovernment {
+    background-position: -170px -27px;
+}
+
+#category li span.gtour {
+    background-position: -170px -54px;
+}
+
+#category li span.gstay {
+    background-position: -170px -79px;
+}
+
+#category li span.gfood {
+    background-position: -170px -106px;
+}
+
+#category li span.gcafe {
+    background-position: -170px -131px;
+}
+
+#category li span.ghospital {
+    background-position: -170px -158px;
+}
+
+#category li span.gpharmacy {
+    background-position: -170px -185px;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.legend-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 210px !important;
+    background: rgba(255, 255, 255, 0.8);
+    margin-right: 20px;
+    font-family: Arial, sans-serif;
+    overflow: auto;
+    border-radius: 3px;
+    transform: rotate(90deg);
+    font-family: 'Pretendard' !important;
+    font-weight: 700 !important;
+    top: -54px;
+    bottom: auto !important;
+    left: 280px;
+    right: auto !important;
+    margin: 0 !important;
+}
+
+.legend-overlay.single {
+    right: auto !important;
+}
+
+.legend-overlay::-webkit-scrollbar {
+    display: none;
+}
+
+.legend-overlay .density-legend-key+span {
+    display: none;
+}
+
+.legend-overlay:before {
+    content: '높음';
+    transform: rotate(-90deg);
+    display: block;
+    margin-left: -10px;
+    padding: 16px 0 11px;
+    color: #D30F20;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.52px;
+}
+
+.legend-overlay:after {
+    content: '낮음';
+    transform: rotate(-90deg);
+    display: block;
+    margin-left: -7px;
+    padding: 16px 0 15px;
+    color: #555;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.52px;
+}
+
+#legend {
+    padding: 3px 5px 3px 15px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+    line-height: 10px;
+    margin-bottom: 70px;
+}
+
+.density-legend-key {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.legend-key {
+    display: inline-block;
+    border-radius: 20%;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+#side {
+    top: 32px;
+    left: 85px;
+    margin-top: 0;
+    overflow: initial;
+    display: none;
+}
+
+#side_img {
+    display: none !important;
+}
+
+#side {
+    left: 80px !important;
+    bottom: auto;
+    background: #fff;
+}
+
+#legend.legend-overlay {
+    right: auto !important;
+    display: none;
+    left: 254px !important;
+    box-shadow: none;
+    top: -51px;
+    background: #fff;
+    padding: 3px 6px 3px 18px !important;
+    border: 1px solid #ebebeb;
+    border-left: 0px solid transparent;
+    border-radius: 10px 10px 0 0;
+}
+
+#side #side_text {
+    padding: 11px 12px 11px 17px;
+    border: 1px solid #ebebeb;
+    border-right: 0px solid transparent;
+    border-radius: 10px 0 0 10px;
+    background: #fff;
+    font-size: 14px;
+    color: #444;
+    font-weight: 600;
+    letter-spacing: -0.56px;
+}
+
+.w1024 #rvWrapper {
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
+}
+
+/* #rvWrapper{display: none;} */
+
+/* 카테고리 End */
+
+/* 버스 */
+
+#map img[title="busMarker"] {
+    display: none !important;
+}
+
+#map.bus-on img[title="busMarker"] {
+    display: inline-block !important;
+}
+
+.bus-info {
+    position: relative;
+    left: -6px;
+    width: 370px;
+    height: 370px;
+    padding: 15px 20px 10px 20px;
+    background-color: #fff;
+    border: 1px solid #999;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+.bus-info::before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 14px;
+    background-color: #fff;
+    border: 1px solid #999;
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(45deg);
+}
+
+.bus-info .bus-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    padding-right: 40px;
+}
+
+.bus-info .bus-title .title {
+    display: block;
+    width: 100%;
+    margin-bottom: 3px;
+    font-size: 16px;
+    color: #000;
+}
+
+.bus-info .bus-title .num {
+    display: block;
+    width: 42px;
+    margin-right: 5px;
+    padding-right: 5px;
+    border-right: 1px solid #ddd;
+    font-size: 13px;
+    box-sizing: content-box;
+}
+
+.bus-info .bus-title .direction {
+    display: block;
+    width: calc(100% - 55px);
+    font-size: 13px;
+}
+
+.bus-info .util-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bus-info .util-list .util-btns {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.bus-info .util-list .util-btns button {
+    width: 73px;
+    padding: 4px 0;
+    font-size: 0;
+}
+
+.bus-info .util-list .util-btns button:not(:first-child) {
+    border-left: 1px solid #ddd;
+}
+
+.bus-info .util-list .util-btns button::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin: 0 auto;
+    background: url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_tooltip_190531.png) no-repeat;
+}
+
+.bus-info .util-list .util-btns .bus-save::before {
+    display: none;
+    background-position: -76px -138px;
+}
+
+.bus-info .util-list .util-btns .bus-rodeview::before {
+    background-position: -100px -138px;
+}
+
+.bus-info .util-list .util-btns .bus-share::before {
+    display: none;
+    background-position: -124px -138px;
+}
+
+.bus-info .util-list .util-find .bus-find {
+    width: 74px;
+    height: 34px;
+    padding: 9px 12px 10px 27px;
+    font-size: 0;
+    font-weight: bold;
+    color: #fff;
+    background: var(--main-color);
+    /* background: url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_tooltip_190531.png) no-repeat 0 -138px; */
+    border-radius: 3px;
+}
+
+.bus-info .sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 8px;
+}
+
+.bus-info .sub .sub-title {
+    display: block;
+    font-size: 14px;
+    color: #000;
+    line-height: 1;
+}
+
+.bus-info .sub .sub-util {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.bus-info .sub .sub-util .date-time {
+    display: inline-flex;
+    gap: 5px;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.bus-info .sub .sub-util .bus-refresh {
+    width: 15px;
+    height: 15px;
+    font-size: 0;
+    background: url("data:image/svg+xml,%3Csvg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14.3837 8.70091C14.1743 8.63557 13.9474 8.65575 13.7528 8.75706C13.5581 8.85836 13.4113 9.03257 13.3445 9.2417C12.9517 10.4435 12.1859 11.4885 11.1586 12.2247C10.1313 12.961 8.89603 13.3499 7.63253 13.3351C6.06973 13.3529 4.56367 12.7498 3.44459 11.658C2.32552 10.5663 1.68477 9.07496 1.66286 7.51116C1.68477 5.94735 2.32552 4.45606 3.44459 3.3643C4.56367 2.27254 6.06973 1.66942 7.63253 1.68719C9.04395 1.68378 10.4119 2.17541 11.4987 3.07662L9.69448 2.77711C9.58635 2.7593 9.47577 2.76306 9.3691 2.78817C9.26242 2.81329 9.16177 2.85925 9.07291 2.92343C8.98405 2.9876 8.90875 3.06872 8.85133 3.16212C8.79391 3.25552 8.75551 3.35936 8.73833 3.46766C8.72054 3.57586 8.7243 3.68652 8.7494 3.79326C8.77449 3.90001 8.82042 4.00074 8.88455 4.08965C8.94869 4.17857 9.02975 4.25393 9.12309 4.31138C9.21643 4.36884 9.32019 4.40727 9.42842 4.42446L12.9537 5.00685H13.095C13.1914 5.00674 13.2871 4.98985 13.3777 4.95693C13.4082 4.94536 13.4363 4.92846 13.4609 4.90701C13.5205 4.88483 13.5765 4.85399 13.6271 4.81549L13.702 4.72397C13.702 4.68237 13.7768 4.64909 13.8101 4.59917C13.8433 4.54925 13.8101 4.51597 13.8516 4.48269C13.8746 4.43424 13.8941 4.38419 13.9098 4.33294L14.5334 1.00496C14.5541 0.895699 14.5532 0.783421 14.5306 0.674534C14.508 0.565648 14.4641 0.462285 14.4016 0.370349C14.3391 0.278412 14.259 0.199701 14.1661 0.13871C14.0732 0.0777198 13.9691 0.0356436 13.8599 0.0148844C13.7508 -0.00587485 13.6386 -0.00491066 13.5297 0.017722C13.4209 0.0403546 13.3176 0.0842123 13.2258 0.146791C13.0402 0.273175 12.9124 0.468141 12.8705 0.6888L12.6461 1.89519C11.2542 0.688168 9.4743 0.0235627 7.63253 0.0232043C5.62873 0.0054556 3.69973 0.783893 2.26881 2.18771C0.837894 3.59152 0.0219422 5.50603 0 7.51116C0.0219422 9.51628 0.837894 11.4308 2.26881 12.8346C3.69973 14.2384 5.62873 15.0169 7.63253 14.9991C9.25643 15.0241 10.8454 14.5266 12.1656 13.58C13.4858 12.6334 14.4673 11.2877 14.9657 9.7409C14.9973 9.63438 15.0072 9.52262 14.9949 9.41221C14.9825 9.3018 14.9482 9.19497 14.894 9.09804C14.8398 9.00111 14.7667 8.91603 14.679 8.84782C14.5914 8.77961 14.491 8.72966 14.3837 8.70091Z' fill='%23444444'/%3E%3C/svg%3E%0A") no-repeat center;
+}
+
+.bus-info .bus-list {
+    max-height: 194px;
+    border: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+.bus-info .bus-list .bus-head {
+    display: flex;
+    background-color: #eee;
+}
+
+.bus-info .bus-list .bus-head .head-title {
+    width: 70%;
+    padding: 8px 0;
+    font-size: 13px;
+    color: #222;
+    text-align: center;
+}
+
+.bus-info .bus-list .bus-head .head-title:last-child {
+    width: 30%;
+    border-left: 1px solid #ddd;
+}
+
+.bus-info .bus-list .bus-items {
+    margin: 0;
+}
+
+.bus-info .bus-list .bus-items .item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bus-info .bus-list .bus-items .item:not(:first-child) {
+    border-top: 1px solid #ddd;
+}
+
+.bus-info .bus-list .bus-items .item .item-inner {
+    display: block;
+    width: 70%;
+    padding: 5px 10px;
+}
+
+.bus-info .bus-list .bus-items .item a.item-inner {
+    color: inherit;
+}
+
+.bus-info .bus-list .bus-items .item a.item-inner:hover {
+    text-decoration: none;
+}
+
+.bus-info .bus-list .bus-items .item .item-inner:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    border-left: 1px solid #ddd;
+    text-align: center;
+}
+
+.bus-info .bus-list .bus-items .item .item-inner .item-label {
+    display: inline-block;
+    padding: 3px 4px;
+    font-size: 10px;
+    background-color: var(--main-color);
+    border-radius: 3px;
+    color: #fff;
+}
+
+.bus-info .bus-list .bus-items .item .item-inner .num {
+    font-size: 12px;
+}
+
+.bus-info .bus-list .bus-items .item .item-inner p {
+    margin-bottom: 0;
+    margin-top: 2px;
+    font-size: 13px;
+}
+
+.bus-info .bus-list .bus-items .item .item-inner .time {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.bus-info .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    background: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.5735 15.3259L0.595703 1.34807L1.65636 0.287415L15.6342 14.2652L14.5735 15.3259Z' fill='%23328ADC'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.65678 15.3256L15.6346 1.34777L14.5739 0.287109L0.596116 14.2649L1.65678 15.3256Z' fill='%23328ADC'/%3E%3C/svg%3E%0A") no-repeat center;
+    border-radius: 6px;
+    font-size: 0;
+}
+
+/* 버스 End */
+
+/* 로딩 */
+
+.basic-loading {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    right: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 10;
+    transition: all 0.3s;
+}
+
+.basic-loading p {
+    margin: 0;
+    font-weight: bold;
+    color: #223966;
+}
+
+.basic-loading span {
+    font-size: 28px;
+    font-weight: bold;
+    color: #888;
+}
+
+.basic-loading.off {
+    visibility: hidden;
+    opacity: 0;
+}
+
+:root {
+    --loading-spinner-size: 0.8rem;
+    --loading-spinner-gap: 1;
+    /* [1] */
+    --loading-spinner-wrapper: calc(var(--loading-spinner-size) * 3 + var(--loading-spinner-gap) * var(--loading-spinner-size) * 2);
+    /* [2] */
+    --loading-spinner-color: #223966;
+    --animation-timing: cubic-bezier(0, 1, 1, 0);
+    --animation-duration: 600ms;
+    --animation-count: infinite;
+}
+
+.basic-loading .loading {
+    --spacer: calc(var(--loading-spinner-size) * var(--loading-spinner-gap) + var(--loading-spinner-size));
+    /* [3] */
+    position: relative;
+    width: var(--loading-spinner-wrapper);
+    height: var(--loading-spinner-size);
+    /* border: 1px solid red; */
+    /* [4] */
+}
+
+.basic-loading .loading span {
+    position: absolute;
+    top: 0;
+    width: var(--loading-spinner-size);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: var(--loading-spinner-color);
+    animation-timing-function: var(--animation-timing);
+}
+
+.basic-loading .loading span:nth-child(1) {
+    left: 0;
+    animation: scale-up var(--animation-duration) var(--animation-count);
+}
+
+.basic-loading .loading span:nth-child(2) {
+    left: 0;
+    animation: move-right var(--animation-duration) var(--animation-count);
+}
+
+.basic-loading .loading span:nth-child(3) {
+    left: calc(var(--spacer) * 1);
+    animation: move-right var(--animation-duration) var(--animation-count);
+}
+
+.basic-loading .loading span:nth-child(4) {
+    left: calc(var(--spacer) * 2);
+    animation: scale-down var(--animation-duration) var(--animation-count);
+}
+
+@keyframes scale-up {
+    from {
+        transform: scale(0)
+    }
+    to {
+        transform: scale(1)
+    }
+}
+
+@keyframes scale-down {
+    from {
+        transform: scale(1)
+    }
+    to {
+        transform: scale(0)
+    }
+}
+
+@keyframes move-right {
+    from {
+        transform: translate(0, 0)
+    }
+    to {
+        transform: translate(var(--spacer), 0)
+    }
+    /* [3] */
+}
+
+/* 로딩 End */
+
+/* 추가 커스텀 */
+
+@font-face {
+    font-family: 'NEXON Lv1 Gothic OTF Light';
+    src: url('https://www.policymap.or.kr/lib_xraymap/ex_lib/font/NEXON Lv1 Gothic OTF Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,
+body {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-family: 'NEXON Lv1 Gothic OTF Light', "Lato", sans-serif;
+    height: 100%;
+    width: 100%;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    /* required to prevent rogue scrollbars */
+    overflow: hidden;
+    /* cosmetic stuff: */
+    /*background-color:#5AE;*/
+    position: fixed;
+}
+
+#wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+    /* if you want the content to scroll normally: */
+    overflow: auto;
+    /* cosmetic stuff: */
+    /*
+			background-color:#AEA;
+			border: #6B6 1em solid;
+			box-sizing:border-box;
+			*/
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-family: 'NEXON Lv1 Gothic OTF Light', "Lato", sans-serif;
+}
+
+.legend-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.8);
+    margin-right: 20px;
+    font-family: Arial, sans-serif;
+    overflow: auto;
+    border-radius: 3px;
+}
+
+#legend {
+    padding: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+    line-height: 10px;
+    margin-bottom: 70px;
+}
+
+.density-legend-key {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.legend-key {
+    display: inline-block;
+    border-radius: 20%;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.side-left {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.0);
+    margin-left: 0px;
+    margin-top: 70px;
+    font-family: Arial, sans-serif;
+    overflow: auto;
+    border-radius: 3px;
+}
+
+.side-right {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.0);
+    margin-top: 70px;
+    right: 0;
+    font-family: Arial, sans-serif;
+    overflow: auto;
+    border-radius: 3px;
+}
+
+img[title="liveCamera"] {
+    animation: liveicon .7s infinite;
+    box-shadow: 1, 1, 1, 1 rgba(0, 0, 0, 0.5)
+}
+
+@keyframes liveicon {
+    0% {
+        scale: 1
+    }
+    50% {
+        scale: 1.3
+    }
+    100% {
+        scale: 1
+    }
+}
+
+/* 추가 커스텀 마커 관련 */
+
+.searchOverlay {
+    position: absolute;
+    left: 50%;
+    bottom: 15px;
+    transform: translateX(-50%);
+    width: 265px;
+    padding: 20px 15px;
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Pretendard';
+}
+
+.searchOverlay * {
+    white-space: normal;
+    word-break: keep-all;
+    line-height: normal;
+}
+
+.searchOverlay .address-box {
+    position: relative;
+    margin: 8px 0 15px;
+}
+
+.searchOverlay .name {
+    display: block;
+    padding-right: 30px;
+    font-size: 16px;
+    color: #111;
+}
+
+.searchOverlay .address {
+    margin: 5px 0;
+    font-size: 13px;
+    color: #222;
+}
+
+.searchOverlay .address-dong {
+    position: relative;
+    padding-left: 38px;
+    color: #666;
+}
+
+.searchOverlay .address-dong:before {
+    content: '지번';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 31px;
+    height: 20px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    color: #666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+}
+
+.searchOverlay .tel {
+    display: block;
+    font-size: 12px;
+    color: var(--main-color);
+    letter-spacing: -0.5px;
+}
+
+.searchOverlay .btn-list {
+    display: flex;
+    margin-top: 15px;
+    gap: 6px;
+}
+
+.searchOverlay .btn-list a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: 50%;
+    height: 37px;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    font-size: 14px;
+    color: #222;
+    transition: all 0.2s;
+}
+
+.searchOverlay .btn-list a.detail-link {
+    width: 100%;
+}
+
+.searchOverlay .btn-list a::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.searchOverlay .btn-list a.detail-link:before {
+    display: none;
+}
+
+.searchOverlay .btn-list a:hover,
+.searchOverlay .btn-list a:focus {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+    color: #fff;
+    text-decoration: none;
+}
+
+.searchOverlay .btn-list .roadview::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 1C9.06875 1 10.75 2.61852 10.75 4.62037C10.75 7.33413 7 11.3439 7 11.3439C7 11.3439 3.25 7.33413 3.25 4.62037C3.25 2.61852 4.93125 1 7 1ZM7 3.43386C6.66848 3.43386 6.35054 3.56207 6.11612 3.79029C5.8817 4.01851 5.75 4.32804 5.75 4.65079C5.75 4.97354 5.8817 5.28307 6.11612 5.51129C6.35054 5.73951 6.66848 5.86772 7 5.86772C7.33152 5.86772 7.64946 5.73951 7.88388 5.51129C8.1183 5.28307 8.25 4.97354 8.25 4.65079C8.25 4.32804 8.1183 4.01851 7.88388 3.79029C7.64946 3.56207 7.33152 3.43386 7 3.43386ZM12 11.3439C12 12.6886 9.7625 13.7778 7 13.7778C4.2375 13.7778 2 12.6886 2 11.3439C2 10.559 2.7625 9.85926 3.94375 9.41508L4.34375 9.96878C3.66875 10.2426 3.25 10.6198 3.25 11.0397C3.25 11.8794 4.93125 12.5608 7 12.5608C9.06875 12.5608 10.75 11.8794 10.75 11.0397C10.75 10.6198 10.3313 10.2426 9.65625 9.96878L10.0562 9.41508C11.2375 9.85926 12 10.559 12 11.3439Z' fill='%23C8C8C8'/%3E%3C/svg%3E%0A");
+}
+
+.searchOverlay .btn-list .find::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.19021 7.95924L7.02608 13.8094C7.27894 14.0629 7.69235 14.0636 7.94521 13.8107L13.809 7.96054C13.8696 7.90016 13.9176 7.82843 13.9504 7.74946C13.9831 7.67049 14 7.58583 14 7.50033C14 7.41483 13.9831 7.33017 13.9504 7.25119C13.9176 7.17222 13.8696 7.10049 13.809 7.04011L7.94521 1.18994C7.88481 1.12961 7.8131 1.08178 7.7342 1.04918C7.6553 1.01659 7.57074 0.99988 7.48537 1C7.4 1.00012 7.3155 1.01707 7.23669 1.04989C7.15788 1.0827 7.08631 1.13074 7.02608 1.19124L1.19021 7.04141C1.12991 7.10166 1.08207 7.1732 1.04943 7.25194C1.0168 7.33068 1 7.41509 1 7.50033C1 7.58556 1.0168 7.66997 1.04943 7.74871C1.08207 7.82745 1.12991 7.89899 1.19021 7.95924ZM5.54989 6.20029H8.79998V4.90025L10.75 6.85031L8.79998 8.80036V7.50033H6.84992V10.1004H5.54989V6.20029Z' fill='%23C8C8C8'/%3E%3C/svg%3E%0A");
+}
+
+.searchOverlay .btn-list .roadview:hover::before,
+.searchOverlay .btn-list .roadview:focus::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 1C9.06875 1 10.75 2.61852 10.75 4.62037C10.75 7.33413 7 11.3439 7 11.3439C7 11.3439 3.25 7.33413 3.25 4.62037C3.25 2.61852 4.93125 1 7 1ZM7 3.43386C6.66848 3.43386 6.35054 3.56207 6.11612 3.79029C5.8817 4.01851 5.75 4.32804 5.75 4.65079C5.75 4.97354 5.8817 5.28307 6.11612 5.51129C6.35054 5.73951 6.66848 5.86772 7 5.86772C7.33152 5.86772 7.64946 5.73951 7.88388 5.51129C8.1183 5.28307 8.25 4.97354 8.25 4.65079C8.25 4.32804 8.1183 4.01851 7.88388 3.79029C7.64946 3.56207 7.33152 3.43386 7 3.43386ZM12 11.3439C12 12.6886 9.7625 13.7778 7 13.7778C4.2375 13.7778 2 12.6886 2 11.3439C2 10.559 2.7625 9.85926 3.94375 9.41508L4.34375 9.96878C3.66875 10.2426 3.25 10.6198 3.25 11.0397C3.25 11.8794 4.93125 12.5608 7 12.5608C9.06875 12.5608 10.75 11.8794 10.75 11.0397C10.75 10.6198 10.3313 10.2426 9.65625 9.96878L10.0562 9.41508C11.2375 9.85926 12 10.559 12 11.3439Z' fill='white'/%3E%3C/svg%3E%0A");
+}
+
+.searchOverlay .btn-list .find:hover::before,
+.searchOverlay .btn-list .find:focus::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.19021 7.95924L7.02608 13.8094C7.27894 14.0629 7.69235 14.0636 7.94521 13.8107L13.809 7.96054C13.8696 7.90016 13.9176 7.82843 13.9504 7.74946C13.9831 7.67049 14 7.58583 14 7.50033C14 7.41483 13.9831 7.33017 13.9504 7.25119C13.9176 7.17222 13.8696 7.10049 13.809 7.04011L7.94521 1.18994C7.88481 1.12961 7.8131 1.08178 7.7342 1.04918C7.6553 1.01659 7.57074 0.99988 7.48537 1C7.4 1.00012 7.3155 1.01707 7.23669 1.04989C7.15788 1.0827 7.08631 1.13074 7.02608 1.19124L1.19021 7.04141C1.12991 7.10166 1.08207 7.1732 1.04943 7.25194C1.0168 7.33068 1 7.41509 1 7.50033C1 7.58556 1.0168 7.66997 1.04943 7.74871C1.08207 7.82745 1.12991 7.89899 1.19021 7.95924ZM5.54989 6.20029H8.79998V4.90025L10.75 6.85031L8.79998 8.80036V7.50033H6.84992V10.1004H5.54989V6.20029Z' fill='white'/%3E%3C/svg%3E%0A");
+}
+
+.searchOverlay .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: url("data:image/svg+xml,%3Csvg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 2.5L12.5 12.5' stroke='%23666666' stroke-linejoin='round'/%3E%3Cpath d='M2.5 12.5L12.5 2.5' stroke='%23666666' stroke-linejoin='round'/%3E%3C/svg%3E%0A") no-repeat center;
+    border-radius: 6px;
+    font-size: 0;
+}
+
+.placeinfo_wrap {
+    position: absolute;
+    width: auto;
+    max-width: 260px;
+    width: max-content;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--main-color);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.placeinfo_wrap::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-top-color: var(--main-color);
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -20px;
+    border-top-width: 13px;
+}
+
+/* .placeinfo_wrap::before {content: ''; position: aboslute; bottom: -18px; left: 50%; transform: translateX(-50%); width: 36px; height: 36px; background-color: var(--main-color);} */
+
+.placeinfo_wrap a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 8px 30px 8px 12px;
+    font-family: 'Pretendard';
+    color: #fff;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
+    word-break: keep-all;
+}
+
+.placeinfo_wrap a::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    background: url("data:image/svg+xml;charset=utf8,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M13.0459 1.84612V5.28202H11.328V3.02228L7.27222 7.07803L6.11803 5.92385L10.1958 1.84612H7.89207V0.128174L11.328 0.128174L13.0459 0.128174V1.84612ZM0.161285 0.128177H6.17411V1.84613H1.87923V11.2948H11.328V6.99997H13.0459V13.0128H0.161285V0.128177Z' fill='rgb(255, 255, 255)' /%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    gap: 10px;
+}
+
+.placeinfo_wrap a:hover,
+.placeinfo_wrap a:focus {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.placeinfo_wrap a:focus {
+    color: #fff;
+}
+
+.placeinfo_wrap a span {
+    color: inherit;
+}
+
+.placeinfo_wrap .overlay-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 8px 12px;
+    font-family: 'Pretendard';
+    color: #fff;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
+    word-break: keep-all;
+}
+
+.placeinfo_wrap.no-link {
+    background-color: #1D5FAC;
+}
+
+.placeinfo_wrap.no-link::before {
+    border-top-color: #1D5FAC;
+}
+
+.placeinfo_wrap.special-overlay {
+    background-color: var(--point-color);
+}
+
+.placeinfo_wrap.special-overlay.festival {
+    background-color: var(--point-color);
+}
+
+.placeinfo_wrap.special-overlay.attraction {
+    background-color: var(--point-color2);
+}
+
+.placeinfo_wrap.special-overlay::before {
+    border-top-color: var(--point-color);
+}
+
+.placeinfo_wrap.special-overlay.attraction::before {
+    border-top-color: var(--point-color2);
+}
+
+.placeinfo_wrap.special-overlay .searchOverlay2 {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 8px 12px;
+}
+
+.placeinfo_wrap.special-overlay .overlay-item {
+    position: relative;
+    padding: 0 0 0 7px;
+    text-align: left;
+}
+
+.placeinfo_wrap.special-overlay .overlay-item::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 0;
+    width: 3px;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+/* 추가 커스텀 마커 관련 End */
+
+/* 로드뷰 추가 커스텀 */
+
+#rvWrapper {
+    right: auto;
+    left: 20px;
+    top: 45%;
+    bottom: auto;
+}
+
+/* 로드뷰 추가 커스텀 End */
+
+/* 기타 Public 추가 커스텀 */
+
+#map_controller_wrap {
+    z-index: 2;
+}
+
+#map_controller_wrap .vertical .custom-btn-control button {
+    margin-left: auto;
+}
+
+#map_controller_wrap .vertical .custom-btn-control button.traffic {
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='18' viewBox='0 0 20 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 6.4C9.40326 6.4 8.83097 6.21036 8.40901 5.87279C7.98705 5.53523 7.75 5.07739 7.75 4.6C7.75 3.601 8.7625 2.8 10 2.8C11.2487 2.8 12.25 3.601 12.25 4.6C12.25 5.07739 12.0129 5.53523 11.591 5.87279C11.169 6.21036 10.5967 6.4 10 6.4ZM10 10.9C9.40326 10.9 8.83097 10.7104 8.40901 10.3728C7.98705 10.0352 7.75 9.57739 7.75 9.1C7.75 8.101 8.7625 7.3 10 7.3C11.2487 7.3 12.25 8.101 12.25 9.1C12.25 9.57739 12.0129 10.0352 11.591 10.3728C11.169 10.7104 10.5967 10.9 10 10.9ZM10 15.4C9.40326 15.4 8.83097 15.2104 8.40901 14.8728C7.98705 14.5352 7.75 14.0774 7.75 13.6C7.75 12.601 8.7625 11.8 10 11.8C11.2487 11.8 12.25 12.601 12.25 13.6C12.25 14.0774 12.0129 14.5352 11.591 14.8728C11.169 15.2104 10.5967 15.4 10 15.4ZM19 7.3H15.625V6.274C17.56 5.869 19 4.474 19 2.8H15.625V1.9C15.625 1.66131 15.5065 1.43239 15.2955 1.2636C15.0845 1.09482 14.7984 1 14.5 1H5.5C5.20163 1 4.91548 1.09482 4.7045 1.2636C4.49353 1.43239 4.375 1.66131 4.375 1.9V2.8H1C1 4.474 2.44 5.869 4.375 6.274V7.3H1C1 8.974 2.44 10.369 4.375 10.774V11.8H1C1 13.474 2.44 14.869 4.375 15.274V16.3C4.375 16.5387 4.49353 16.7676 4.7045 16.9364C4.91548 17.1052 5.20163 17.2 5.5 17.2H14.5C14.7984 17.2 15.0845 17.1052 15.2955 16.9364C15.5065 16.7676 15.625 16.5387 15.625 16.3V15.274C17.56 14.869 19 13.474 19 11.8H15.625V10.774C17.56 10.369 19 8.974 19 7.3Z' fill='%23444444'/%3E%3C/svg%3E%0A");
+}
+
+#map_controller_wrap .vertical .custom-btn-control button.traffic.on {
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='18' viewBox='0 0 20 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 6.4C9.40326 6.4 8.83097 6.21036 8.40901 5.87279C7.98705 5.53523 7.75 5.07739 7.75 4.6C7.75 3.601 8.7625 2.8 10 2.8C11.2488 2.8 12.25 3.601 12.25 4.6C12.25 5.07739 12.0129 5.53523 11.591 5.87279C11.169 6.21036 10.5967 6.4 10 6.4ZM10 10.9C9.40326 10.9 8.83097 10.7104 8.40901 10.3728C7.98705 10.0352 7.75 9.57739 7.75 9.1C7.75 8.101 8.7625 7.3 10 7.3C11.2488 7.3 12.25 8.101 12.25 9.1C12.25 9.57739 12.0129 10.0352 11.591 10.3728C11.169 10.7104 10.5967 10.9 10 10.9ZM10 15.4C9.40326 15.4 8.83097 15.2104 8.40901 14.8728C7.98705 14.5352 7.75 14.0774 7.75 13.6C7.75 12.601 8.7625 11.8 10 11.8C11.2488 11.8 12.25 12.601 12.25 13.6C12.25 14.0774 12.0129 14.5352 11.591 14.8728C11.169 15.2104 10.5967 15.4 10 15.4ZM19 7.3H15.625V6.274C17.56 5.869 19 4.474 19 2.8H15.625V1.9C15.625 1.66131 15.5065 1.43239 15.2955 1.2636C15.0845 1.09482 14.7984 1 14.5 1H5.5C5.20163 1 4.91548 1.09482 4.70451 1.2636C4.49353 1.43239 4.375 1.66131 4.375 1.9V2.8H1C1 4.474 2.44 5.869 4.375 6.274V7.3H1C1 8.974 2.44 10.369 4.375 10.774V11.8H1C1 13.474 2.44 14.869 4.375 15.274V16.3C4.375 16.5387 4.49353 16.7676 4.70451 16.9364C4.91548 17.1052 5.20163 17.2 5.5 17.2H14.5C14.7984 17.2 15.0845 17.1052 15.2955 16.9364C15.5065 16.7676 15.625 16.5387 15.625 16.3V15.274C17.56 14.869 19 13.474 19 11.8H15.625V10.774C17.56 10.369 19 8.974 19 7.3Z' fill='%23328ADC'/%3E%3C/svg%3E%0A");
+}
+
+#map_controller_wrap .vertical .custom-btn-control button.roadview {
+    background-image: url("data:image/svg+xml,%3Csvg width='15' height='18' viewBox='0 0 15 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.04348 0C9.95772 0 12.3261 2.28 12.3261 5.1C12.3261 8.92286 7.04348 14.5714 7.04348 14.5714C7.04348 14.5714 1.76087 8.92286 1.76087 5.1C1.76087 2.28 4.12924 0 7.04348 0ZM7.04348 3.42857C6.57647 3.42857 6.12858 3.60918 5.79836 3.93067C5.46813 4.25216 5.28261 4.6882 5.28261 5.14286C5.28261 5.59751 5.46813 6.03355 5.79836 6.35504C6.12858 6.67653 6.57647 6.85714 7.04348 6.85714C7.51049 6.85714 7.95837 6.67653 8.2886 6.35504C8.61883 6.03355 8.80435 5.59751 8.80435 5.14286C8.80435 4.6882 8.61883 4.25216 8.2886 3.93067C7.95837 3.60918 7.51049 3.42857 7.04348 3.42857ZM14.087 14.5714C14.087 16.4657 10.935 18 7.04348 18C3.15196 18 0 16.4657 0 14.5714C0 13.4657 1.07413 12.48 2.73815 11.8543L3.30163 12.6343C2.35076 13.02 1.76087 13.5514 1.76087 14.1429C1.76087 15.3257 4.12924 16.2857 7.04348 16.2857C9.95772 16.2857 12.3261 15.3257 12.3261 14.1429C12.3261 13.5514 11.7362 13.02 10.7853 12.6343L11.3488 11.8543C13.0128 12.48 14.087 13.4657 14.087 14.5714Z' fill='%23444444'/%3E%3C/svg%3E%0A");
+}
+
+#map_controller_wrap .vertical .custom-btn-control button.roadview.on {
+    background-image: url("data:image/svg+xml,%3Csvg width='15' height='18' viewBox='0 0 15 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.04348 0C9.95772 0 12.3261 2.28 12.3261 5.1C12.3261 8.92286 7.04348 14.5714 7.04348 14.5714C7.04348 14.5714 1.76087 8.92286 1.76087 5.1C1.76087 2.28 4.12924 0 7.04348 0ZM7.04348 3.42857C6.57647 3.42857 6.12858 3.60918 5.79836 3.93067C5.46813 4.25216 5.28261 4.6882 5.28261 5.14286C5.28261 5.59751 5.46813 6.03355 5.79836 6.35504C6.12858 6.67653 6.57647 6.85714 7.04348 6.85714C7.51049 6.85714 7.95837 6.67653 8.2886 6.35504C8.61883 6.03355 8.80435 5.59751 8.80435 5.14286C8.80435 4.6882 8.61883 4.25216 8.2886 3.93067C7.95837 3.60918 7.51049 3.42857 7.04348 3.42857ZM14.087 14.5714C14.087 16.4657 10.935 18 7.04348 18C3.15196 18 0 16.4657 0 14.5714C0 13.4657 1.07413 12.48 2.73815 11.8543L3.30163 12.6343C2.35076 13.02 1.76087 13.5514 1.76087 14.1429C1.76087 15.3257 4.12924 16.2857 7.04348 16.2857C9.95772 16.2857 12.3261 15.3257 12.3261 14.1429C12.3261 13.5514 11.7362 13.02 10.7853 12.6343L11.3488 11.8543C13.0128 12.48 14.087 13.4657 14.087 14.5714Z' fill='%23328ADC'/%3E%3C/svg%3E%0A");
+}
+
+#map_controller_wrap .vertical .custom-btn-control button.district {
+    background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.00113 0C8.55118 0 8.10124 0.170979 7.73228 0.530934L4.76265 3.49156L9.00113 7.72103L13.2396 3.49156L10.27 0.530934C9.90101 0.170979 9.45107 0 9.00113 0ZM3.49381 4.76041L0.533183 7.73003C-0.177728 8.43195 -0.177728 9.5658 0.533183 10.2677L3.49381 13.2373L7.72328 8.99887L3.49381 4.76041ZM14.5084 4.76041L10.279 8.99887L14.5084 13.2373L17.4691 10.2677C18.18 9.5658 18.18 8.43195 17.4691 7.73003L14.5084 4.76041ZM9.00113 10.2767L4.76265 14.5062L7.73228 17.4668C8.4342 18.1777 9.56805 18.1777 10.27 17.4668L13.2396 14.5062L9.00113 10.2767Z' fill='%23444444'/%3E%3C/svg%3E%0A");
+}
+
+#map_controller_wrap .vertical .custom-btn-control button.district.on {
+    background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.00113 0C8.55118 0 8.10124 0.170979 7.73228 0.530934L4.76265 3.49156L9.00113 7.72103L13.2396 3.49156L10.27 0.530934C9.90101 0.170979 9.45107 0 9.00113 0ZM3.49381 4.7604L0.533183 7.73003C-0.177728 8.43195 -0.177728 9.5658 0.533183 10.2677L3.49381 13.2373L7.72328 8.99888L3.49381 4.7604ZM14.5084 4.7604L10.279 8.99888L14.5084 13.2373L17.4691 10.2677C18.18 9.5658 18.18 8.43195 17.4691 7.73003L14.5084 4.7604ZM9.00113 10.2767L4.76265 14.5062L7.73228 17.4668C8.4342 18.1777 9.56805 18.1777 10.27 17.4668L13.2396 14.5062L9.00113 10.2767Z' fill='%23328ADC'/%3E%3C/svg%3E%0A");
+}
+
+#map_controller_wrap .vertical .custom-btn-control button.on {
+    background-color: #fff;
+}
+
+#map_controller_wrap .horizontal {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+#map_controller_wrap .horizontal .main-search {
+    display: flex;
+    position: relative;
+    max-width: 320px;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+#map_controller_wrap .horizontal .main-search .search-select {
+    min-width: 100px;
+    padding: 0 25px 0px 12px;
+    background: #fff url("data:image/svg+xml,%3Csvg width='9' height='5' viewBox='0 0 9 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.57457 0L4.79289 3.09042L8.01121 0L8.99985 0.951417L4.79289 5L0.585938 0.951417L1.57457 0Z' fill='%23757D86'/%3E%3C/svg%3E%0A") no-repeat right 8px center !important;
+    -webkit-padding-end: 25px;
+    -moz-padding-end: 25px;
+    border-right: 1px solid #ddd;
+    font-family: 'Pretendard';
+    font-size: 13px;
+    transition: all 0.3s;
+}
+
+#map_controller_wrap .horizontal .main-search .search-select:focus {
+    outline: none;
+}
+
+#map_controller_wrap .horizontal .main-search .search-input {
+    width: 100%;
+    height: 100%;
+    padding: 10px 50px 10px 20px;
+    background-color: #F2F8FF;
+    font-family: 'Pretendard';
+    font-size: 15px;
+    transition: all 0.3s;
+}
+
+#map_controller_wrap .horizontal .main-search .search-input:focus {
+    color: #47B7EA;
+    outline: none;
+}
+
+#map_controller_wrap .horizontal .main-search .search-btn {
+    position: absolute;
+    cursor: pointer;
+    top: 47%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    background: url("data:image/svg+xml,%3Csvg width='26' height='26' viewBox='0 0 26 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='13.1031' cy='13.1226' r='7.34131' transform='rotate(45 13.1031 13.1226)' stroke='%233BA8E7' stroke-width='3'/%3E%3Cpath d='M21.374 24.0006C21.9598 24.5864 22.9095 24.5864 23.4953 24.0006C24.0811 23.4148 24.0811 22.4651 23.4953 21.8793L21.374 24.0006ZM17.438 20.0646L21.374 24.0006L23.4953 21.8793L19.5593 17.9432L17.438 20.0646Z' fill='%233BA8E7'/%3E%3C/svg%3E%0A") no-repeat center;
+    font-size: 0;
+}
+
+#map_controller_wrap .horizontal .custom-type-control button .btn-text {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--basic-color);
+}
+
+#map_controller_wrap .controller-title,
+#map_controller_wrap .controller-close {
+    display: none;
+}
+
+#map .zoom-slide {
+    z-index: 5 !important;
+}
+
+.gis-util-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: absolute;
+    top: 400px;
+    right: 25px;
+    z-index: 1;
+}
+
+.gis-util {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid #EBEBEB;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.layer-toggle {
+    display: none;
+}
+
+.layer-toggle {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.5 5L20 9L12.5 13L5 9L12.5 5Z' stroke='black' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M20 11.5L12.5 15.5L5 11.5' stroke='black' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M20 14.5L12.5 18.5L5 14.5' stroke='black' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+}
+
+.layer-toggle.on {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.5 5L20 9L12.5 13L5 9L12.5 5Z' stroke='%231D85FF' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M20 11.5L12.5 15.5L5 11.5' stroke='%231D85FF' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M20 14.5L12.5 18.5L5 14.5' stroke='%231D85FF' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+}
+
+.gis-gps {
+    display: inline-block;
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='7.4' stroke='%23101010' stroke-width='1.2'/%3E%3Cline x1='12.2523' y1='4.69531' x2='12.2523' y2='7.47792' stroke='%23101010' stroke-width='1.2'/%3E%3Cline x1='12.2523' y1='16.5215' x2='12.2523' y2='19.3041' stroke='%23101010' stroke-width='1.2'/%3E%3Cline x1='4.69531' y1='11.7477' x2='7.47792' y2='11.7477' stroke='%23101010' stroke-width='1.2'/%3E%3Cline x1='16.5215' y1='11.7477' x2='19.3041' y2='11.7477' stroke='%23101010' stroke-width='1.2'/%3E%3Ccircle cx='12.0005' cy='12.0005' r='1.04348' fill='%23101010'/%3E%3C/svg%3E%0A");
+}
+
+.gis-gps.on {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='7.4' stroke='%231D85FF' stroke-width='1.2'/%3E%3Cline x1='12.2523' y1='4.69531' x2='12.2523' y2='7.47792' stroke='%231D85FF' stroke-width='1.2'/%3E%3Cline x1='12.2523' y1='16.5215' x2='12.2523' y2='19.3041' stroke='%231D85FF' stroke-width='1.2'/%3E%3Cline x1='4.69531' y1='11.7477' x2='7.47792' y2='11.7477' stroke='%231D85FF' stroke-width='1.2'/%3E%3Cline x1='16.5215' y1='11.7477' x2='19.3041' y2='11.7477' stroke='%231D85FF' stroke-width='1.2'/%3E%3Ccircle cx='12.0005' cy='12.0005' r='1.04348' fill='%231D85FF'/%3E%3C/svg%3E%0A");
+}
+
+.w1024 #map .zoom-slide {
+    display: none;
+}
+
+.w1024 .gis-util-box {
+    top: 132px;
+    right: 10px;
+    left: auto;
+}
+
+.w1024 .layer-toggle,
+.w1024 .gis-gps {
+    display: inline-block;
+}
+
+.w1024 #map_controller_wrap {
+    top: 116px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 116px);
+    background-color: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.w1024 #map_controller_wrap .controller-inner {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 16px 16px 24px;
+    background-color: #fff;
+    border-radius: 12px 12px 0 0;
+    transform: translateY(100%);
+    transition: all 0.3s;
+}
+
+.w1024 #map_controller_wrap.open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.w1024 #map_controller_wrap.open .controller-inner {
+    transform: translateY(0);
+}
+
+.w1024 #map_controller_wrap .vertical {
+    position: static;
+    margin: 0;
+}
+
+.w1024 #map_controller_wrap .horizontal {
+    justify-content: center;
+    margin-left: 0;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #EBEBEB;
+}
+
+.w1024 #map_controller_wrap .horizontal .custom-type-control {
+    gap: 36px;
+}
+
+.w1024 #map_controller_wrap .horizontal .custom-type-control button {
+    gap: 4px;
+    position: relative;
+    width: auto;
+    margin-bottom: 0;
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.w1024 #map_controller_wrap .horizontal .custom-type-control .selected-btn::before,
+.w1024 #map_controller_wrap .horizontal .custom-type-control button.on::before {
+    border: 2px solid var(--main-color);
+}
+
+.w1024 #map_controller_wrap .horizontal .custom-type-control button::after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translate(-50%, 5px);
+    width: 27px;
+    height: 26px;
+    background: url("data:image/svg+xml,%3Csvg width='27' height='26' viewBox='0 0 27 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.869141' width='25.1665' height='25.1665' rx='12.5833' fill='%231D85FF'/%3E%3Cpath d='M9.375 12.5856L12.2878 15.4984L18.1134 9.67285' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A") no-repeat center;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.w1024 #map_controller_wrap .horizontal .custom-type-control .selected-btn::after,
+.w1024 #map_controller_wrap .horizontal .custom-type-control button.on::after {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.w1024 #map_controller_wrap .horizontal .custom-type-control button .btn-text {
+    padding: 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--basic-color);
+    line-height: 1.4;
+}
+
+.w1024 #map_controller_wrap .horizontal .custom-type-control .selected-btn .btn-text,
+.w1024 #map_controller_wrap .horizontal .custom-type-control button.on .btn-text {
+    background-color: transparent;
+}
+
+.w1024 #map_controller_wrap .horizontal .custom-type-control button::before {
+    width: 64px;
+    height: 61px;
+    border-radius: 6px;
+    background-size: cover !important;
+    background-color: var(--main-color);
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 42px;
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: auto;
+    height: auto;
+    margin-bottom: 0;
+    background: none !important;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--basic-color);
+    line-height: 1.4;
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control button::before {
+    content: '';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 56px;
+    height: 56px;
+    background-color: #F1F2F5;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control button.traffic::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='26' height='23' viewBox='0 0 26 23' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.8887 7.88867C12.0599 7.88867 11.265 7.62528 10.679 7.15644C10.0929 6.6876 9.76367 6.05171 9.76367 5.38867C9.76367 4.00117 11.1699 2.88867 12.8887 2.88867C14.623 2.88867 16.0137 4.00117 16.0137 5.38867C16.0137 6.05171 15.6844 6.6876 15.0984 7.15644C14.5123 7.62528 13.7175 7.88867 12.8887 7.88867ZM12.8887 14.1387C12.0599 14.1387 11.265 13.8753 10.679 13.4064C10.0929 12.9376 9.76367 12.3017 9.76367 11.6387C9.76367 10.2512 11.1699 9.13867 12.8887 9.13867C14.623 9.13867 16.0137 10.2512 16.0137 11.6387C16.0137 12.3017 15.6844 12.9376 15.0984 13.4064C14.5123 13.8753 13.7175 14.1387 12.8887 14.1387ZM12.8887 20.3887C12.0599 20.3887 11.265 20.1253 10.679 19.6564C10.0929 19.1876 9.76367 18.5517 9.76367 17.8887C9.76367 16.5012 11.1699 15.3887 12.8887 15.3887C14.623 15.3887 16.0137 16.5012 16.0137 17.8887C16.0137 18.5517 15.6844 19.1876 15.0984 19.6564C14.5123 20.1253 13.7175 20.3887 12.8887 20.3887ZM25.3887 9.13867H20.7012V7.71367C23.3887 7.15117 25.3887 5.21367 25.3887 2.88867H20.7012V1.63867C20.7012 1.30715 20.5366 0.989209 20.2435 0.754788C19.9505 0.520368 19.5531 0.388672 19.1387 0.388672H6.63867C6.22427 0.388672 5.82684 0.520368 5.53382 0.754788C5.24079 0.989209 5.07617 1.30715 5.07617 1.63867V2.88867H0.388672C0.388672 5.21367 2.38867 7.15117 5.07617 7.71367V9.13867H0.388672C0.388672 11.4637 2.38867 13.4012 5.07617 13.9637V15.3887H0.388672C0.388672 17.7137 2.38867 19.6512 5.07617 20.2137V21.6387C5.07617 21.9702 5.24079 22.2881 5.53382 22.5226C5.82684 22.757 6.22427 22.8887 6.63867 22.8887H19.1387C19.5531 22.8887 19.9505 22.757 20.2435 22.5226C20.5366 22.2881 20.7012 21.9702 20.7012 21.6387V20.2137C23.3887 19.6512 25.3887 17.7137 25.3887 15.3887H20.7012V13.9637C23.3887 13.4012 25.3887 11.4637 25.3887 9.13867Z' fill='%23BBC1CB'/%3E%3C/svg%3E%0A");
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control button.traffic.on::before {
+    background-color: var(--main-color);
+    background-image: url("data:image/svg+xml,%3Csvg width='28' height='25' viewBox='0 0 28 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.8887 8.88867C13.0599 8.88867 12.265 8.62528 11.679 8.15644C11.0929 7.6876 10.7637 7.05171 10.7637 6.38867C10.7637 5.00117 12.1699 3.88867 13.8887 3.88867C15.623 3.88867 17.0137 5.00117 17.0137 6.38867C17.0137 7.05171 16.6844 7.6876 16.0984 8.15644C15.5123 8.62528 14.7175 8.88867 13.8887 8.88867ZM13.8887 15.1387C13.0599 15.1387 12.265 14.8753 11.679 14.4064C11.0929 13.9376 10.7637 13.3017 10.7637 12.6387C10.7637 11.2512 12.1699 10.1387 13.8887 10.1387C15.623 10.1387 17.0137 11.2512 17.0137 12.6387C17.0137 13.3017 16.6844 13.9376 16.0984 14.4064C15.5123 14.8753 14.7175 15.1387 13.8887 15.1387ZM13.8887 21.3887C13.0599 21.3887 12.265 21.1253 11.679 20.6564C11.0929 20.1876 10.7637 19.5517 10.7637 18.8887C10.7637 17.5012 12.1699 16.3887 13.8887 16.3887C15.623 16.3887 17.0137 17.5012 17.0137 18.8887C17.0137 19.5517 16.6844 20.1876 16.0984 20.6564C15.5123 21.1253 14.7175 21.3887 13.8887 21.3887ZM26.3887 10.1387H21.7012V8.71367C24.3887 8.15117 26.3887 6.21367 26.3887 3.88867H21.7012V2.63867C21.7012 2.30715 21.5366 1.98921 21.2435 1.75479C20.9505 1.52037 20.5531 1.38867 20.1387 1.38867H7.63867C7.22427 1.38867 6.82684 1.52037 6.53382 1.75479C6.24079 1.98921 6.07617 2.30715 6.07617 2.63867V3.88867H1.38867C1.38867 6.21367 3.38867 8.15117 6.07617 8.71367V10.1387H1.38867C1.38867 12.4637 3.38867 14.4012 6.07617 14.9637V16.3887H1.38867C1.38867 18.7137 3.38867 20.6512 6.07617 21.2137V22.6387C6.07617 22.9702 6.24079 23.2881 6.53382 23.5226C6.82684 23.757 7.22427 23.8887 7.63867 23.8887H20.1387C20.5531 23.8887 20.9505 23.757 21.2435 23.5226C21.5366 23.2881 21.7012 22.9702 21.7012 22.6387V21.2137C24.3887 20.6512 26.3887 18.7137 26.3887 16.3887H21.7012V14.9637C24.3887 14.4012 26.3887 12.4637 26.3887 10.1387Z' fill='white'/%3E%3C/svg%3E%0A");
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control button.roadview::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='26' viewBox='0 0 20 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.0444 0.277832C14.1639 0.277832 17.5118 3.50079 17.5118 7.48709C17.5118 12.891 10.0444 20.8757 10.0444 20.8757C10.0444 20.8757 2.57702 12.891 2.57702 7.48709C2.57702 3.50079 5.9249 0.277832 10.0444 0.277832ZM10.0444 5.12439C9.38425 5.12439 8.75113 5.3797 8.28433 5.83415C7.81753 6.28861 7.55528 6.90498 7.55528 7.54767C7.55528 8.19037 7.81753 8.80674 8.28433 9.26119C8.75113 9.71564 9.38425 9.97095 10.0444 9.97095C10.7046 9.97095 11.3377 9.71564 11.8045 9.26119C12.2713 8.80674 12.5335 8.19037 12.5335 7.54767C12.5335 6.90498 12.2713 6.28861 11.8045 5.83415C11.3377 5.3797 10.7046 5.12439 10.0444 5.12439ZM20.0009 20.8757C20.0009 23.5534 15.5454 25.7223 10.0444 25.7223C4.54343 25.7223 0.0878906 23.5534 0.0878906 20.8757C0.0878906 19.3127 1.60626 17.9193 3.95849 17.0348L4.75501 18.1374C3.41088 18.6826 2.57702 19.4339 2.57702 20.2699C2.57702 21.942 5.9249 23.299 10.0444 23.299C14.1639 23.299 17.5118 21.942 17.5118 20.2699C17.5118 19.4339 16.6779 18.6826 15.3338 18.1374L16.1303 17.0348C18.4826 17.9193 20.0009 19.3127 20.0009 20.8757Z' fill='%23BBC1CB'/%3E%3C/svg%3E%0A");
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control button.roadview.on::before {
+    background-color: var(--main-color);
+    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.0444 2.27783C19.1639 2.27783 22.5118 5.50079 22.5118 9.48709C22.5118 14.891 15.0444 22.8757 15.0444 22.8757C15.0444 22.8757 7.57702 14.891 7.57702 9.48709C7.57702 5.50079 10.9249 2.27783 15.0444 2.27783ZM15.0444 7.12439C14.3843 7.12439 13.7511 7.3797 13.2843 7.83415C12.8175 8.28861 12.5553 8.90498 12.5553 9.54767C12.5553 10.1904 12.8175 10.8067 13.2843 11.2612C13.7511 11.7156 14.3843 11.971 15.0444 11.971C15.7046 11.971 16.3377 11.7156 16.8045 11.2612C17.2713 10.8067 17.5335 10.1904 17.5335 9.54767C17.5335 8.90498 17.2713 8.28861 16.8045 7.83415C16.3377 7.3797 15.7046 7.12439 15.0444 7.12439ZM25.0009 22.8757C25.0009 25.5534 20.5454 27.7223 15.0444 27.7223C9.54343 27.7223 5.08789 25.5534 5.08789 22.8757C5.08789 21.3127 6.60626 19.9193 8.95849 19.0348L9.75501 20.1374C8.41088 20.6826 7.57702 21.4339 7.57702 22.2699C7.57702 23.942 10.9249 25.299 15.0444 25.299C19.1639 25.299 22.5118 23.942 22.5118 22.2699C22.5118 21.4339 21.6779 20.6826 20.3338 20.1374L21.1303 19.0348C23.4826 19.9193 25.0009 21.3127 25.0009 22.8757Z' fill='white'/%3E%3C/svg%3E%0A");
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control button.district::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='26' height='26' viewBox='0 0 26 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9989 0C12.3491 0 11.6993 0.246917 11.1665 0.766742L6.87794 5.0423L12.9989 11.1502L19.1198 5.0423L14.8313 0.766742C14.2984 0.246917 13.6487 0 12.9989 0ZM5.04555 6.87469L0.769991 11.1632C-0.256664 12.1769 -0.256664 13.8144 0.769991 14.828L5.04555 19.1166L11.1535 12.9956L5.04555 6.87469ZM20.9522 6.87469L14.8443 12.9956L20.9522 19.1166L25.2278 14.828C26.2544 13.8144 26.2544 12.1769 25.2278 11.1632L20.9522 6.87469ZM12.9989 14.841L6.87794 20.949L11.1665 25.2245C12.1802 26.2512 13.8176 26.2512 14.8313 25.2245L19.1198 20.949L12.9989 14.841Z' fill='%23BBC1CB'/%3E%3C/svg%3E%0A");
+}
+
+.w1024 #map_controller_wrap .vertical .custom-btn-control button.district.on::before {
+    background-color: var(--main-color);
+    background-image: url("data:image/svg+xml,%3Csvg width='26' height='26' viewBox='0 0 26 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9989 0C12.3491 0 11.6993 0.246917 11.1665 0.766742L6.87794 5.0423L12.9989 11.1502L19.1198 5.0423L14.8313 0.766742C14.2984 0.246917 13.6487 0 12.9989 0ZM5.04555 6.87469L0.769991 11.1632C-0.256664 12.1769 -0.256664 13.8144 0.769991 14.828L5.04555 19.1166L11.1535 12.9956L5.04555 6.87469ZM20.9522 6.87469L14.8443 12.9956L20.9522 19.1166L25.2278 14.828C26.2544 13.8144 26.2544 12.1769 25.2278 11.1632L20.9522 6.87469ZM12.9989 14.841L6.87794 20.949L11.1665 25.2245C12.1802 26.2512 13.8176 26.2512 14.8313 25.2245L19.1198 20.949L12.9989 14.841Z' fill='white'/%3E%3C/svg%3E%0A");
+}
+
+.w1024 #map_controller_wrap .controller-title {
+    display: block;
+    margin-bottom: 28px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--basic-color);
+    text-align: center;
+}
+
+.w1024 #map_controller_wrap .controller-close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 16px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    background: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 3L15 15' stroke='%231D1D1D' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M3 15L15 3' stroke='%231D1D1D' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A") no-repeat center;
+}
+
+@media (max-width:1999px) {
+    #map .zoom-slide {
+        right: 15px !important;
+    }
+    #map_controller_wrap {
+        right: 15px;
+    }
+    .gis-util-box {
+        right: 10px;
+    }
+}
+
+@media (max-width:1640px) {
+    #side {
+        left: 310px !important;
+        bottom: auto;
+    }
+    #legend.legend-overlay {
+        right: auto !important;
+        left: 484px !important;
+    }
+    #map .zoom-slide {
+        left: 25px !important;
+        right: auto !important;
+        top: 90px !important;
+    }
+    #map_controller_wrap {
+        right: 0;
+        right: auto;
+        display: block;
+        top: 20px;
+        left: 25px;
+    }
+    #map_controller_wrap .vertical {
+        position: absolute;
+        margin-top: 211px;
+    }
+    #map_controller_wrap .vertical .custom-btn-control button {
+        margin-left: 0;
+    }
+    #map_controller_wrap .horizontal {
+        margin-left: 378px;
+    }
+    #map_controller_wrap .horizontal .custom-type-control button {
+        width: 48px;
+        margin-bottom: 5px;
+    }
+    #map_controller_wrap .horizontal .custom-type-control button::before {
+        height: 26px;
+    }
+    .gis-util-box {
+        right: auto;
+        left: 22px;
+    }
+}
+
+/* 기타 Public 추가 커스텀 End */
+
+/* GPS 마커 */
+
+#my-position-marker {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+#my-position-marker::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: var(--main-color);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    border-radius: 50%;
+}
+
+#my-position-marker::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450%;
+    height: 450%;
+    border-radius: 50%;
+    background-color: var(--main-color);
+    animation: spread-circle 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    z-index: -1;
+}
+
+@keyframes spread-circle {
+    0% {
+        width: 100%;
+        height: 100%;
+    }
+    80%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* GPS 마커 */
+
+/* 지점 위치정보보 레이어 */
+
+.mouseRightOverlay {
+    position: relative;
+    max-width: 450px;
+    width: 100%;
+    padding: 20px 24px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    font-family: 'Pretendard';
+    transform: translate(51%, 46%);
+}
+
+.mouseRightOverlay .info-title {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+}
+
+.mouseRightOverlay .info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.mouseRightOverlay .info-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.mouseRightOverlay .info-list li:not(:first-child) {
+    margin-top: 2px;
+}
+
+.mouseRightOverlay .info-list li strong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    min-width: 80px;
+    padding: 3px;
+    background-color: #F1F2F5;
+    border-radius: 4px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.mouseRightOverlay .info-list li span {
+    display: block;
+    font-weight: 300;
+}
+
+.mouseRightOverlay .mouseRightBtns {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.mouseRightOverlay .mouseRightBtns button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 50%;
+    height: 41px;
+    background-color: var(--main-color);
+    border-radius: 4px;
+    font-size: 15px;
+    color: #fff;
+    transition: all 0.2s;
+}
+
+.mouseRightOverlay .mouseRightBtns button:hover,
+.mouseRightOverlay .mouseRightBtns button:focus {
+    background-color: var(--main-color-hover);
+}
+
+.mouseRightOverlay .mouseRightBtns .area-border-remove {
+    background-color: #656B71;
+}
+
+.mouseRightOverlay .mouseRightBtns .area-border-remove:hover,
+.mouseRightOverlay .mouseRightBtns .area-border-remove:focus {
+    background-color: #54595e;
+}
+
+.mouseRightOverlay .mouseRightBtns .area-border-remove::after {
+    content: '-';
+}
+
+.mouseRightOverlay .mouseRightBtns .area-border-add::after {
+    content: '+';
+}
+
+.mouseRightOverlay .closeBtn {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    width: 30px;
+    height: 30px;
+    background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.98975 3.9895L16.0106 16.0103' stroke='%232D2D2D' stroke-width='1.4' stroke-linecap='round'/%3E%3Cpath d='M16.0103 3.9895L3.98944 16.0103' stroke='%232D2D2D' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E%0A") no-repeat center;
+    font-size: 0;
+    color: transparent;
+}
+
+/* 지점 위치정보보 레이어 End */

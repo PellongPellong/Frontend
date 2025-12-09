@@ -1,0 +1,209 @@
+#dragdrop .well {
+    padding: 8px;
+    border: 0;
+    background: #e0e0e0;
+}
+
+#dragdrop .well .header {
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+#dragdrop .well .subheader {
+    color: #969696;
+    font-size: 12px;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+    background: #fff;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 2px;
+    -moz-border-radius-topleft: 2px;
+    -moz-border-radius-topright: 2px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+#dragdrop .well .subheader .buttonsml {
+    background: #5bb95b;
+    padding: 3px;
+    color: #fff;
+    font-size: 11px;
+    line-height: 9px;
+}
+
+.draglist-shift {
+    margin-left: -3% !important;
+    width: 53% !important;
+}
+
+.label-forLayerNM {
+    width: 160px;
+    margin-top: 3px;
+    /*margin: 2px;*/
+    /*라벨 위치 살짝 위로 되어 있어서 수정*/
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+    font-weight: 100;
+    text-align: left;
+    position: absolute;
+}
+
+.sortable-list {
+    background-color: #fff;
+    list-style: none;
+    margin-bottom: 10px;
+    min-height: 30px;
+    padding: 5px;
+}
+
+.sortable-list:last-child {
+    margin-bottom: 0;
+}
+
+.placeholder {
+    background-color: white;
+    border: 1px dashed #666;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.dragbleList {
+    max-height: 800px;
+    overflow: auto;
+}
+
+.sortable-item {
+    background: #f1f1f1 url(dragListicon.png) 10px 10px no-repeat;
+    cursor: grab;
+    /*move;*/
+    display: block;
+    margin-bottom: 2px;
+    /*padding: 6px 6px 6px 6px;*/
+    padding: 1px 1px 1px 1px;
+    color: #5a5a5a;
+    font-size: 12px;
+}
+
+.sortable-selected-item {
+    /*
+	background:#f1f1f1 url(dragListicon.png) 10px 10px no-repeat;	
+	cursor: grab;
+	display: block;	
+	margin-bottom: 2px;
+	padding: 1px 1px 1px 1px;
+	color: #5a5a5a;
+	font-size: 12px;
+	*/
+    /*border: double;*/
+    /*box-shadow: 0 0 0 1px #646464 inset;*/
+    /*box-shadow:inset 0 0 5px #878787;*/
+    outline: dashed 1px #646464;
+    box-shadow: inset 0 0 3px #878787;
+}
+
+.sortable-selected-times-item {
+    /*
+	background:#f1f1f1 url(dragListicon.png) 10px 10px no-repeat;	
+	cursor: grab;
+	display: block;	
+	margin-bottom: 2px;
+	padding: 1px 1px 1px 1px;
+	color: #5a5a5a;
+	font-size: 12px;
+	*/
+    /*border: double;*/
+    /*box-shadow: 0 0 0 1px #646464 inset;*/
+    /*box-shadow:inset 0 0 5px #878787;*/
+    background: #00a2e0 url(dragListicon.png) 10px 10px no-repeat;
+    outline: dashed 1px #646464;
+    box-shadow: inset 0 0 3px #878787;
+}
+
+#div_TOC_LIST li:active {
+    color: #ffffff;
+    font-weight: bold;
+    background-color: #999;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/*좌우 붙이는 css*/
+
+div.section_zone {
+    margin: 0 auto;
+    /*padding: 3px;*/
+    padding: 1px;
+    width: 100%;
+    position: relative;
+    overflow: auto;
+    text-align: center;
+    /*display: inline-block;*/
+    clear: both;
+    /*background-color: #fff;*/
+    border: 0px solid #000;
+    /* change border to be inside the box */
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+div.box_frame {
+    float: left;
+    /*background-color: #eee;*/
+    /* standard background color */
+    border: 0px solid #898989;
+    padding-right: 2px;
+    /*padding: 2px;*/
+    margin: 0 5px;
+    text-align: center;
+    /* change border to be inside the box */
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    text-overflow: ellipsis;
+}
+
+div.box_frame:first-child {
+    margin-left: 0;
+}
+
+div.box_frame:last-child {
+    margin-right: 0;
+    float: right;
+}
+
+div.box_frame#_15 {
+    /* width 15% */
+    width: 20%;
+}
+
+/*플로팅*/
+
+#sortable-div {
+    position: absolute;
+    z-index: 9;
+}
+
+#div_TOC_Header {
+    cursor: move;
+}
+
+/*레이어 열기 닫기 버튼*/
+
+div.LAYER_OPEN_SAVE {
+    position: absolute;
+    right: 25px;
+    top: 10px;
+}

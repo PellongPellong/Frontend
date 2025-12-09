@@ -1,0 +1,101 @@
+.dot {
+    overflow: hidden;
+    float: left;
+    width: 12px;
+    height: 12px;
+    background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');
+}
+
+.dotOverlay {
+    position: relative;
+    bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    border-bottom: 2px solid #ddd;
+    float: left;
+    font-size: 12px;
+    padding: 5px;
+    background: #fff;
+}
+
+.dotOverlay:nth-of-type(n) {
+    border: 0;
+    box-shadow: 0px 1px 2px #888;
+}
+
+.number {
+    font-weight: bold;
+    color: #ee6152;
+}
+
+.dotOverlay:after {
+    content: '';
+    position: absolute;
+    margin-left: -6px;
+    left: 50%;
+    bottom: -8px;
+    width: 11px;
+    height: 8px;
+    background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')
+}
+
+.distanceInfo {
+    position: relative;
+    top: 5px;
+    left: 5px;
+    list-style: none;
+    margin: 0;
+}
+
+.distanceInfo .label {
+    display: inline-block;
+    width: 50px;
+    color: #333232;
+}
+
+.distanceInfo:after {
+    content: none;
+}
+
+/*마지막에 출력되는 최종 창 */
+
+.dotOverlay_last {
+    position: relative;
+    bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    border-bottom: 2px solid #ddd;
+    float: left;
+    font-size: 12px;
+    padding: 5px;
+    padding-right: 30px;
+    background: #fbe4e4;
+    cursor: default;
+}
+
+.detailToolClose {
+    overflow: hidden;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 20px;
+    height: 20px;
+    font-size: 0;
+    line-height: 0;
+    background: url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/tool/btn_close_s.png) no-repeat;
+    text-indent: -9999px;
+    cursor: pointer;
+}
+
+.detailToolArrow {
+    overflow: hidden;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 10px 10px 0 0;
+    border-color: #000000 transparent transparent transparent;
+    text-indent: -9999px;
+}

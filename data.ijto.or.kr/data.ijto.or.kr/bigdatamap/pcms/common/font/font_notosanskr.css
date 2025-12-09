@@ -1,0 +1,38 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    src: url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Regular.woff2) format('woff2'), url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Regular.woff) format('woff'), url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Regular.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 400;
+    src: url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Regular.woff2) format('woff2'), url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Regular.woff) format('woff'), url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Regular.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 600;
+    src: url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Bold.woff2) format('woff2'), url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Bold.woff) format('woff'), url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Bold.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Noto Sans KR Bold';
+    font-style: normal;
+    src: url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Bold.woff2) format('woff2'), url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Bold.woff) format('woff'), url(/bigdatamap/pcms/common/font/notosanskr/NotoSansKR-Bold.otf) format('opentype');
+}
+
+@font-face {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    src: url("/bigdatamap/pcms/common/font/notosanskr/OpenSans-Regular.woff") format("woff");
+    unicode-range: U+0020-007E;
+}
+
+.ntk {
+    font-family: "Noto Sans CJK KR", "Noto Sans KR", 'Noto Sans EOT', SimHei, Sans-serif;
+    font-weight: 400;
+}
