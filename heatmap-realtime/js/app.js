@@ -2,7 +2,7 @@
 // -------------------------------------------------------------
 // 이 파일은 전체 앱의 진입점입니다.
 // - Kakao 지도를 초기화합니다.
-// - ApiClient를 통해 내부 API에서 데이터를 가져옵니다.
+// - ApiClient를 통해 원본 API에서 데이터를 가져옵니다.
 // - HeatmapEngine과 UiManager를 호출해서 히트맵과 UI를 갱신합니다.
 
 (function (window, document) {
@@ -11,7 +11,7 @@
     // ---------------------------------------------------------
     // Kakao 지도 초기화 관련 설정값입니다.
     // - centerLat/lng: 기본 중심 좌표 (제주도 대략 중앙)
-    // - level: 줌 레벨 (숫자가 클수록 넓은 영역)
+    // - level: 줄 레벨 (숫자가 클수록 넓은 영역)
     // ---------------------------------------------------------
     var centerLat = 33.3846;
     var centerLng = 126.5535;
@@ -45,7 +45,7 @@
     }
 
     // ---------------------------------------------------------
-    // 실시간 혼잡도 데이터를 내부 API에서 가져옵니다.
+    // 실시간 혼잡도 데이터를 원본 API에서 가져옵니다.
     // - ApiClient.getPoints를 호출하여 포인트 데이터를 가져옵니다.
     // - 데이터 형식은 { point: [{ content, label, weight, location }] } 형태를 기대합니다.
     // ---------------------------------------------------------
@@ -55,8 +55,8 @@
             ? window.UiManager.getCurrentRegion()
             : "";
 
-        // 내부 API 설계에 따라 table/where/columns를 구성합니다.
-        // 여기서는 예시로 "stores" 테이블과 region_code 조건을 사용합니다.
+        // 원본 API는 getPoints가 목업 데이터를 반환하므로
+        // params는 사용되지 않지만, 향후 확장성을 위해 전달합니다.
         var params = {
             table: "stores",
             where: {},
@@ -71,13 +71,14 @@
     }
 
     // ---------------------------------------------------------
-    // Biz 설정(레이어 구성)을 내부 API에서 가져옵니다.
+    // Biz 설정(레이어 구성)을 원본 API에서 가져옵니다.
     // - data.ijto.or.kr의 getBiz.php 역할을 하는 엔드포인트라고 가정합니다.
     // - UI의 레이어 리스트를 구성할 때 사용합니다.
     // ---------------------------------------------------------
     function fetchBizConfig() {
-        // 예시로 "jeju_congestion"이라는 비즈 파일명을 사용합니다.
-        return window.ApiClient.getBizConfig("jeju_congestion");
+        // 원본 API에서 사용하는 Biz 파일명
+        // 예: "mms1_any_mega.biz" 또는 "jeju_congestion"
+        return window.ApiClient.getBizConfig("mms1_any_mega.biz");
     }
 
     // ---------------------------------------------------------
@@ -107,16 +108,31 @@
 
                 // UI 및 엔진 상태에 반영
                 window.UiManager.setCurrentPointData(points);
-                window.UiManager.updateLayerListUI(bizConfig);
+                
+                // Biz 설정이 유효한 경우에만 레이어 UI 업데이트
+                if (bizConfig && typeof bizConfig === 'object') {
+                    window.UiManager.updateLayerListUI(bizConfig);
+                }
 
                 var stats = window.UiManager.calculateStats(points);
                 window.UiManager.updateStatsUI(stats);
 
                 window.HeatmapEngine.setPoints(points);
+                
+                console.log("데이터 로드 성공:", {
+                    bizConfig: bizConfig,
+                    pointsCount: points.length
+                });
             })
             .catch(function (error) {
                 console.error("데이터 로드 실패", error);
-                alert("데이터를 불러오는 중 오류가 발생했습니다.");
+                
+                // CORS 에러인 경우 도움말 표시
+                var errorMsg = "데이터를 불러오는 중 오류가 발생했습니다.";
+                if (error.message && error.message.indexOf("CORS") !== -1) {
+                    errorMsg += "\n\nCORS 오류가 발생했습니다. 프록시 서버를 사용해주세요.";
+                }
+                alert(errorMsg);
             })
             .finally(function () {
                 window.UiManager.hideLoading();
