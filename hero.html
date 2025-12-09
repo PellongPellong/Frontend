@@ -9,80 +9,99 @@
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@400;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
         rel="stylesheet" />
     <style>
-        .font-serif-display {
-            font-family: 'Noto Serif KR', serif;
-        }
-
         .font-display {
             font-family: 'Noto Sans KR', sans-serif;
         }
 
-        /* Glass Base - 반투명 유리 */
-        .glass-base {
-            background: radial-gradient(circle at 20% 20%,
-                    rgba(255, 255, 255, 0.035) 0%,
-                    rgba(255, 255, 255, 0.007) 25%,
-                    transparent 50%),
-                radial-gradient(circle at 80% 20%,
-                    rgba(255, 255, 255, 0.035) 0%,
-                    rgba(255, 255, 255, 0.015) 25%,
-                    transparent 50%),
-                radial-gradient(circle at 20% 80%,
-                    rgba(255, 255, 255, 0.025) 0%,
-                    rgba(255, 255, 255, 0.005) 25%,
-                    transparent 50%),
-                radial-gradient(circle at 80% 80%,
-                    rgba(255, 255, 255, 0.035) 0%,
-                    rgba(255, 255, 255, 0.015) 25%,
-                    transparent 50%),
-                rgba(255, 255, 255, 0.005);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
-            border-radius: 0.75rem;
-            position: relative;
-            box-shadow:
-                inset 0 0 70px rgba(255, 255, 255, 0.055),
-                inset 5px 5px 30px rgba(255, 255, 255, 0.14),
-                inset -5px -5px 30px rgba(255, 255, 255, 0.14),
-                inset 5px -5px 30px rgba(255, 255, 255, 0.125),
-                inset -5px 5px 30px rgba(255, 255, 255, 0.125),
-                0 18px 55px rgba(0, 0, 0, 0.36);
-        }
-
-
-
-        .btn-final {
-            background: rgba(249, 115, 22, 0.85);
-            border: 1px solid rgba(251, 146, 60, 0.6);
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3), inset 0 2px 8px rgba(0, 0, 0, 0.2);
-            transition: box-shadow 0.3s ease;
+        /* Card with Aurora */
+        .card-aurora {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
             position: relative;
             overflow: hidden;
         }
 
-        .btn-final::before {
+        /* Aurora Effect - 10% */
+        .card-aurora::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.8s ease;
+            inset: -50%;
+            background: linear-gradient(135deg,
+                    rgba(138, 43, 226, 0.10) 0%,
+                    rgba(75, 0, 130, 0.07) 25%,
+                    rgba(0, 191, 255, 0.10) 50%,
+                    rgba(138, 43, 226, 0.07) 75%,
+                    rgba(0, 191, 255, 0.10) 100%);
+            background-size: 400% 400%;
+            animation: aurora 8s ease infinite;
+            filter: blur(30px);
         }
 
-        .btn-final:hover::before {
-            left: 100%;
+        @keyframes aurora {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
-        .btn-final:hover {
-            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4), inset 0 2px 8px rgba(0, 0, 0, 0.2);
+        /* Button with Rotating Border */
+        .btn-aurora {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+            border: none;
+            border-radius: 3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
         }
 
-        /* 비디오 스타일 */
+        .btn-aurora::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 3rem;
+            background: linear-gradient(45deg,
+                    rgba(138, 43, 226, 0.6),
+                    rgba(0, 191, 255, 0.6),
+                    rgba(138, 43, 226, 0.6));
+            background-size: 200% 200%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: gradientRotate 3s linear infinite;
+            z-index: -1;
+            filter: blur(10px);
+        }
+
+        .btn-aurora:hover::before {
+            opacity: 1;
+        }
+
+        .btn-aurora:hover {
+            transform: translateY(-2px);
+        }
+
+        @keyframes gradientRotate {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Video */
         #background-video {
             position: absolute;
             top: 50%;
@@ -95,30 +114,14 @@
             object-fit: cover;
         }
 
-        /* 텍스트 섭도우 */
-        .text-shadow-default {
-            text-shadow:
-                0 6px 12px rgba(0, 0, 0, 0.4),
-                0 3px 6px rgba(0, 0, 0, 0.2),
-                0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .subtitle-shadow-default {
-            text-shadow:
-                0 3px 6px rgba(0, 0, 0, 0.5),
-                0 1.5px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-final {
-            border: 2px solid transparent;
-            border-image: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%) 1;
+        .content-wrapper {
             position: relative;
-            transition: all 0.3s ease;
+            z-index: 1;
         }
     </style>
 </head>
 
-<body class="bg-background-light">
+<body class="bg-black">
     <div class="relative flex h-screen w-full flex-col font-display overflow-hidden">
         <div class="absolute inset-0 h-full w-full overflow-hidden">
             <video id="background-video" autoplay loop muted playsinline>
@@ -126,24 +129,18 @@
                 Your browser does not support the video tag.
             </video>
         </div>
+        <div class="absolute inset-0 bg-black/10"></div>
         <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
             <div class="flex w-full max-w-[480px] flex-col items-center gap-8 rounded-xl">
-                <div class="glass-base flex w-full flex-col gap-10 px-10 py-6 shadow-2xl">
-                    <div class="content-wrapper flex w-full flex-col gap-10">
-
-                        <div class="flex flex-col gap-3 text-center">
-                            <h1
-                                class="font-serif-display text-4xl font-bold leading-tight text-white text-shadow-default">
-                                제주숨곳 AI</h1>
-                            <h2
-                                class="font-display text-base font-normal leading-normal text-white/90 subtitle-shadow-default">
-                                ai가 만들어주는 당신만의<br>유니크한 제주 경험</h2>
-                        </div>
-                        <button class="btn-final w-full rounded-2xl py-3 active:scale-95 mt-4">
-                            <span class="text-base tracking-wide drop-shadow-md relative z-10">나만의 제주 찾으러
-                                가기</span>
+                <div class="card-aurora flex w-full flex-col gap-6 p-12 shadow-2xl">
+                    <div class="content-wrapper flex w-full flex-col gap-6">
+                        <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span
+                                class="font-light">AI</span></h1>
+                        <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한
+                            제주 경험</p>
+                        <button class="btn-aurora w-full py-4 active:scale-95">
+                            <span class="text-sm">나만의 제주 찾으러 가기</span>
                         </button>
-
                     </div>
                 </div>
             </div>
