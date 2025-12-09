@@ -17,6 +17,7 @@
     var defaultLevel = 10;
 
     var map = null;
+    var mapContainer = null;
 
     // ---------------------------------------------------------
     // 원본 API 설정
@@ -29,19 +30,30 @@
     // 지도 초기화 함수
     // ---------------------------------------------------------
     function initMap() {
-        var container = document.getElementById("map");
-        if (!container) return;
+        mapContainer = document.getElementById("map");
+        if (!mapContainer) {
+            console.error('❌ #map 요소를 찾을 수 없습니다!');
+            return;
+        }
 
         var options = {
             center: new kakao.maps.LatLng(centerLat, centerLng),
             level: defaultLevel
         };
 
-        map = new kakao.maps.Map(container, options);
+        map = new kakao.maps.Map(mapContainer, options);
+        
+        // XRayMap이 사용할 수 있도록 전역으로 노출
+        window.map = map;
+        window.div_map = mapContainer;
+        
+        console.log('✅ Kakao 지도 초기화 완료');
+        console.log('  - map:', map);
+        console.log('  - div_map:', mapContainer);
 
         // 히트맵 엔진 초기화 (원본 라이브러리가 있으면 생략 가능)
         if (window.HeatmapEngine) {
-            window.HeatmapEngine.init(map, container);
+            window.HeatmapEngine.init(map, mapContainer);
         }
 
         // XRayMap 라이브러리를 사용하여 Biz 파일 로드
@@ -66,9 +78,6 @@
             // 원본 라이브러리 호출
             // 파라미터: (bizUrl, placeholderKey, replacementValue)
             window.HM_loadLayersByUrlFileAndRepalceTag(bizUrl, '#CD#', REGION_CODE);
-            
-            // 추가 플레이스홀더 치환 (필요시)
-            // #COMPANY_ID# 같은 다른 플레이스홀더가 있다면 여기서 처리
             
             console.log("✅ Biz 파일 로드 완료");
         } else if (window.HeatmapEngine && window.HeatmapEngine.loadBizFile) {
@@ -105,7 +114,10 @@
     // 메인 새로고침 함수
     // ---------------------------------------------------------
     function refreshData() {
-        if (!window.ApiClient || !window.UiManager) return;
+        if (!window.ApiClient || !window.UiManager) {
+            console.warn('⚠️ ApiClient 또는 UiManager가 로드되지 않았습니다.');
+            return;
+        }
 
         window.UiManager.showLoading();
 
