@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html class="light" lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Modern Hero Variations</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet" />
+    <style>
+        .font-serif-display { font-family: 'Noto Serif KR', serif; }
+        .font-display { font-family: 'Noto Sans KR', sans-serif; }
+        
+        #background-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+        
+        /* 1. 미니멀 투명 카드 */
+        .card-minimal {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+        }
+        
+        .btn-minimal {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+            border: none;
+            border-radius: 3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .btn-minimal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* 2. 그라디언트 보더 */
+        .card-gradient-border {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(30px);
+            border-radius: 2rem;
+            position: relative;
+            padding: 2px;
+        }
+        .card-gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 2rem;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+        .card-gradient-inner {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: calc(2rem - 2px);
+        }
+        
+        .btn-gradient-glow {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 3rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .btn-gradient-glow:hover {
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        /* 3. 네온 글로우 */
+        .card-neon {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 1rem;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 30px rgba(0, 255, 255, 0.05);
+        }
+        
+        .text-neon {
+            text-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.8),
+                0 0 20px rgba(0, 255, 255, 0.5),
+                0 0 30px rgba(0, 255, 255, 0.3);
+        }
+        
+        .btn-neon {
+            background: transparent;
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        .btn-neon:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+        
+        /* 4. 부드러운 블러 */
+        .card-soft {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 2.5rem;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                inset 0 0 30px rgba(255, 255, 255, 0.05);
+        }
+        
+        .btn-soft {
+            background: rgba(255, 143, 0, 0.9);
+            border: none;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 143, 0, 0.3);
+        }
+        .btn-soft:hover {
+            background: rgba(255, 143, 0, 1);
+            transform: scale(1.02);
+            box-shadow: 0 12px 35px rgba(255, 143, 0, 0.5);
+        }
+        
+        /* 5. 모노크롬 미니멀 */
+        .card-mono {
+            background: rgba(18, 18, 18, 0.7);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.75rem;
+        }
+        
+        .btn-mono {
+            background: white;
+            color: #000;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            letter-spacing: -0.02em;
+        }
+        .btn-mono:hover {
+            background: #f0f0f0;
+            transform: scale(0.98);
+        }
+        
+        /* 6. 홀로그램 */
+        .card-holo {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 50%,
+                rgba(255, 255, 255, 0.1) 100%);
+            backdrop-filter: blur(35px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-holo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%);
+            animation: holo 3s linear infinite;
+        }
+        @keyframes holo {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .btn-holo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border: none;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-holo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-holo:hover::before {
+            left: 100%;
+        }
+        
+        .section-title {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .variation-container { position: relative; padding-top: 50px; }
+    </style>
+</head>
+<body class="bg-black">
+    <div class="min-h-screen py-12 px-4">
+        <h1 class="text-center text-3xl font-bold mb-4 text-white">모던 히어로 디자인</h1>
+        <p class="text-center text-gray-400 mb-12">세련되고 트렌디한 6가지 스타일</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-7xl mx-auto">
+            
+            <!-- 1. 미니멀 투명 -->
+            <div class="variation-container">
+                <span class="section-title text-white">1: 미니멀 투명</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-minimal p-12 max-w-md w-full">
+                            <h1 class="font-display text-5xl font-extralight text-center mb-3 tracking-tight">제주숨곳 <span class="font-light">AI</span></h1>
+                            <p class="text-center text-sm text-white/70 font-light mb-8 leading-relaxed">ai가 만들어주는 당신만의<br>유니크한 제주 경험</p>
+                            <button class="btn-minimal w-full py-4 active:scale-95">
+                                <span class="text-sm">나만의 제주 찾으러 가기</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2. 그라디언트 보더 -->
+            <div class="variation-container">
+                <span class="section-title text-white">2: 그라디언트 보더</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-gradient-border max-w-md w-full">
+                            <div class="card-gradient-inner p-10">
+                                <h1 class="font-serif-display text-4xl font-bold text-center mb-3">제주숨곳 AI</h1>
+                                <p class="text-center text-sm text-white/80 mb-8">당신만의 유니크한 제주 경험</p>
+                                <button class="btn-gradient-glow w-full py-4 active:scale-95">
+                                    <span class="text-sm font-semibold">시작하기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3. 네온 글로우 -->
+            <div class="variation-container">
+                <span class="section-title text-white">3: 네온 글로우</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/40"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-neon p-10 max-w-md w-full">
+                            <h1 class="font-display text-4xl font-black text-center mb-3 text-neon uppercase tracking-wider">제주숨곳 AI</h1>
+                            <p class="text-center text-sm text-cyan-200 mb-8">미래의 제주 여행</p>
+                            <button class="btn-neon w-full py-3 active:scale-95">
+                                <span class="text-sm uppercase tracking-wide">시작</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 4. 부드러운 블러 -->
+            <div class="variation-container">
+                <span class="section-title text-white">4: 부드러운 블러</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/15"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-soft p-12 max-w-lg w-full">
+                            <h1 class="font-serif-display text-5xl font-bold text-center mb-4 leading-tight">제주숨곳 AI</h1>
+                            <p class="text-center text-white/70 mb-10 text-sm leading-relaxed">ai가 만들어주는 당신만의 유니크한 제주 경험</p>
+                            <button class="btn-soft w-full py-4 active:scale-95">
+                                <span class="text-sm tracking-wide">나만의 제주 찾으러 가기</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 5. 모노크롬 미니멀 -->
+            <div class="variation-container">
+                <span class="section-title text-white">5: 모노크롬</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/30"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-mono p-10 max-w-sm w-full">
+                            <h1 class="font-display text-3xl font-black text-center mb-2 tracking-tight">제주숨곳 AI</h1>
+                            <p class="text-center text-xs text-white/60 mb-8 font-medium">당신만의 유니크한 제주 경험</p>
+                            <button class="btn-mono w-full py-3 active:scale-95">
+                                <span class="text-xs">시작하기</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 6. 홀로그램 -->
+            <div class="variation-container">
+                <span class="section-title text-white">6: 홀로그램</span>
+                <div class="relative h-[500px] rounded-xl overflow-hidden">
+                    <video class="absolute inset-0 h-full w-full object-cover" autoplay loop muted playsinline>
+                        <source src="vid/back.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-black/25"></div>
+                    <div class="relative flex h-full w-full flex-col items-center justify-center p-6 text-white">
+                        <div class="card-holo p-10 max-w-md w-full">
+                            <h1 class="font-display text-4xl font-bold text-center mb-3 tracking-tight relative z-10">제주숨곳 AI</h1>
+                            <p class="text-center text-sm text-white/80 mb-8 relative z-10">당신만의 유니크한 제주 경험</p>
+                            <button class="btn-holo w-full py-4 active:scale-95 relative z-10">
+                                <span class="text-sm font-semibold">시작하기</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
