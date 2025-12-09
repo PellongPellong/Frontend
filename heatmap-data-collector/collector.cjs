@@ -16,6 +16,41 @@ const API_CONFIG = {
         TABLE: 'mms_cell_new_최신유동인구',
         SELECT: '(M_POP_00+M_POP_10+M_POP_20+M_POP_30+M_POP_40+M_POP_50+M_POP_60+M_POP_70+M_POP_80+M_POP_90+W_POP_00+W_POP_10+W_POP_20+W_POP_30+W_POP_40+W_POP_50+W_POP_60+W_POP_70+W_POP_80+W_POP_90) as total_pop,MEGA_CD,CELL_ID,LAT,LON',
         METHOD: '11',
+        EXTENT_PRJ: '3',  // 좌표계 (3 = WGS84)
+        SEARCH_R: '10',   // 검색 반경
+    }
+};
+
+/**
+ * 지역별 바운딩 박스 (위도/경도)
+ */
+const REGION_BOUNDS = {
+    // 제주도 전체 영역
+    '50': {
+        BOTTOM_X: 126.15,  // 서쪽 경계
+        BOTTOM_Y: 33.10,   // 남쪽 경계
+        TOP_X: 127.00,     // 동쪽 경계
+        TOP_Y: 33.65,      // 북쪽 경계
+        W: 1920,           // 이미지 너비 (px)
+        H: 1080            // 이미지 높이 (px)
+    },
+    // 서울 (예시)
+    '11': {
+        BOTTOM_X: 126.76,
+        BOTTOM_Y: 37.42,
+        TOP_X: 127.18,
+        TOP_Y: 37.70,
+        W: 1920,
+        H: 1080
+    },
+    // 기본값 (제주도)
+    'default': {
+        BOTTOM_X: 126.15,
+        BOTTOM_Y: 33.10,
+        TOP_X: 127.00,
+        TOP_Y: 33.65,
+        W: 1920,
+        H: 1080
     }
 };
 
@@ -46,9 +81,19 @@ function httpsGet(url) {
  * URL 구성
  */
 function buildApiUrl(regionCode = '50') {
+    // 지역별 바운딩 박스 가져오기
+    const bounds = REGION_BOUNDS[regionCode] || REGION_BOUNDS['default'];
+    
     const params = new URLSearchParams({
         ...API_CONFIG.params,
-        WHERE: `mega_cd IN ('${regionCode}')`
+        WHERE: `mega_cd IN ('${regionCode}')`,
+        // EXTENT 파라미터 추가
+        BOTTOM_X: bounds.BOTTOM_X,
+        BOTTOM_Y: bounds.BOTTOM_Y,
+        TOP_X: bounds.TOP_X,
+        TOP_Y: bounds.TOP_Y,
+        W: bounds.W,
+        H: bounds.H
     });
 
     return `${API_CONFIG.baseUrl}?${params.toString()}`;
@@ -61,7 +106,7 @@ async function fetchPopulationData(regionCode = '50') {
     const url = buildApiUrl(regionCode);
     
     console.log(`\n🔍 데이터 수집 시작: ${regionCode}`);
-    console.log(`URL: ${url}\n`);
+    console.log(`URL: ${url.substring(0, 200)}...\n`);
 
     try {
         const response = await httpsGet(url);
@@ -72,6 +117,12 @@ async function fetchPopulationData(regionCode = '50') {
 
         const contentType = response.headers['content-type'] || '';
         const text = response.body;
+
+        // 에러 메시지 체크
+        if (text.includes('ERROR:')) {
+            console.error(`❌ API 에러: ${text}`);
+            throw new Error(`API Error: ${text}`);
+        }
 
         // JSON 파싱 시도
         if (contentType.includes('application/json') || text.trim().startsWith('{') || text.trim().startsWith('[')) {
@@ -140,7 +191,7 @@ function processData(rawData) {
             longitude: parseFloat(item.LON || item.lon || 0),
             population: parseInt(item.total_pop || item.TOTAL_POP || 0),
             timestamp: timestamp
-        }));
+        })).filter(p => p.latitude !== 0 && p.longitude !== 0); // 유효한 좌표만
     } else if (rawData && typeof rawData === 'object') {
         return {
             timestamp: timestamp,
@@ -214,8 +265,9 @@ async function collect(regionCode = '50') {
         // 1. 데이터 수집
         const rawData = await fetchPopulationData(regionCode);
         
-        console.log('📦 원본 데이터:');
-        console.log(JSON.stringify(rawData, null, 2).substring(0, 500) + '...');
+        console.log('📦 원본 데이터 (Sample):');
+        const sampleText = JSON.stringify(rawData, null, 2);
+        console.log(sampleText.substring(0, 500) + (sampleText.length > 500 ? '...' : ''));
         
         // 2. 데이터 가공
         const processedData = processData(rawData);
@@ -225,9 +277,11 @@ async function collect(regionCode = '50') {
 
         // 4. 결과 출력
         console.log('\n📊 수집 결과:');
-        console.log(`  - 데이터 개수: ${processedData.data_count}`);
+        console.log(`  - 데이터 개수: ${processedData.data_count.toLocaleString()}`);
         console.log(`  - 총 인구: ${processedData.summary.total_population.toLocaleString()}명`);
         console.log(`  - 평균 인구: ${processedData.summary.avg_population.toLocaleString()}명`);
+        console.log(`  - 최대 인구: ${processedData.summary.max_population.toLocaleString()}명`);
+        console.log(`  - 최소 인구: ${processedData.summary.min_population.toLocaleString()}명`);
         console.log(`  - 저장 경로: ${filepath}\n`);
 
         return processedData;
