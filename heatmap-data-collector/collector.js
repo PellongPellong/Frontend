@@ -10,7 +10,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // 설정
-const API_BASE_URL = 'https://jeju.mms.gislab.co.kr/mms_new/GEONET.getAreaWeekInfoByLatlng.php';
+const API_BASE_URL = 'jeju.mms.gislab.co.kr';
+const API_PATH = '/mms_new/GEONET.getAreaWeekInfoByLatlng.php';
 const DATA_DIR = path.join(__dirname, 'data');
 const HISTORY_DIR = path.join(DATA_DIR, 'history');
 const LOCATIONS_FILE = path.join(__dirname, 'locations.json');
@@ -34,12 +35,22 @@ async function loadLocations() {
   }
 }
 
-// API 호출 (https 모듈 사용)
+// API 호출 (SSL 검증 우회)
 function fetchPopulationData(lng, lat, radius) {
   return new Promise((resolve, reject) => {
-    const url = `${API_BASE_URL}?X=${lng}&Y=${lat}&R=${radius}`;
+    const options = {
+      hostname: API_BASE_URL,
+      path: `${API_PATH}?X=${lng}&Y=${lat}&R=${radius}`,
+      method: 'GET',
+      headers: {
+        'accept': 'application/json, text/javascript, */*; q=0.01',
+        'accept-language': 'ko-KR,ko;q=0.9',
+      },
+      // SSL 인증서 검증 우회 (자체 서명 인증서 대응)
+      rejectUnauthorized: false
+    };
     
-    https.get(url, (res) => {
+    const req = https.request(options, (res) => {
       let data = '';
       
       res.on('data', (chunk) => {
@@ -58,9 +69,13 @@ function fetchPopulationData(lng, lat, radius) {
           reject(error);
         }
       });
-    }).on('error', (error) => {
+    });
+
+    req.on('error', (error) => {
       reject(error);
     });
+
+    req.end();
   });
 }
 
@@ -121,7 +136,7 @@ function parsePopulationData(rawData) {
         population: Math.round(dayData[hour])
       }))
       .sort((a, b) => a.hour - b.hour)
-  }));
+  }));  
 
   return {
     current: {
@@ -172,7 +187,7 @@ async function collectLocationData(location) {
       return null;
     }
 
-    console.log(`✅ ${location.name}: 총 ${parsedData.current.total}명 (도민 ${parsedData.current.resident.total}, 관광객 ${parsedData.current.tourist.total})`);  
+    console.log(`✅ ${location.name}: 총 ${parsedData.current.total}명 (도민 ${parsedData.current.resident.total}, 관광객 ${parsedData.current.tourist.total})`);
 
     return {
       id: location.id,
