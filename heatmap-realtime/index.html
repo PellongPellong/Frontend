@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="./styles/main.css">
     
     <!-- 
-        중요: 스크립트 로딩 순서
-        1. XRayMap 라이브러리 (가장 먼저!)
-        2. 내 스크립트들
-        3. app.js는 DOMContentLoaded에서 Kakao SDK를 동적 로드
+        중요: XRayMap 라이브러리는 가장 먼저 로드해야 합니다!
+        로컬 파일을 사용하도록 변경했습니다.
     -->
     
-    <!-- 1. XRayMap 히트맵 라이브러리 (동기 로드) -->
-    <script type="text/javascript" src="https://www.policymap.or.kr/lib/xraymap/heatmap_20231212geonet.js"></script>
+    <!-- 1. XRayMap 히트맵 라이브러리 (로컬 파일) -->
+    <!-- 주의: 이 파일을 vendor/xraymap/ 폴더에 복사해야 합니다! -->
+    <script type="text/javascript" src="./vendor/xraymap/heatmap.js"></script>
+    
+    <!-- CDN 대안 (로컬 파일이 없으면 주석 해제) -->
+    <!-- <script type="text/javascript" src="https://www.policymap.or.kr/lib/xraymap/heatmap_20231212geonet.js"></script> -->
 </head>
 <body>
     <!-- 헤더 영역 -->
@@ -105,7 +107,7 @@
         </div>
     </main>
 
-    <!-- 2. 내 스크립트들 (반드시 XRayMap 다음에 로드) -->
+    <!-- 2. 내 스크립트들 -->
     <script src="./js/api-client.js"></script>
     <script src="./js/heatmap-engine.js"></script>
     <script src="./js/ui-manager.js"></script>
@@ -119,10 +121,15 @@
         
         if (typeof HM_loadLayersByUrlFileAndRepalceTag !== 'function') {
             console.error('❌ XRayMap 라이브러리 로드 실패!');
-            console.log('🔧 대안:');
-            console.log('  1. 브라우저 캐시 완전 삭제 (Ctrl+Shift+Delete)');
-            console.log('  2. 시크릿 모드/프라이빗 모드에서 테스트');
-            console.log('  3. HTTPS 서버에서 실행 (HTTP에서는 HTTPS 리소스 차단될 수 있음)');
+            console.log('🔧 해결 방법:');
+            console.log('  1. 로컬의 data.ijto.or.kr/www.policymap.or.kr/lib_xraymap/ 폴더에서');
+            console.log('     heatmap 관련 .js 파일들을');
+            console.log('  2. heatmap-realtime/vendor/xraymap/ 폴더로 복사하세요.');
+            console.log('  3. 파일명을 heatmap.js로 변경하거나 index.html의 src 수정');
+            console.log('');
+            console.log('📝 예시:');
+            console.log('  cp data.ijto.or.kr/www.policymap.or.kr/lib_xraymap/heatmap_20231212geonet.js \\');
+            console.log('     heatmap-realtime/vendor/xraymap/heatmap.js');
         } else {
             console.log('✅ XRayMap 라이브러리 로드 성공!');
         }
