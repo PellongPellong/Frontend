@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실시간 혼잡도 히트맵 - 제주</title>
+    <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+    <!-- 헤더 영역 -->
+    <header class="header">
+        <div class="header-content">
+            <h1>🔥 제주 실시간 혼잡도 히트맵</h1>
+            <div class="header-controls">
+                <button id="refreshBtn" class="btn btn-primary">새로고침</button>
+                <button id="toggleLayerBtn" class="btn btn-secondary">레이어 토글</button>
+                <select id="locationSelect" class="select">
+                    <option value="">-- 지역 선택 --</option>
+                    <option value="jeju">제주시</option>
+                    <option value="seogwipo">서귀포시</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨테이너 -->
+    <main class="main-container">
+        <!-- 사이드바 (레이어 패널) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>레이어 관리</h2>
+                <button id="closeSidebarBtn" class="close-btn">✕</button>
+            </div>
+            
+            <div class="sidebar-content">
+                <!-- 레이어 목록 -->
+                <div class="layer-section">
+                    <h3>활성 레이어</h3>
+                    <div id="layerList" class="layer-list">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+
+                <!-- 범례 -->
+                <div class="legend-section">
+                    <h3>혼잡도 범례</h3>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #00FF00;"></span>
+                            <span>여유 (0-20%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #FFFF00;"></span>
+                            <span>보통 (20-50%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #FF8800;"></span>
+                            <span>혼잡 (50-80%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #FF0000;"></span>
+                            <span>극혼잡 (80-100%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 실시간 통계 -->
+                <div class="stats-section">
+                    <h3>실시간 통계</h3>
+                    <div id="statsContainer" class="stats">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 지도 영역 -->
+        <div class="map-wrapper">
+            <div id="map" class="map-container"></div>
+            
+            <!-- 로딩 인디케이터 -->
+            <div id="loadingIndicator" class="loading-indicator hidden">
+                <div class="spinner"></div>
+                <p>데이터 로딩 중...</p>
+            </div>
+
+            <!-- 정보 창 -->
+            <div id="infoWindow" class="info-window hidden">
+                <div class="info-content">
+                    <h4 id="infoTitle"></h4>
+                    <div id="infoBody"></div>
+                    <button class="close-btn">✕</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 스크립트 -->
+    <script src="./js/api-client.js"></script>
+    <script src="./js/heatmap-engine.js"></script>
+    <script src="./js/ui-manager.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
