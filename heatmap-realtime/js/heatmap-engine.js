@@ -3,6 +3,7 @@
 // 이 파일은 실제 히트맵 렌더링 로직을 담당합니다.
 // - data.ijto.or.kr에서 사용하던 HM_* 함수들의 개념을 단순화해서 구현합니다.
 // - Kakao 지도 객체를 받아서, 포인트 데이터를 캔버스 오버레이로 그립니다.
+// - Biz 파일을 로드하여 레이어 설정을 처리합니다.
 
 (function(window, document) {
     "use strict";
@@ -15,6 +16,7 @@
     var ctx = null;                 // 2D 컨텍스트
     var points = [];                // { lat, lng, weight } 배열
     var maxWeight = 1;              // weight 정규화를 위한 최대값
+    var bizLayers = [];             // Biz 파일에서 로드한 레이어 정보
 
     // 히트맵 옵션: 반경, 색상, 투명도 등
     var options = {
@@ -67,26 +69,21 @@
 
     // ---------------------------------------------------------
     // 색상 맵핑: 0~1 사이의 값을 그라디언트 색상으로 변환합니다.
-    // - 낮은 값은 녹색, 중간은 노랑/주황, 높은 값은 빨강으로 매핑합니다.
+    // - 낮은 값은 녹색, 중간은 노랑/주황, 높은 값은 빨강으로 맵핑합니다.
     // ---------------------------------------------------------
     function getColorForValue(value) {
-        // value: 0~1 사이 실수 (정규화된 혼잡도)
         var r = 0, g = 0, b = 0;
 
         if (value < 0.25) {
-            // 0.0 ~ 0.25: 초록색 계열 (#00FF00)
             g = 255;
             r = Math.floor(255 * (value / 0.25));
         } else if (value < 0.5) {
-            // 0.25 ~ 0.5: 노란색으로 이동 (#FFFF00)
             r = 255;
             g = 255;
         } else if (value < 0.75) {
-            // 0.5 ~ 0.75: 주황색 (#FF8800)
             r = 255;
             g = Math.floor(255 * (1 - (value - 0.5) / 0.25));
         } else {
-            // 0.75 ~ 1.0: 빨간색 (#FF0000)
             r = 255;
             g = 0;
         }
@@ -96,38 +93,28 @@
 
     // ---------------------------------------------------------
     // 히트맵 렌더링: 현재 points 배열을 바탕으로 캔버스에 그립니다.
-    // - 1단계: 캔버스 초기화
-    // - 2단계: 각 포인트에 대해 그라디언트 원을 그림
-    // - 3단계: 알파값을 기반으로 색상 적용
     // ---------------------------------------------------------
     function render() {
         if (!canvas || !ctx || !map) return;
 
         resizeCanvas();
-
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (points.length === 0) return;
 
-        // 임시 캔버스를 사용하여 알파 채널을 계산하고, 나중에 색상을 입힙니다.
         var tempCanvas = document.createElement("canvas");
         tempCanvas.width = canvas.width;
         tempCanvas.height = canvas.height;
         var tempCtx = tempCanvas.getContext("2d");
 
-        // 각 포인트에 대해 그라디언트 원을 그림
         points.forEach(function(p) {
             var projected = project(p.lat, p.lng);
             var value = maxWeight > 0 ? (p.weight / maxWeight) : 0;
             var radius = options.radius;
 
             var gradient = tempCtx.createRadialGradient(
-                projected.x,
-                projected.y,
-                0,
-                projected.x,
-                projected.y,
-                radius
+                projected.x, projected.y, 0,
+                projected.x, projected.y, radius
             );
 
             gradient.addColorStop(0, "rgba(0, 0, 0," + options.maxOpacity * value + ")");
@@ -142,15 +129,11 @@
             );
         });
 
-        // 블러 효과: 간단히 캔버스 자체에 가우시안 비슷한 효과를 주기 위해 shadow를 활용할 수 있으나,
-        // 여기서는 기본 드로잉만 구현합니다. 필요시 확장 가능합니다.
-
         var imageData = tempCtx.getImageData(0, 0, canvas.width, canvas.height);
         var data = imageData.data;
 
-        // 알파 채널을 기반으로 색상을 입히는 루프
         for (var i = 0; i < data.length; i += 4) {
-            var alpha = data[i + 3] / 255; // 0~1
+            var alpha = data[i + 3] / 255;
             if (alpha <= 0) continue;
 
             var color = getColorForValue(alpha);
@@ -164,9 +147,7 @@
     }
 
     // ---------------------------------------------------------
-    // 포인트 데이터 설정: 외부에서 새로운 포인트 배열을 전달할 때 사용합니다.
-    // - points 배열은 [{ location: [lng, lat], weight, content, label }] 구조를 가정합니다.
-    // - HM_createPointFromDataString의 개념을 바닐라 객체 기반으로 재구현한 셈입니다.
+    // 포인트 데이터 설정
     // ---------------------------------------------------------
     function setPoints(pointArray) {
         points = [];
@@ -188,25 +169,115 @@
     }
 
     // ---------------------------------------------------------
-    // 히트맵 초기화: Kakao Map 위에 캔버스 레이어를 하나 올립니다.
+    // Biz 파일 로딩 함수
+    // 원본 API의 Biz 파일은 특수 포맷으로 되어 있습니다.
+    // 여기서는 간단히 텍스트로 로드한 후, 원본 라이브러리가 있다면
+    // 그쪽에 위임하고, 없다면 기본 처리만 합니다.
+    // ---------------------------------------------------------
+    function loadBizFile(bizUrl) {
+        console.log("📄 Biz 파일 로드 시작:", bizUrl);
+
+        // 원본 XRayMap 라이브러리 함수가 있는지 확인
+        if (typeof window.HM_loadLayersByUrlFileAndRepalceTag === 'function') {
+            // 원본 라이브러리 사용
+            console.log("✅ XRayMap 라이브러리 함수 발견 - 원본 방식으로 처리");
+            window.HM_loadLayersByUrlFileAndRepalceTag(bizUrl, '#CD#', '50');
+            return;
+        }
+
+        // 원본 라이브러리가 없다면 직접 fetch하여 파싱
+        fetch(bizUrl, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'omit'
+        })
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('Biz 파일 로드 실패: ' + response.status);
+            }
+            return response.text();
+        })
+        .then(function(bizText) {
+            console.log("✅ Biz 파일 로드 성공 (길이: " + bizText.length + ")");
+            console.log("📝 Biz 내용 미리보기:", bizText.substring(0, 200));
+            
+            // Biz 파일 파싱 (간략하게)
+            parseBizFile(bizText);
+            
+            // UI에 레이어 목록 표시
+            if (window.UiManager && window.UiManager.updateLayerListUI) {
+                window.UiManager.updateLayerListUI({ layers: bizLayers });
+            }
+        })
+        .catch(function(error) {
+            console.error("🚨 Biz 파일 로드 실패:", error);
+        });
+    }
+
+    // ---------------------------------------------------------
+    // Biz 파일 파싱 (간략 버전)
+    // 원본 포맷: 
+    // "NULL\n▶\nUID᛫number᛫1669273820477.7627\nsCallUrl᛫string᛫..."
+    // 각 레이어는 "\n▶\n"로 구분되고, 필드는 "\n"으로 구분됩니다.
+    // ---------------------------------------------------------
+    function parseBizFile(bizText) {
+        bizLayers = [];
+        
+        // "▶" 기호로 레이어 분리
+        var layerBlocks = bizText.split('\n▶\n');
+        
+        console.log("🗒️ Biz 파일에서 " + layerBlocks.length + "개 레이어 블록 발견");
+        
+        layerBlocks.forEach(function(block, index) {
+            if (!block || block.trim() === 'NULL') return;
+            
+            var layer = {};
+            var lines = block.split('\n');
+            
+            lines.forEach(function(line) {
+                if (!line || line.indexOf('᛫') === -1) return;
+                
+                var parts = line.split('᛫');
+                if (parts.length >= 3) {
+                    var key = parts[0];
+                    var type = parts[1];
+                    var value = parts.slice(2).join('᛫');
+                    
+                    // 주요 필드만 추출
+                    if (key === 'sLayerNM') layer.name = value;
+                    if (key === 'sCallUrl') layer.apiUrl = value;
+                    if (key === 'sLegend') layer.legend = value;
+                    if (key === 'bVisible') layer.visible = value === 'true';
+                    if (key === 'zIndex') layer.zIndex = parseInt(value) || 0;
+                }
+            });
+            
+            if (layer.name) {
+                bizLayers.push(layer);
+                console.log("✅ 레이어 파싱 성공:", layer.name);
+            }
+        });
+        
+        console.log("🎯 최종 파싱된 레이어 개수:", bizLayers.length);
+    }
+
+    // ---------------------------------------------------------
+    // 히트맵 초기화
     // ---------------------------------------------------------
     function initHeatmap(kakaoMap, containerEl) {
-        // kakaoMap: kakao.maps.Map 인스턴스
-        // containerEl: 지도가 들어있는 DOM 요소 (예: document.getElementById('map'))
         map = kakaoMap;
 
         canvas = document.createElement("canvas");
         canvas.style.position = "absolute";
         canvas.style.top = "0";
         canvas.style.left = "0";
-        canvas.style.pointerEvents = "none"; // 클릭 이벤트를 지도에 그대로 전달하기 위해
+        canvas.style.pointerEvents = "none";
 
         containerEl.appendChild(canvas);
         ctx = canvas.getContext("2d");
 
         resizeCanvas();
 
-        // 지도 이동/줌 변경 시 히트맵 재렌더링
         kakao.maps.event.addListener(map, "zoom_changed", render);
         kakao.maps.event.addListener(map, "center_changed", render);
     }
@@ -217,7 +288,9 @@
     window.HeatmapEngine = {
         init: initHeatmap,
         setPoints: setPoints,
-        render: render
+        render: render,
+        loadBizFile: loadBizFile,
+        getBizLayers: function() { return bizLayers; }
     };
 
 })(window, document);
