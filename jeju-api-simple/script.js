@@ -162,10 +162,10 @@ function searchPlaces(keyword) {
         return;
     }
     
-    // 제주도 내에서 검색
+    // 제주도 내에서 검색 (최대 반경 20km)
     const options = {
         location: new kakao.maps.LatLng(33.3846, 126.5535),
-        radius: 50000, // 50km
+        radius: 20000, // 20km (카카오 API 최대값)
         size: 15
     };
     
@@ -185,7 +185,7 @@ function searchPlaces(keyword) {
 function searchCategory(categoryCode) {
     const options = {
         location: new kakao.maps.LatLng(33.3846, 126.5535),
-        radius: 50000,
+        radius: 20000, // 20km (카카오 API 최대값)
         size: 15
     };
     
