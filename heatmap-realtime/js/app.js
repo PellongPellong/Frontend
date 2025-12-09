@@ -5,7 +5,7 @@
 // - ApiClient를 통해 내부 API에서 데이터를 가져옵니다.
 // - HeatmapEngine과 UiManager를 호출해서 히트맵과 UI를 갱신합니다.
 
-(function(window, document) {
+(function (window, document) {
     "use strict";
 
     // ---------------------------------------------------------
@@ -96,7 +96,7 @@
         var pointsPromise = fetchRealtimePoints();
 
         Promise.all([bizPromise, pointsPromise])
-            .then(function(results) {
+            .then(function (results) {
                 var bizConfig = results[0];
                 var pointsResponse = results[1];
 
@@ -114,11 +114,11 @@
 
                 window.HeatmapEngine.setPoints(points);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error("데이터 로드 실패", error);
                 alert("데이터를 불러오는 중 오류가 발생했습니다.");
             })
-            .finally(function() {
+            .finally(function () {
                 window.UiManager.hideLoading();
             });
     }
@@ -130,10 +130,10 @@
     // ---------------------------------------------------------
     function loadKakaoSdkAndInit() {
         var script = document.createElement("script");
-        script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&autoload=false";
-        script.onload = function() {
+        script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=6a1893d4524b57143bd18ba93baa7bda&autoload=false";
+        script.onload = function () {
             // autoload=false로 설정했기 때문에, kakao.maps.load로 초기화를 해야 합니다.
-            kakao.maps.load(function() {
+            kakao.maps.load(function () {
                 initMap();
             });
         };
@@ -151,7 +151,7 @@
     // ---------------------------------------------------------
     // DOMContentLoaded 시점에 Kakao SDK를 로드합니다.
     // ---------------------------------------------------------
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         loadKakaoSdkAndInit();
     });
 
