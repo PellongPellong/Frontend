@@ -6,17 +6,10 @@
     <title>실시간 혼잡도 히트맵 - 제주</title>
     <link rel="stylesheet" href="./styles/main.css">
     
-    <!-- 
-        의존성 로드 순서:
-        1. jQuery (XRayMap 라이브러리가 필요로 함)
-        2. XRayMap 히트맵 라이브러리
-        3. 내 스크립트들
-    -->
-    
-    <!-- 1. jQuery (XRayMap이 사용) -->
+    <!-- jQuery (XRayMap이 사용) -->
     <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
     
-    <!-- 2. XRayMap 히트맵 라이브러리 -->
+    <!-- XRayMap 히트맵 라이브러리 -->
     <script type="text/javascript" src="./www.policymap.or.kr/lib_xraymap/heatmap_20231212_geonet.js"></script>
 </head>
 <body>
@@ -108,13 +101,13 @@
         </div>
     </main>
 
-    <!-- 3. 내 스크립트들 -->
+    <!-- 내 스크립트들 -->
     <script src="./js/api-client.js"></script>
     <script src="./js/heatmap-engine.js"></script>
     <script src="./js/ui-manager.js"></script>
     <script src="./js/app.js"></script>
     
-    <!-- 디버깅 -->
+    <!-- XRayMap 필수 더미 함수들 -->
     <script>
         console.log('🔍 라이브러리 로드 상태:');
         console.log('  - jQuery:', typeof $);
@@ -132,6 +125,35 @@
         window.__sendMapLoaded = function() {
             console.log('📡 __sendMapLoaded 호출됨 (더미)');
         };
+        
+        window.__sendMapMoveStart = function() {
+            // 지도 이동 시작 시 호출되는 함수 (더미)
+        };
+        
+        window._user_h_removeTmpMapRightMarker = function() {
+            // 임시 마커 제거 함수 (더미)
+        };
+        
+        // XRayMap이 찾는 div 요소들을 동적 생성
+        window.addEventListener('DOMContentLoaded', function() {
+            // legend 컨테이너 (이미 있으면 생략)
+            if (!document.getElementById('legend')) {
+                var legendDiv = document.createElement('div');
+                legendDiv.id = 'legend';
+                legendDiv.style.display = 'none'; // 숨김
+                document.body.appendChild(legendDiv);
+            }
+            
+            // side 컨테이너
+            if (!document.getElementById('side')) {
+                var sideDiv = document.createElement('div');
+                sideDiv.id = 'side';
+                sideDiv.style.display = 'none';
+                document.body.appendChild(sideDiv);
+            }
+            
+            console.log('✅ XRayMap 필수 DOM 요소 준비 완료');
+        });
     </script>
 </body>
 </html>
