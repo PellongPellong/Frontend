@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 
-<html class="light" lang="ko"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Jeju Hidden AI - Travel Preference Quiz</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Noto+Sans+KR:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script>
+<html class="light" lang="ko">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Jeju Hidden AI - Travel Preference Quiz</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Noto+Sans+KR:wght@400;500;700;900&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
@@ -31,71 +39,97 @@
       },
     }
   </script>
-<style>
+  <style>
     body {
       overflow: hidden;
     }
   </style>
-<style>
+  <style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
-  </head>
+</head>
+
 <body class="font-display">
-<div class="relative flex h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-hidden">
-<!-- Header -->
-<header class="flex h-14 shrink-0 items-center justify-between px-4">
-<button class="flex h-10 w-10 items-center justify-center">
-<span class="material-symbols-outlined text-2xl text-stone-800 dark:text-stone-200">arrow_back</span>
-</button>
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-xl">explore</span>
-<span class="font-bold text-lg text-stone-800 dark:text-stone-200">Jeju Hidden AI</span>
-</div>
-<div class="h-10 w-10"></div> <!-- Spacer -->
-</header>
-<!-- Content -->
-<main class="flex flex-1 flex-col justify-between overflow-hidden px-4 pb-4">
-<!-- Question Section -->
-<div class="flex flex-col gap-4 pt-6">
-<div class="flex items-center gap-2 self-start rounded-full bg-primary/20 px-3 py-1.5">
-<span class="material-symbols-outlined text-sm text-primary">person_pin</span>
-<p class="text-xs font-bold uppercase tracking-wider text-primary">Companion</p>
-</div>
-<h1 class="text-stone-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">누구와 함께 떠나시나요?</h1>
-</div>
-<!-- Carousel Section -->
-<div class="flex-grow flex flex-col justify-center min-h-0">
-<div class="flex overflow-x-auto snap-x snap-mandatory py-4 [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
-<div class="flex items-stretch gap-4 px-[15vw]">
-<div class="flex h-full w-[70vw] shrink-0 snap-center flex-col gap-4 rounded-xl bg-white/50 dark:bg-stone-800/50 p-4 backdrop-blur-lg border border-white/30 dark:border-stone-700/50 shadow-lg">
-<div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col" data-alt="Illustration of a couple holding hands on a scenic background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuARCOnTqJ-Rps7Kh-l5zFpje3r7He7BUPHURyUtJ3f86nOw958TUvt_fGyEJF1ERhdMFRgbIKg0AHlO1QPFqPmL2bPZncQOpLAa6svGtG6KnHE8VAVk6ytinX0d_i2AmvyTzbSfQ2a6GBuDS-URnOeIWR96XxSBSSPkEWyaQDDqS1Q9EFF2W4Q0cdfjaBFDX2Xr5RXzbQlsxhbYL_tyJhHqUaxno6wNMSBzQmVb4We-UWCI09ZPcBZ1QKocOHp3P51XFgJ3eqL44A');"></div>
-<p class="text-stone-900 dark:text-white text-lg font-bold leading-normal text-center">연인과</p>
-</div>
-<div class="flex h-full w-[70vw] shrink-0 snap-center flex-col gap-4 rounded-xl bg-white/50 dark:bg-stone-800/50 p-4 backdrop-blur-lg border-2 border-primary shadow-lg ring-4 ring-primary/20">
-<div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col" data-alt="Illustration of friends laughing together at a beach." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4x3BlaU8GDGJ1BKfXpKplt4l4x-W1iSR-ZHR5HNNTfbz2uCzNqr34Gu4RYDP3UGd9MkKh0LGCWNM4obR7e6VE-_ZerneonZAs63nN1dNdLhjLqyqVnjnTn2o1M6IIjsGJaafJu7x4UOqfvan8eoC_aWmZ8RmyJeKSbWDF2EmyNh9OqZ4HQ9czuA3p2qYbxYajqT5XwffHPXPxLg9x5rP1BzL6-7UBFMPD34J44SClwcDgOJiURg6aOOsBe74wjGgttD86BgGXlA');"></div>
-<p class="text-primary text-lg font-bold leading-normal text-center">친구와</p>
-</div>
-<div class="flex h-full w-[70vw] shrink-0 snap-center flex-col gap-4 rounded-xl bg-white/50 dark:bg-stone-800/50 p-4 backdrop-blur-lg border border-white/30 dark:border-stone-700/50 shadow-lg">
-<div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col" data-alt="Illustration of a family with a child exploring a forest." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQ2VM1qEXp0BCO9qULtx_2lshpq7itzcdn12Ky0p19pHUsdOXW250CwMTBvjRzkKvNLpYpfaIYFoJoo8R9lNvfRmVyghrPs5FycYY95lW-YsZgBOeX16x5EJVxiq5ZM1Z4Xh_EngV7vnM1VDvTBdMGYnDCYSofH-G_RrCLIxqzTQclrFSrSg2nwpUPksrXgrbzvldIMVwPyMqjOlb_4BzQ-6jHeCt0AU--sFEZbSAlE2B16bovU6o5OpkH3vRYC4tbnRVurGoZDg');"></div>
-<p class="text-stone-900 dark:text-white text-lg font-bold leading-normal text-center">가족과</p>
-</div>
-<div class="flex h-full w-[70vw] shrink-0 snap-center flex-col gap-4 rounded-xl bg-white/50 dark:bg-stone-800/50 p-4 backdrop-blur-lg border border-white/30 dark:border-stone-700/50 shadow-lg">
-<div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col" data-alt="Illustration of a solo traveler with a backpack looking at a map." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA-6YTlDbPR7anKPXm7Bv2bd8Ezq-8weJm-K35NwIvkxe5b9ItKO6zGcJxlNwZ5BxpvOWqnFXnbXTKKaDtljFHT4ZQaJh-s1TjDLQRyTqzidpytubbSijdQ_Rj5Q0Iua0sp-HId8k09NEZF6sh7sUgnz5YJuPvfLrsmT5xG5JhkWRJoZSTXDZxondRjk_DwA2xb-Z0IBVSQRD6cBtSqjmf_GM06ncY9FRXIoAeFR4QdYvxrL_NXFVf9PmmBVU8M_Ul4YGChHmtVKA');"></div>
-<p class="text-stone-900 dark:text-white text-lg font-bold leading-normal text-center">혼자서</p>
-</div>
-</div>
-</div>
-</div>
-<!-- Progress Bar & Navigation -->
-<div class="flex flex-col gap-4 pb-2">
-<div class="flex flex-col gap-2">
-<div class="flex justify-between items-center"><p class="text-stone-600 dark:text-stone-400 text-sm font-medium">Question 1 of 6</p></div>
-<div class="rounded-full bg-stone-900/10 dark:bg-white/10"><div class="h-2 rounded-full bg-primary" style="width: 17%;"></div></div>
-</div>
-<button class="w-full h-12 flex items-center justify-center rounded-xl bg-primary text-white font-bold text-base">Next</button>
-</div>
-</main>
-</div>
-</body></html>
+  <div
+    class="relative flex h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-hidden">
+    <!-- Header -->
+    <header class="flex h-14 shrink-0 items-center justify-between px-4">
+      <button class="flex h-10 w-10 items-center justify-center">
+        <span class="material-symbols-outlined text-2xl text-stone-800 dark:text-stone-200">arrow_back</span>
+      </button>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">explore</span>
+        <span class="font-bold text-lg text-stone-800 dark:text-stone-200">Jeju Hidden AI</span>
+      </div>
+      <div class="h-10 w-10"></div> <!-- Spacer -->
+    </header>
+    <!-- Content -->
+    <main class="flex flex-1 flex-col justify-between overflow-hidden px-4 pb-4">
+      <!-- Question Section -->
+      <div class="flex flex-col gap-4 pt-6">
+        <div class="flex items-center gap-2 self-start rounded-full bg-primary/20 px-3 py-1.5">
+          <span class="material-symbols-outlined text-sm text-primary">person_pin</span>
+          <p class="text-xs font-bold uppercase tracking-wider text-primary">Companion</p>
+        </div>
+        <h1 class="text-stone-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">누구와 함께 떠나시나요?</h1>
+      </div>
+      <!-- Carousel Section -->
+      <div class="flex-grow flex flex-col justify-center min-h-0">
+        <div
+          class="flex overflow-x-auto snap-x snap-mandatory py-4 [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden">
+          <div class="flex items-stretch gap-4 px-[15vw]">
+            <div
+              class="flex h-full w-[70vw] shrink-0 snap-center flex-col gap-4 rounded-xl bg-white/50 dark:bg-stone-800/50 p-4 backdrop-blur-lg border border-white/30 dark:border-stone-700/50 shadow-lg">
+              <div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col"
+                data-alt="Illustration of a couple holding hands on a scenic background."
+                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuARCOnTqJ-Rps7Kh-l5zFpje3r7He7BUPHURyUtJ3f86nOw958TUvt_fGyEJF1ERhdMFRgbIKg0AHlO1QPFqPmL2bPZncQOpLAa6svGtG6KnHE8VAVk6ytinX0d_i2AmvyTzbSfQ2a6GBuDS-URnOeIWR96XxSBSSPkEWyaQDDqS1Q9EFF2W4Q0cdfjaBFDX2Xr5RXzbQlsxhbYL_tyJhHqUaxno6wNMSBzQmVb4We-UWCI09ZPcBZ1QKocOHp3P51XFgJ3eqL44A');">
+              </div>
+              <p class="text-stone-900 dark:text-white text-lg font-bold leading-normal text-center">연인과</p>
+            </div>
+            <div
+              class="flex h-full w-[70vw] shrink-0 snap-center flex-col gap-4 rounded-xl bg-white/50 dark:bg-stone-800/50 p-4 backdrop-blur-lg border-2 border-primary shadow-lg ring-4 ring-primary/20">
+              <div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col"
+                data-alt="Illustration of friends laughing together at a beach."
+                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD4x3BlaU8GDGJ1BKfXpKplt4l4x-W1iSR-ZHR5HNNTfbz2uCzNqr34Gu4RYDP3UGd9MkKh0LGCWNM4obR7e6VE-_ZerneonZAs63nN1dNdLhjLqyqVnjnTn2o1M6IIjsGJaafJu7x4UOqfvan8eoC_aWmZ8RmyJeKSbWDF2EmyNh9OqZ4HQ9czuA3p2qYbxYajqT5XwffHPXPxLg9x5rP1BzL6-7UBFMPD34J44SClwcDgOJiURg6aOOsBe74wjGgttD86BgGXlA');">
+              </div>
+              <p class="text-primary text-lg font-bold leading-normal text-center">친구와</p>
+            </div>
+            <div
+              class="flex h-full w-[70vw] shrink-0 snap-center flex-col gap-4 rounded-xl bg-white/50 dark:bg-stone-800/50 p-4 backdrop-blur-lg border border-white/30 dark:border-stone-700/50 shadow-lg">
+              <div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col"
+                data-alt="Illustration of a family with a child exploring a forest."
+                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQ2VM1qEXp0BCO9qULtx_2lshpq7itzcdn12Ky0p19pHUsdOXW250CwMTBvjRzkKvNLpYpfaIYFoJoo8R9lNvfRmVyghrPs5FycYY95lW-YsZgBOeX16x5EJVxiq5ZM1Z4Xh_EngV7vnM1VDvTBdMGYnDCYSofH-G_RrCLIxqzTQclrFSrSg2nwpUPksrXgrbzvldIMVwPyMqjOlb_4BzQ-6jHeCt0AU--sFEZbSAlE2B16bovU6o5OpkH3vRYC4tbnRVurGoZDg');">
+              </div>
+              <p class="text-stone-900 dark:text-white text-lg font-bold leading-normal text-center">가족과</p>
+            </div>
+            <div
+              class="flex h-full w-[70vw] shrink-0 snap-center flex-col gap-4 rounded-xl bg-white/50 dark:bg-stone-800/50 p-4 backdrop-blur-lg border border-white/30 dark:border-stone-700/50 shadow-lg">
+              <div class="w-full bg-center bg-no-repeat aspect-[4/3] bg-cover rounded-lg flex flex-col"
+                data-alt="Illustration of a solo traveler with a backpack looking at a map."
+                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA-6YTlDbPR7anKPXm7Bv2bd8Ezq-8weJm-K35NwIvkxe5b9ItKO6zGcJxlNwZ5BxpvOWqnFXnbXTKKaDtljFHT4ZQaJh-s1TjDLQRyTqzidpytubbSijdQ_Rj5Q0Iua0sp-HId8k09NEZF6sh7sUgnz5YJuPvfLrsmT5xG5JhkWRJoZSTXDZxondRjk_DwA2xb-Z0IBVSQRD6cBtSqjmf_GM06ncY9FRXIoAeFR4QdYvxrL_NXFVf9PmmBVU8M_Ul4YGChHmtVKA');">
+              </div>
+              <p class="text-stone-900 dark:text-white text-lg font-bold leading-normal text-center">혼자서</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Progress Bar & Navigation -->
+      <div class="flex flex-col gap-4 pb-2">
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between items-center">
+            <p class="text-stone-600 dark:text-stone-400 text-sm font-medium">Question 1 of 6</p>
+          </div>
+          <div class="rounded-full bg-stone-900/10 dark:bg-white/10">
+            <div class="h-2 rounded-full bg-primary" style="width: 17%;"></div>
+          </div>
+        </div>
+        <button
+          class="w-full h-12 flex items-center justify-center rounded-xl bg-primary text-white font-bold text-base">Next</button>
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>
