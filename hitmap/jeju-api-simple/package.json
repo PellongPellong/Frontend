@@ -1,0 +1,21 @@
+{
+  "name": "jeju-review-crawler",
+  "version": "1.0.0",
+  "description": "제주도 장소 리뷰 크롤러",
+  "main": "crawl-reviews.js",
+  "scripts": {
+    "crawl": "node crawl-reviews.js",
+    "install-browser": "playwright install chromium"
+  },
+  "keywords": [
+    "jeju",
+    "crawler",
+    "reviews",
+    "kakao"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}
