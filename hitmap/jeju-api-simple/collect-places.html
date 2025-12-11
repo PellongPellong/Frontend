@@ -76,6 +76,31 @@
             color: #667eea;
         }
 
+        .error-box {
+            background: #ffe0e0;
+            border-left: 4px solid #ff4444;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .error-box.active {
+            display: block;
+        }
+
+        .error-box h3 {
+            color: #ff4444;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .error-box p {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
         .start-btn {
             width: 100%;
             padding: 15px;
@@ -178,7 +203,7 @@
             border-radius: 10px;
             font-family: 'Courier New', monospace;
             font-size: 12px;
-            max-height: 200px;
+            max-height: 300px;
             overflow-y: auto;
             margin-top: 15px;
             display: none;
@@ -191,12 +216,21 @@
         .console-line {
             margin: 3px 0;
         }
+
+        .console-line.error {
+            color: #ff6b6b;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🗺️ 제주도 장소 ID 수집기</h1>
         <p class="subtitle">카카오 Maps API를 사용하여 제주도 전체 장소 정보를 수집합니다</p>
+
+        <div class="error-box" id="errorBox">
+            <h3>⚠️ 오류 발생</h3>
+            <p id="errorMessage"></p>
+        </div>
 
         <div class="info-box">
             <h3>수집 정보</h3>
@@ -208,7 +242,7 @@
             </ul>
         </div>
 
-        <button class="start-btn" id="startBtn" onclick="startCollection()">🚀 수집 시작</button>
+        <button class="start-btn" id="startBtn" onclick="startCollectionWrapper()">🚀 수집 시작</button>
 
         <div class="progress-container" id="progressContainer">
             <div class="status-text" id="statusText">준비 중...</div>
@@ -243,25 +277,45 @@
         // 카카오 Maps API 로드
         kakao.maps.load(function() {
             ps = new kakao.maps.services.Places();
-            console.log('카카오 Maps API 로드 완료');
+            addConsoleLog('✅ 카카오 Maps API 로드 완료');
         });
 
         // 콘솔 로그 캡처
         const originalLog = console.log;
+        const originalError = console.error;
+        
         console.log = function(...args) {
             originalLog.apply(console, args);
             addConsoleLog(args.join(' '));
         };
 
-        function addConsoleLog(message) {
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addConsoleLog('❌ ERROR: ' + args.join(' '), true);
+        };
+
+        function addConsoleLog(message, isError = false) {
             const consoleOutput = document.getElementById('consoleOutput');
             if (consoleOutput) {
                 const line = document.createElement('div');
-                line.className = 'console-line';
-                line.textContent = message;
+                line.className = 'console-line' + (isError ? ' error' : '');
+                line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
                 consoleOutput.appendChild(line);
                 consoleOutput.scrollTop = consoleOutput.scrollHeight;
             }
+        }
+
+        function showError(message) {
+            const errorBox = document.getElementById('errorBox');
+            const errorMessage = document.getElementById('errorMessage');
+            errorBox.classList.add('active');
+            errorMessage.textContent = message;
+            addConsoleLog(message, true);
+        }
+
+        function hideError() {
+            const errorBox = document.getElementById('errorBox');
+            errorBox.classList.remove('active');
         }
 
         function updateProgress(progress, category, placeCount) {
@@ -284,18 +338,19 @@
             progressPercent.textContent = progress + '%';
         }
 
-        async function startCollection() {
+        async function startCollectionWrapper() {
             if (!ps) {
-                alert('카카오 Maps API를 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
+                showError('카카오 Maps API를 로드하는 중입니다. 잠시 후 다시 시도해주세요.');
                 return;
             }
 
+            hideError();
             const startBtn = document.getElementById('startBtn');
             startBtn.disabled = true;
             startBtn.textContent = '수집 중...';
 
             try {
-                const result = await startCollection_internal(ps, updateProgress);
+                const result = await startCollection(ps, updateProgress);
                 
                 startBtn.textContent = '✅ 수집 완료!';
                 startBtn.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
@@ -305,9 +360,9 @@
 
             } catch (error) {
                 console.error('수집 중 오류 발생:', error);
+                showError(`수집 중 오류 발생: ${error.message || '알 수 없는 오류'}. 아래 콘솔을 확인해주세요.`);
                 startBtn.textContent = '❌ 오류 발생';
                 startBtn.style.background = 'linear-gradient(135deg, #eb3349 0%, #f45c43 100%)';
-                alert('수집 중 오류가 발생했습니다. 콘솔을 확인해주세요.');
             } finally {
                 setTimeout(() => {
                     startBtn.disabled = false;
@@ -315,11 +370,6 @@
                     startBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
                 }, 3000);
             }
-        }
-
-        // collect-places.js의 startCollection을 다른 이름으로 호출
-        async function startCollection_internal(ps, updateProgress) {
-            return await startCollection(ps, updateProgress);
         }
     </script>
 </body>
