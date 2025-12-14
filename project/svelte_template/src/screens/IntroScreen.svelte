@@ -25,7 +25,7 @@
             position: 'center'
         },
         {
-            image: '/images/deer-mascot.png', // 마스코트 이미지
+            image: '/images/mascot.png', // 마스코트 이미지
             text: '백록과 함께\n제주의 숨은 명소를 찾아볼까요?',
             position: 'bottom',
             showButton: true,
