@@ -3,178 +3,211 @@
 
     export let goTo;
 
-    let showMascot = false;
-    let timer;
+    let currentScene = 0;
+    let autoTimer;
+    const AUTO_DELAY = 3500; // 3.5초
+
+    // 동화책 장면 데이터
+    const scenes = [
+        {
+            image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop',
+            text: '옛날 옛적, 백록담에는\n하얀 사슴이 평화롭게 살았어요',
+            position: 'center'
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=1920&h=1080&fit=crop',
+            text: '어느 날부터 많은 사람들이\n찾아오기 시작했어요',
+            position: 'center'
+        },
+        {
+            image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop',
+            text: '백록은 조용한 곳을 찾아\n제주의 숨은 곳으로 떠났답니다',
+            position: 'center'
+        },
+        {
+            image: '/images/deer-mascot.png', // 마스코트 이미지
+            text: '백록과 함께\n제주의 숨은 명소를 찾아볼까요?',
+            position: 'bottom',
+            showButton: true,
+            speechBubble: true
+        }
+    ];
+
+    $: isLastScene = currentScene === scenes.length - 1;
+
+    function nextScene() {
+        if (currentScene < scenes.length - 1) {
+            currentScene++;
+            resetTimer();
+        }
+    }
+
+    function skipIntro() {
+        goTo('survey');
+    }
+
+    function resetTimer() {
+        clearTimeout(autoTimer);
+        if (!isLastScene) {
+            autoTimer = setTimeout(nextScene, AUTO_DELAY);
+        }
+    }
+
+    function handleClick() {
+        if (isLastScene) {
+            goTo('survey');
+        } else {
+            nextScene();
+        }
+    }
 
     onMount(() => {
-        timer = setTimeout(() => {
-            showMascot = true;
-        }, 5000);
+        resetTimer();
     });
 
     onDestroy(() => {
-        clearTimeout(timer);
+        clearTimeout(autoTimer);
     });
-
-    function handleInteraction() {
-        showMascot = true;
-        clearTimeout(timer);
-    }
 </script>
 
-<div
-    class="relative w-full h-screen bg-cover bg-center overflow-hidden"
-    style="background-image: url('https://placehold.co/1920x1080/2c3e50/ecf0f1?text=Baekrokdam+Background');"
-    on:click={handleInteraction}
-    role="button"
-    tabindex="0"
-    on:keypress={handleInteraction}
->
-    <!-- Gradient Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-b from-blue-900/60 via-teal-900/50 to-green-900/60"></div>
-
-    <!-- Animated particles effect -->
-    <div class="absolute inset-0 opacity-30">
-        <div class="particle particle-1"></div>
-        <div class="particle particle-2"></div>
-        <div class="particle particle-3"></div>
+<div class="relative w-full h-screen overflow-hidden bg-gradient-to-br from-blue-100 via-teal-50 to-green-100">
+    <!-- 배경 이미지 -->
+    <div class="absolute inset-0">
+        {#each scenes as scene, index}
+            <div 
+                class="absolute inset-0 transition-opacity duration-1000 {currentScene === index ? 'opacity-100' : 'opacity-0'}"
+                style="background-image: url('{scene.image}'); background-size: cover; background-position: center;"
+            >
+                <!-- 오버레이 -->
+                <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40"></div>
+            </div>
+        {/each}
     </div>
 
-    <div
-        class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 pb-20"
-    >
-        <!-- Deer / Mascot Area -->
-        <div
-            class="transition-all duration-1000 transform {showMascot
-                ? 'scale-110'
-                : 'scale-100'} mb-8 z-10"
+    <!-- 건너뛰기 버튼 -->
+    {#if !isLastScene}
+        <button
+            class="absolute top-6 right-6 glass px-4 py-2 rounded-full text-gray-700 font-semibold hover:scale-105 transition-transform z-20"
+            on:click={skipIntro}
         >
-            {#if showMascot}
-                <div class="glass p-8 rounded-3xl">
-                    <img
-                        src="https://placehold.co/300x300/e67e22/fff?text=Mascot+Deer"
-                        alt="Mascot"
-                        class="w-40 h-40 md:w-56 md:h-56 object-contain animate-bounce-slow"
-                    />
-                </div>
-            {:else}
-                <img
-                    src="https://placehold.co/300x300/bdc3c7/2c3e50?text=Natural+Deer"
-                    alt="Natural Deer"
-                    class="w-40 h-40 md:w-56 md:h-56 object-contain opacity-90 drop-shadow-2xl"
-                />
-            {/if}
-        </div>
+            건너뛰기
+        </button>
+    {/if}
 
-        <!-- Title & Text with glass morphism -->
-        <div class="glass rounded-2xl p-6 md:p-8 max-w-lg mb-8 z-10">
-            <h1
-                class="text-3xl md:text-5xl font-bold text-gradient-jeju mb-4 drop-shadow-lg"
-            >
-                제주 숨은 명소
-            </h1>
-            <p class="text-gray-700 text-base md:text-lg leading-relaxed">
-                나만의 제주 여행을 위한<br />맞춤형 관광지 추천 서비스
+    <!-- 컨텐츠 영역 -->
+    <div 
+        class="relative h-full flex flex-col justify-center items-center p-8 cursor-pointer z-10"
+        on:click={handleClick}
+        role="button"
+        tabindex="0"
+        on:keypress={(e) => e.key === 'Enter' && handleClick()}
+    >
+        {#each scenes as scene, index}
+            <div class="absolute inset-0 flex flex-col items-center transition-opacity duration-700 {currentScene === index ? 'opacity-100' : 'opacity-0'}">
+                
+                <!-- 마지막 장면: 마스코트 + 말풍선 -->
+                {#if scene.showButton}
+                    <div class="flex flex-col items-center justify-center h-full animate-fade-in">
+                        <!-- 마스코트 이미지 -->
+                        <div class="relative mb-8">
+                            <img 
+                                src={scene.image}
+                                alt="백록 마스코트"
+                                class="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl animate-bounce-gentle"
+                            />
+                            
+                            <!-- 말풍선 -->
+                            <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 -translate-y-full">
+                                <div class="relative glass rounded-3xl px-6 py-4 shadow-2xl max-w-xs">
+                                    <p class="text-gray-800 text-center font-medium text-lg leading-relaxed whitespace-pre-line">
+                                        {scene.text}
+                                    </p>
+                                    <!-- 말풍선 꼬리 -->
+                                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
+                                        <div class="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[20px] border-t-white/80"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 시작하기 버튼 -->
+                        <button
+                            class="gradient-jeju text-white font-bold py-4 px-10 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 z-10"
+                            on:click|stopPropagation={() => goTo('survey')}
+                        >
+                            <span class="flex items-center gap-2 text-lg">
+                                <span>여행 시작하기</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                    
+                {:else}
+                    <!-- 일반 장면: 텍스트 박스 -->
+                    <div class="flex items-center justify-center h-full">
+                        <div class="glass rounded-3xl px-8 py-6 md:px-12 md:py-8 max-w-2xl mx-4 animate-fade-in">
+                            <p class="text-gray-800 text-center font-bold text-2xl md:text-4xl leading-relaxed whitespace-pre-line">
+                                {scene.text}
+                            </p>
+                        </div>
+                    </div>
+                {/if}
+            </div>
+        {/each}
+    </div>
+
+    <!-- 하단 인디케이터 -->
+    <div class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20">
+        {#each scenes as _, index}
+            <button
+                class="transition-all duration-300 rounded-full {currentScene === index ? 'w-8 h-3 bg-white' : 'w-3 h-3 bg-white/40'}"
+                on:click|stopPropagation={() => {
+                    currentScene = index;
+                    resetTimer();
+                }}
+                aria-label="{index + 1}번 장면으로 이동"
+            ></button>
+        {/each}
+    </div>
+
+    <!-- 클릭 힌트 (마지막 장면 제외) -->
+    {#if !isLastScene}
+        <div class="absolute bottom-20 left-0 right-0 text-center z-20 animate-pulse">
+            <p class="glass-dark rounded-full px-4 py-2 text-white text-sm inline-block">
+                화면을 클릭하면 다음 장면으로
             </p>
         </div>
-
-        <!-- Start Button (visible when mascot appears) -->
-        {#if showMascot}
-            <button
-                class="gradient-jeju text-white font-bold py-4 px-10 rounded-full shadow-2xl transform transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 animate-fade-in z-10"
-                on:click|stopPropagation={() => goTo("survey")}
-            >
-                <span class="flex items-center gap-2">
-                    <span class="text-lg">여행 시작하기</span>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                    </svg>
-                </span>
-            </button>
-        {/if}
-
-        <!-- Hint -->
-        {#if !showMascot}
-            <div class="glass-dark rounded-full px-6 py-3 animate-pulse z-10">
-                <p class="text-white text-sm flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
-                    </svg>
-                    화면을 터치하세요
-                </p>
-            </div>
-        {/if}
-    </div>
+    {/if}
 </div>
 
 <style>
-    .animate-bounce-slow {
-        animation: bounce 3s infinite;
-    }
-    @keyframes bounce {
-        0%,
-        100% {
-            transform: translateY(-5%);
-        }
-        50% {
+    @keyframes bounce-gentle {
+        0%, 100% {
             transform: translateY(0);
         }
+        50% {
+            transform: translateY(-10px);
+        }
     }
+    
+    .animate-bounce-gentle {
+        animation: bounce-gentle 3s ease-in-out infinite;
+    }
+    
     .animate-fade-in {
-        animation: fadeIn 0.5s ease-out;
+        animation: fadeIn 0.8s ease-out;
     }
+    
     @keyframes fadeIn {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: scale(0.95);
         }
         to {
             opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Floating particles */
-    .particle {
-        position: absolute;
-        background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-        border-radius: 50%;
-        animation: float 20s infinite ease-in-out;
-    }
-    
-    .particle-1 {
-        width: 60px;
-        height: 60px;
-        top: 20%;
-        left: 10%;
-        animation-delay: 0s;
-    }
-    
-    .particle-2 {
-        width: 80px;
-        height: 80px;
-        top: 60%;
-        right: 15%;
-        animation-delay: 5s;
-    }
-    
-    .particle-3 {
-        width: 40px;
-        height: 40px;
-        bottom: 30%;
-        left: 70%;
-        animation-delay: 10s;
-    }
-
-    @keyframes float {
-        0%, 100% {
-            transform: translate(0, 0) scale(1);
-        }
-        33% {
-            transform: translate(30px, -30px) scale(1.1);
-        }
-        66% {
-            transform: translate(-20px, 20px) scale(0.9);
+            transform: scale(1);
         }
     }
 </style>
