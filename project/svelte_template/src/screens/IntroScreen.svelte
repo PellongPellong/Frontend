@@ -70,7 +70,7 @@
     });
 </script>
 
-<div class="relative w-full h-screen overflow-hidden bg-gradient-to-br from-blue-100 via-teal-50 to-green-100">
+<div class="relative w-full h-screen overflow-hidden bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100">
     <!-- 배경 이미지 -->
     <div class="absolute inset-0">
         {#each scenes as scene, index}
@@ -132,7 +132,7 @@
                         
                         <!-- 시작하기 버튼 -->
                         <button
-                            class="gradient-jeju text-white font-bold py-4 px-10 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 z-10"
+                            class="bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-4 px-10 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 z-10"
                             on:click|stopPropagation={() => goTo('survey')}
                         >
                             <span class="flex items-center gap-2 text-lg">
