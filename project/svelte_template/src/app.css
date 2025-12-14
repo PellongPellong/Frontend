@@ -1,52 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   body {
-    @apply antialiased;
+    font-family: system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-@layer utilities {
-  /* Glass morphism utility */
-  .glass {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-  }
-  
-  .glass-dark {
-    background-color: rgba(17, 24, 39, 0.8);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(55, 65, 81, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-  }
+/* Glass morphism utility */
+.glass {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
 
-  /* Smooth transitions */
-  .transition-base {
-    @apply transition-all duration-300 ease-in-out;
-  }
+.glass-dark {
+  background-color: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(55, 65, 81, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
 
-  /* Hover lift effect */
-  .hover-lift {
-    @apply transition-transform duration-200 hover:scale-[1.02] hover:shadow-2xl;
-  }
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-  /* Gradient backgrounds */
-  .gradient-jeju {
-    @apply bg-gradient-to-br from-blue-400 via-teal-400 to-green-400;
-  }
+.hover-lift:hover {
+  transform: scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
 
-  .gradient-sunset {
-    @apply bg-gradient-to-br from-orange-400 via-pink-400 to-purple-400;
-  }
+/* Gradient backgrounds */
+.gradient-jeju {
+  background: linear-gradient(to bottom right, #60a5fa, #2dd4bf, #4ade80);
+}
 
-  /* Text gradients */
-  .text-gradient-jeju {
-    @apply bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent;
-  }
+.gradient-sunset {
+  background: linear-gradient(to bottom right, #fb923c, #f472b6, #a78bfa);
+}
+
+/* Text gradients */
+.text-gradient-jeju {
+  background: linear-gradient(to right, #2563eb, #0d9488);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
