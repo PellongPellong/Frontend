@@ -10,27 +10,19 @@
     $: currentQuestion = questions[currentStep];
     $: totalSteps = questions.length;
     $: isLastStep = currentStep === totalSteps - 1;
-
-    // Sync with store
     $: currentValue = $preferences[currentQuestion.id];
+    $: progress = ((currentStep + 1) / totalSteps) * 100;
 
     function handleSelect(value) {
         if (currentQuestion.multiple) {
             preferences.toggleAvoid(value);
         } else {
             preferences.setField(currentQuestion.id, value);
-            // Auto advance for single choice if not last step?
-            // User might want to change, so manual Next is better?
-            // Requirement 2.6 says "Back/Next buttons".
-            // But let's allow click to select.
         }
     }
 
     function handleNext() {
-        // Validation: check if answered?
-        // Preferences are nullable initially.
         if (isEmpty(currentValue)) {
-            alert("Please select an option");
             return;
         }
 
@@ -45,7 +37,6 @@
         if (currentStep > 0) {
             currentStep--;
         } else {
-            // maybe back to intro?
             goTo("intro");
         }
     }
@@ -56,42 +47,100 @@
     }
 </script>
 
-<div
-    class="max-w-md w-full mx-auto p-4 flex flex-col h-screen md:h-auto md:min-h-[600px] justify-between"
->
-    <!-- Header -->
-    <div class="mb-6">
-        <div class="flex justify-between items-center mb-4">
-            <button
-                class="text-gray-500 hover:text-gray-800"
-                on:click={handleBack}
-            >
-                &larr; Back
-            </button>
-            <span class="text-sm font-semibold text-gray-500"
-                >Step {currentStep + 1} of {totalSteps}</span
-            >
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-green-50 py-6 px-4">
+    <div class="max-w-2xl mx-auto h-full flex flex-col">
+        <!-- Header -->
+        <div class="mb-8">
+            <!-- Top Navigation -->
+            <div class="flex justify-between items-center mb-6">
+                <button
+                    class="glass px-4 py-2 rounded-full hover:scale-105 transition-transform flex items-center gap-2"
+                    on:click={handleBack}
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span class="font-semibold">뒤로</span>
+                </button>
+                
+                <div class="glass px-4 py-2 rounded-full">
+                    <span class="text-sm font-bold text-gray-700">
+                        {currentStep + 1} / {totalSteps}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="glass rounded-full p-2">
+                <ProgressBar current={currentStep + 1} total={totalSteps} />
+            </div>
+            
+            <!-- Progress Percentage -->
+            <div class="text-center mt-3">
+                <p class="text-sm text-gray-600">
+                    <span class="font-bold text-blue-600">{Math.round(progress)}%</span> 완료
+                </p>
+            </div>
         </div>
-        <ProgressBar current={currentStep + 1} total={totalSteps} />
-    </div>
 
-    <!-- Content -->
-    <div class="flex-grow flex flex-col justify-center">
-        <QuestionCard
-            question={currentQuestion}
-            value={currentValue}
-            onSelect={handleSelect}
-        />
-    </div>
+        <!-- Question Content -->
+        <div class="flex-grow flex flex-col justify-center mb-8">
+            <div class="animate-fade-in" key={currentStep}>
+                <QuestionCard
+                    question={currentQuestion}
+                    value={currentValue}
+                    onSelect={handleSelect}
+                />
+            </div>
+        </div>
 
-    <!-- Footer -->
-    <div class="mt-8">
-        <button
-            class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-            on:click={handleNext}
-            disabled={isEmpty(currentValue)}
-        >
-            {isLastStep ? "Show Results" : "Next Question"}
-        </button>
+        <!-- Footer / Next Button -->
+        <div class="pb-6">
+            <button
+                class="w-full font-bold py-4 rounded-2xl shadow-xl transition-all duration-300 {isEmpty(currentValue) 
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                    : 'gradient-jeju text-white hover:scale-[1.02] hover:shadow-2xl active:scale-95'}"
+                on:click={handleNext}
+                disabled={isEmpty(currentValue)}
+            >
+                <span class="flex items-center justify-center gap-2 text-lg">
+                    {#if isLastStep}
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>결과 보기</span>
+                    {:else}
+                        <span>다음 질문</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    {/if}
+                </span>
+            </button>
+            
+            <!-- Skip hint for optional questions -->
+            {#if !isEmpty(currentValue) && !isLastStep}
+                <p class="text-center text-xs text-gray-500 mt-3">
+                    선택을 변경하려면 다시 클릭하세요
+                </p>
+            {/if}
+        </div>
     </div>
 </div>
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+</style>
