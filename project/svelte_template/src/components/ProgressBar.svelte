@@ -17,8 +17,8 @@
             <!-- 도트 -->
             <div class="relative flex items-center justify-center">
                 <div class="{
-                    isCompleted ? 'w-8 h-8 bg-gradient-to-br from-blue-500 to-teal-500' :
-                    isCurrent ? 'w-10 h-10 bg-gradient-to-br from-blue-500 to-teal-500 ring-4 ring-blue-200' :
+                    isCompleted ? 'w-8 h-8 bg-gradient-to-br from-indigo-500 to-cyan-500' :
+                    isCurrent ? 'w-10 h-10 bg-gradient-to-br from-indigo-500 to-cyan-500 ring-4 ring-indigo-200' :
                     'w-8 h-8 bg-gray-200'
                 } rounded-full transition-all duration-300 flex items-center justify-center">
                     {#if isCompleted}
@@ -39,7 +39,7 @@
             <!-- 선 (마지막 단계 제외) -->
             {#if step < total}
                 <div class="flex-1 h-1 rounded-full {
-                    isCompleted ? 'bg-gradient-to-r from-blue-500 to-teal-500' : 'bg-gray-200'
+                    isCompleted ? 'bg-gradient-to-r from-indigo-500 to-cyan-500' : 'bg-gray-200'
                 } transition-all duration-300"></div>
             {/if}
         </div>
