@@ -47,33 +47,31 @@
     }
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-green-50 py-6 px-4">
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-cyan-50 to-sky-50 py-6 px-4">
     <div class="max-w-2xl mx-auto h-full flex flex-col">
         <!-- Header -->
         <div class="mb-6">
-            <!-- Top Navigation -->
+            <!-- Top Navigation - 통합된 디자인 -->
             <div class="flex justify-between items-center mb-6">
                 <button
-                    class="glass px-4 py-2 rounded-full hover:scale-105 transition-transform flex items-center gap-2"
+                    class="flex items-center gap-2 px-4 py-2.5 bg-white/60 backdrop-blur-sm hover:bg-white/80 rounded-full border border-indigo-200/50 hover:border-indigo-300 transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md"
                     on:click={handleBack}
                 >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
                     </svg>
-                    <span class="font-semibold">뒤로</span>
+                    <span class="font-semibold text-sm text-indigo-700">뒤로</span>
                 </button>
+                
+                <!-- 진행 퍼센트 -->
+                <div class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full shadow-md">
+                    <span class="font-bold text-sm text-white">{Math.round(progress)}% 완료</span>
+                </div>
             </div>
 
             <!-- Progress Bar -->
-            <div class="glass rounded-full p-2">
+            <div class="bg-white/40 backdrop-blur-sm rounded-full p-3 shadow-sm">
                 <ProgressBar current={currentStep + 1} total={totalSteps} />
-            </div>
-            
-            <!-- Progress Percentage -->
-            <div class="text-center mt-3">
-                <p class="text-sm text-gray-600">
-                    <span class="font-bold text-blue-600">{Math.round(progress)}%</span> 완료
-                </p>
             </div>
         </div>
 
@@ -93,7 +91,7 @@
             <button
                 class="w-full font-bold py-4 rounded-2xl shadow-xl transition-all duration-300 {isEmpty(currentValue) 
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                    : 'gradient-jeju text-white hover:scale-[1.02] hover:shadow-2xl active:scale-95'}"
+                    : 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white hover:scale-[1.02] hover:shadow-2xl active:scale-95'}"
                 on:click={handleNext}
                 disabled={isEmpty(currentValue)}
             >
