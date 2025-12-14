@@ -4,14 +4,19 @@
     export let onSelect;
 
     function handleClick(optionValue) {
+        console.log('Clicked:', optionValue, 'Current value:', value);
         onSelect(optionValue);
     }
 
     function isSelected(optionValue) {
         if (question.multiple) {
-            return Array.isArray(value) && value.includes(optionValue);
+            const result = Array.isArray(value) && value.includes(optionValue);
+            console.log('Multiple check:', optionValue, 'in', value, '=', result);
+            return result;
         }
-        return value === optionValue;
+        const result = value === optionValue;
+        console.log('Single check:', value, '===', optionValue, '=', result);
+        return result;
     }
 </script>
 
@@ -51,12 +56,13 @@
         {#each question.options as option}
             {@const selected = isSelected(option.value)}
             <button
+                type="button"
                 class="w-full px-6 py-4 rounded-2xl text-left transition-all duration-300 transform hover:scale-[1.02] active:scale-95 {
                     selected 
                         ? 'gradient-jeju text-white shadow-xl' 
                         : 'bg-white hover:bg-blue-50 text-gray-700 border-2 border-gray-200 hover:border-blue-300 shadow-md'
                 }"
-                on:click={() => handleClick(option.value)}
+                on:click|preventDefault|stopPropagation={() => handleClick(option.value)}
             >
                 <div class="flex items-center gap-4">
                     <!-- 이모지 -->
