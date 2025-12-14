@@ -5,7 +5,7 @@
 
     let currentScene = 0;
     let autoTimer;
-    const AUTO_DELAY = 3500; // 3.5초
+    const AUTO_DELAY = 5000; // 5초
 
     // 동화책 장면 데이터
     const scenes = [
@@ -35,10 +35,6 @@
             currentScene++;
             resetTimer();
         }
-    }
-
-    function skipIntro() {
-        goTo("survey");
     }
 
     function resetTimer() {
@@ -83,26 +79,20 @@
                         class="absolute inset-0 bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"
                     ></div>
                 {:else}
-                    <!-- 만화 이미지 -->
-                    <img
-                        src={scene.image}
-                        alt={scene.alt}
-                        class="w-full h-full object-cover"
-                    />
+                    <!-- 만화 이미지 - object-contain으로 변경 (Remote 적용) -->
+                    <div
+                        class="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"
+                    >
+                        <img
+                            src={scene.image}
+                            alt={scene.alt}
+                            class="max-w-full max-h-full object-contain"
+                        />
+                    </div>
                 {/if}
             </div>
         {/each}
     </div>
-
-    <!-- 건너뛰기 버튼 -->
-    {#if !isLastScene}
-        <button
-            class="absolute top-6 right-6 glass px-4 py-2 rounded-full text-gray-700 font-semibold hover:scale-105 transition-transform z-20"
-            on:click={skipIntro}
-        >
-            건너뛰기
-        </button>
-    {/if}
 
     <!-- 컨텐츠 영역 -->
     <div
@@ -123,8 +113,9 @@
             >
                 <!-- 마지막 장면: 마스코트 + 말풍선 + 버튼 -->
                 {#if scene.showButton}
+                    <!-- Remote 레이아웃 적용 (items-center) -->
                     <div
-                        class="h-full flex flex-col justify-end pb-32 animate-fade-in"
+                        class="h-full flex flex-col justify-end items-center pb-32 animate-fade-in"
                     >
                         <!-- 마스코트 + 말풍선 영역 -->
                         <div class="flex flex-col items-center mb-16">
@@ -160,10 +151,10 @@
                             </div>
                         </div>
 
-                        <!-- 시작하기 버튼 (하단 고정) -->
-                        <div class="px-8">
+                        <!-- 시작하기 버튼 (Remote 레이아웃 - 중앙 정렬) -->
+                        <div class="w-full flex justify-center px-8">
                             <button
-                                class="w-full max-w-md mx-auto bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+                                class="w-full max-w-md bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
                                 on:click|stopPropagation={() => goTo("survey")}
                             >
                                 <span
