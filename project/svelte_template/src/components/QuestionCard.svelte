@@ -16,30 +16,32 @@
 </script>
 
 <div class="glass rounded-3xl p-6 md:p-8 shadow-xl">
-    <!-- 마스코트 + 질문 헤더 -->
-    <div class="mb-6 text-center">
-        <!-- 마스코트 이미지 -->
-        <div class="flex justify-center mb-4">
-            <img 
-                src="/images/mascot.png" 
-                alt="백록 마스코트" 
-                class="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg animate-bounce-gentle"
-            />
-        </div>
-
-        <!-- 말풍선 -->
-        <div class="relative inline-block mb-4">
-            <div class="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-lg border border-blue-100">
-                <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
-                    {question.title}
-                </h2>
-                <p class="text-sm md:text-base text-gray-600">
-                    {question.subtitle}
-                </p>
+    <!-- 마스코트 + 말풍선 헤더 -->
+    <div class="mb-6">
+        <div class="flex items-center gap-4 md:gap-6">
+            <!-- 마스코트 이미지 (좌측) -->
+            <div class="flex-shrink-0">
+                <img 
+                    src="/images/mascot.png" 
+                    alt="백록 마스코트" 
+                    class="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg animate-bounce-gentle"
+                />
             </div>
-            <!-- 말풍선 꼬리 -->
-            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full">
-                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-b-[15px] border-b-white/90"></div>
+
+            <!-- 말풍선 (우측) -->
+            <div class="flex-grow relative">
+                <div class="bg-white/90 backdrop-blur-sm rounded-2xl px-5 py-4 shadow-lg border border-blue-100">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
+                        {question.title}
+                    </h2>
+                    <p class="text-sm md:text-base text-gray-600">
+                        {question.subtitle}
+                    </p>
+                </div>
+                <!-- 말풍선 꼬리 (왼쪽으로) -->
+                <div class="absolute left-0 top-1/2 transform -translate-x-full -translate-y-1/2">
+                    <div class="w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[15px] border-r-white/90"></div>
+                </div>
             </div>
         </div>
     </div>
