@@ -116,7 +116,7 @@
     >
         {#each scenes as scene, index}
             <div
-                class="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-700 {currentScene ===
+                class="absolute inset-0 flex flex-col transition-opacity duration-700 {currentScene ===
                 index
                     ? 'opacity-100'
                     : 'opacity-0'}"
@@ -124,63 +124,68 @@
                 <!-- 마지막 장면: 마스코트 + 말풍선 + 버튼 -->
                 {#if scene.showButton}
                     <div
-                        class="flex flex-col items-center justify-center h-full animate-fade-in"
+                        class="h-full flex flex-col justify-end pb-32 animate-fade-in"
                     >
-                        <!-- 마스코트 이미지 -->
-                        <div class="relative mb-8">
-                            <img
-                                src={scene.image}
-                                alt={scene.alt}
-                                class="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl animate-bounce-gentle"
-                            />
-
+                        <!-- 마스코트 + 말풍선 영역 -->
+                        <div class="flex flex-col items-center mb-16">
                             <!-- 말풍선 -->
-                            <div
-                                class="absolute -top-4 left-1/2 transform -translate-x-1/2 -translate-y-full"
-                            >
+                            <div class="relative mb-6">
                                 <div
-                                    class="relative glass rounded-3xl px-6 py-4 shadow-2xl max-w-xs"
+                                    class="glass rounded-3xl px-8 py-5 shadow-2xl max-w-md mx-4"
                                 >
                                     <p
-                                        class="text-gray-800 text-center font-medium text-lg leading-relaxed whitespace-pre-line"
+                                        class="text-gray-800 text-center font-bold text-xl md:text-2xl leading-relaxed whitespace-pre-line"
                                     >
                                         백록과 함께 제주의 숨은 명소를
                                         찾아볼까요?
                                     </p>
-                                    <!-- 말풍선 꼬리 -->
+                                    <!-- 말풍선 꼬리 (아래로) -->
                                     <div
                                         class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full"
                                     >
                                         <div
-                                            class="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[20px] border-t-white/80"
+                                            class="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[24px] border-t-white/80"
                                         ></div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- 마스코트 이미지 -->
+                            <div class="mb-8">
+                                <img
+                                    src={scene.image}
+                                    alt={scene.alt}
+                                    class="w-40 h-40 md:w-48 md:h-48 object-contain drop-shadow-2xl animate-bounce-gentle"
+                                />
+                            </div>
                         </div>
 
-                        <!-- 시작하기 버튼 -->
-                        <button
-                            class="bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-4 px-10 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 z-10"
-                            on:click|stopPropagation={() => goTo("survey")}
-                        >
-                            <span class="flex items-center gap-2 text-lg">
-                                <span>여행 시작하기</span>
-                                <svg
-                                    class="w-5 h-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                        <!-- 시작하기 버튼 (하단 고정) -->
+                        <div class="px-8">
+                            <button
+                                class="w-full max-w-md mx-auto bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+                                on:click|stopPropagation={() => goTo("survey")}
+                            >
+                                <span
+                                    class="flex items-center justify-center gap-3 text-xl"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                    ></path>
-                                </svg>
-                            </span>
-                        </button>
+                                    <span>여행 시작하기</span>
+                                    <svg
+                                        class="w-6 h-6"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                        ></path>
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 {/if}
             </div>
