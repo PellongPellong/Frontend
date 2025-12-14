@@ -10,26 +10,21 @@
     // 동화책 장면 데이터
     const scenes = [
         {
-            image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop',
-            text: '옛날 옛적, 백록담에는\n하얀 사슴이 평화롭게 살았어요',
-            position: 'center'
+            image: '/images/intro/scene1.jpg',
+            alt: '평화로운 백록담의 백록'
         },
         {
-            image: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=1920&h=1080&fit=crop',
-            text: '어느 날부터 많은 사람들이\n찾아오기 시작했어요',
-            position: 'center'
+            image: '/images/intro/scene2.jpg',
+            alt: '관광객들로 북적이는 백록담'
         },
         {
-            image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop',
-            text: '백록은 조용한 곳을 찾아\n제주의 숨은 곳으로 떠났답니다',
-            position: 'center'
+            image: '/images/intro/scene3.jpg',
+            alt: '여행을 떠나는 백록'
         },
         {
-            image: '/images/mascot.png', // 마스코트 이미지
-            text: '백록과 함께\n제주의 숨은 명소를 찾아볼까요?',
-            position: 'bottom',
-            showButton: true,
-            speechBubble: true
+            image: '/images/mascot.png',
+            alt: '백록 마스코트',
+            showButton: true
         }
     ];
 
@@ -76,10 +71,18 @@
         {#each scenes as scene, index}
             <div 
                 class="absolute inset-0 transition-opacity duration-1000 {currentScene === index ? 'opacity-100' : 'opacity-0'}"
-                style="background-image: url('{scene.image}'); background-size: cover; background-position: center;"
             >
-                <!-- 오버레이 -->
-                <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40"></div>
+                {#if scene.showButton}
+                    <!-- 마지막 장면: 그라디언트 배경 -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"></div>
+                {:else}
+                    <!-- 만화 이미지 -->
+                    <img 
+                        src={scene.image}
+                        alt={scene.alt}
+                        class="w-full h-full object-cover"
+                    />
+                {/if}
             </div>
         {/each}
     </div>
@@ -96,23 +99,23 @@
 
     <!-- 컨텐츠 영역 -->
     <div 
-        class="relative h-full flex flex-col justify-center items-center p-8 cursor-pointer z-10"
+        class="relative h-full flex flex-col justify-center items-center p-8 z-10 {!isLastScene ? 'cursor-pointer' : ''}"
         on:click={handleClick}
         role="button"
         tabindex="0"
         on:keypress={(e) => e.key === 'Enter' && handleClick()}
     >
         {#each scenes as scene, index}
-            <div class="absolute inset-0 flex flex-col items-center transition-opacity duration-700 {currentScene === index ? 'opacity-100' : 'opacity-0'}">
+            <div class="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-700 {currentScene === index ? 'opacity-100' : 'opacity-0'}">
                 
-                <!-- 마지막 장면: 마스코트 + 말풍선 -->
+                <!-- 마지막 장면: 마스코트 + 말풍선 + 버튼 -->
                 {#if scene.showButton}
                     <div class="flex flex-col items-center justify-center h-full animate-fade-in">
                         <!-- 마스코트 이미지 -->
                         <div class="relative mb-8">
                             <img 
                                 src={scene.image}
-                                alt="백록 마스코트"
+                                alt={scene.alt}
                                 class="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl animate-bounce-gentle"
                             />
                             
@@ -120,7 +123,8 @@
                             <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 -translate-y-full">
                                 <div class="relative glass rounded-3xl px-6 py-4 shadow-2xl max-w-xs">
                                     <p class="text-gray-800 text-center font-medium text-lg leading-relaxed whitespace-pre-line">
-                                        {scene.text}
+                                        백록과 함께
+제주의 숨은 명소를 찾아볼까요?
                                     </p>
                                     <!-- 말풍선 꼬리 -->
                                     <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
@@ -142,16 +146,6 @@
                                 </svg>
                             </span>
                         </button>
-                    </div>
-                    
-                {:else}
-                    <!-- 일반 장면: 텍스트 박스 -->
-                    <div class="flex items-center justify-center h-full">
-                        <div class="glass rounded-3xl px-8 py-6 md:px-12 md:py-8 max-w-2xl mx-4 animate-fade-in">
-                            <p class="text-gray-800 text-center font-bold text-2xl md:text-4xl leading-relaxed whitespace-pre-line">
-                                {scene.text}
-                            </p>
-                        </div>
                     </div>
                 {/if}
             </div>
