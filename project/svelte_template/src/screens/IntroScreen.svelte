@@ -10,22 +10,22 @@
     // 동화책 장면 데이터
     const scenes = [
         {
-            image: '/images/intro/scene1.jpg',
-            alt: '평화로운 백록담의 백록'
+            image: "/images/scene1.png",
+            alt: "평화로운 백록담의 백록",
         },
         {
-            image: '/images/intro/scene2.jpg',
-            alt: '관광객들로 북적이는 백록담'
+            image: "/images/scene2.png",
+            alt: "관광객들로 북적이는 백록담",
         },
         {
-            image: '/images/intro/scene3.jpg',
-            alt: '여행을 떠나는 백록'
+            image: "/images/scene3.png",
+            alt: "여행을 떠나는 백록",
         },
         {
-            image: '/images/mascot.png',
-            alt: '백록 마스코트',
-            showButton: true
-        }
+            image: "/images/mascot.png",
+            alt: "백록 마스코트",
+            showButton: true,
+        },
     ];
 
     $: isLastScene = currentScene === scenes.length - 1;
@@ -38,7 +38,7 @@
     }
 
     function skipIntro() {
-        goTo('survey');
+        goTo("survey");
     }
 
     function resetTimer() {
@@ -50,7 +50,7 @@
 
     function handleClick() {
         if (isLastScene) {
-            goTo('survey');
+            goTo("survey");
         } else {
             nextScene();
         }
@@ -65,19 +65,26 @@
     });
 </script>
 
-<div class="relative w-full h-screen overflow-hidden bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100">
+<div
+    class="relative w-full h-screen overflow-hidden bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"
+>
     <!-- 배경 이미지 -->
     <div class="absolute inset-0">
         {#each scenes as scene, index}
-            <div 
-                class="absolute inset-0 transition-opacity duration-1000 {currentScene === index ? 'opacity-100' : 'opacity-0'}"
+            <div
+                class="absolute inset-0 transition-opacity duration-1000 {currentScene ===
+                index
+                    ? 'opacity-100'
+                    : 'opacity-0'}"
             >
                 {#if scene.showButton}
                     <!-- 마지막 장면: 그라디언트 배경 -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"></div>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"
+                    ></div>
                 {:else}
                     <!-- 만화 이미지 -->
-                    <img 
+                    <img
                         src={scene.image}
                         alt={scene.alt}
                         class="w-full h-full object-cover"
@@ -98,51 +105,79 @@
     {/if}
 
     <!-- 컨텐츠 영역 -->
-    <div 
-        class="relative h-full flex flex-col justify-center items-center p-8 z-10 {!isLastScene ? 'cursor-pointer' : ''}"
+    <div
+        class="relative h-full flex flex-col justify-center items-center p-8 z-10 {!isLastScene
+            ? 'cursor-pointer'
+            : ''}"
         on:click={handleClick}
         role="button"
         tabindex="0"
-        on:keypress={(e) => e.key === 'Enter' && handleClick()}
+        on:keypress={(e) => e.key === "Enter" && handleClick()}
     >
         {#each scenes as scene, index}
-            <div class="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-700 {currentScene === index ? 'opacity-100' : 'opacity-0'}">
-                
+            <div
+                class="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-700 {currentScene ===
+                index
+                    ? 'opacity-100'
+                    : 'opacity-0'}"
+            >
                 <!-- 마지막 장면: 마스코트 + 말풍선 + 버튼 -->
                 {#if scene.showButton}
-                    <div class="flex flex-col items-center justify-center h-full animate-fade-in">
+                    <div
+                        class="flex flex-col items-center justify-center h-full animate-fade-in"
+                    >
                         <!-- 마스코트 이미지 -->
                         <div class="relative mb-8">
-                            <img 
+                            <img
                                 src={scene.image}
                                 alt={scene.alt}
                                 class="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl animate-bounce-gentle"
                             />
-                            
+
                             <!-- 말풍선 -->
-                            <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 -translate-y-full">
-                                <div class="relative glass rounded-3xl px-6 py-4 shadow-2xl max-w-xs">
-                                    <p class="text-gray-800 text-center font-medium text-lg leading-relaxed whitespace-pre-line">
-                                        백록과 함께
-제주의 숨은 명소를 찾아볼까요?
+                            <div
+                                class="absolute -top-4 left-1/2 transform -translate-x-1/2 -translate-y-full"
+                            >
+                                <div
+                                    class="relative glass rounded-3xl px-6 py-4 shadow-2xl max-w-xs"
+                                >
+                                    <p
+                                        class="text-gray-800 text-center font-medium text-lg leading-relaxed whitespace-pre-line"
+                                    >
+                                        백록과 함께 제주의 숨은 명소를
+                                        찾아볼까요?
                                     </p>
                                     <!-- 말풍선 꼬리 -->
-                                    <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
-                                        <div class="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[20px] border-t-white/80"></div>
+                                    <div
+                                        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full"
+                                    >
+                                        <div
+                                            class="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[20px] border-t-white/80"
+                                        ></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- 시작하기 버튼 -->
                         <button
                             class="bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-4 px-10 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 z-10"
-                            on:click|stopPropagation={() => goTo('survey')}
+                            on:click|stopPropagation={() => goTo("survey")}
                         >
                             <span class="flex items-center gap-2 text-lg">
                                 <span>여행 시작하기</span>
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                <svg
+                                    class="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                    ></path>
                                 </svg>
                             </span>
                         </button>
@@ -153,10 +188,15 @@
     </div>
 
     <!-- 하단 인디케이터 -->
-    <div class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20">
+    <div
+        class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20"
+    >
         {#each scenes as _, index}
             <button
-                class="transition-all duration-300 rounded-full {currentScene === index ? 'w-8 h-3 bg-white' : 'w-3 h-3 bg-white/40'}"
+                class="transition-all duration-300 rounded-full {currentScene ===
+                index
+                    ? 'w-8 h-3 bg-white'
+                    : 'w-3 h-3 bg-white/40'}"
                 on:click|stopPropagation={() => {
                     currentScene = index;
                     resetTimer();
@@ -168,8 +208,12 @@
 
     <!-- 클릭 힌트 (마지막 장면 제외) -->
     {#if !isLastScene}
-        <div class="absolute bottom-20 left-0 right-0 text-center z-20 animate-pulse">
-            <p class="glass-dark rounded-full px-4 py-2 text-white text-sm inline-block">
+        <div
+            class="absolute bottom-20 left-0 right-0 text-center z-20 animate-pulse"
+        >
+            <p
+                class="glass-dark rounded-full px-4 py-2 text-white text-sm inline-block"
+            >
                 화면을 클릭하면 다음 장면으로
             </p>
         </div>
@@ -178,22 +222,23 @@
 
 <style>
     @keyframes bounce-gentle {
-        0%, 100% {
+        0%,
+        100% {
             transform: translateY(0);
         }
         50% {
             transform: translateY(-10px);
         }
     }
-    
+
     .animate-bounce-gentle {
         animation: bounce-gentle 3s ease-in-out infinite;
     }
-    
+
     .animate-fade-in {
         animation: fadeIn 0.8s ease-out;
     }
-    
+
     @keyframes fadeIn {
         from {
             opacity: 0;
