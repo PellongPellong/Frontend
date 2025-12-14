@@ -3,16 +3,7 @@
     export let value;
     export let onSelect;
 
-    // Reactive statement to track value changes
-    $: console.log('QuestionCard value updated:', value);
-    $: console.log('Question ID:', question.id);
-
-    function handleClick(optionValue) {
-        console.log('Clicked:', optionValue, 'Current value:', value);
-        onSelect(optionValue);
-    }
-
-    // Simplified isSelected with reactive logging
+    // Reactive statement for selection state
     $: selectedMap = question.options.reduce((map, opt) => {
         if (question.multiple) {
             map[opt.value] = Array.isArray(value) && value.includes(opt.value);
@@ -21,8 +12,6 @@
         }
         return map;
     }, {});
-    
-    $: console.log('Selected map:', selectedMap);
 </script>
 
 <div class="glass rounded-3xl p-6 md:p-8 shadow-xl">
@@ -67,7 +56,7 @@
                         ? 'gradient-jeju text-white shadow-xl' 
                         : 'bg-white hover:bg-blue-50 text-gray-700 border-2 border-gray-200 hover:border-blue-300 shadow-md'
                 }"
-                on:click={() => handleClick(option.value)}
+                on:click={() => onSelect(option.value)}
             >
                 <div class="flex items-center gap-4">
                     <!-- 이모지 -->
