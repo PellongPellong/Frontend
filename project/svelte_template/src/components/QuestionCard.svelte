@@ -29,7 +29,7 @@
 
             <!-- 말풍선 (우측) -->
             <div class="flex-grow relative">
-                <div class="bg-white/90 backdrop-blur-sm rounded-2xl px-5 py-4 shadow-lg border border-blue-100">
+                <div class="speech-bubble bg-white/90 backdrop-blur-sm rounded-2xl px-5 py-4 shadow-lg border border-blue-100">
                     <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
                         {question.title}
                     </h2>
@@ -38,9 +38,7 @@
                     </p>
                 </div>
                 <!-- 말풍선 꼬리 (왼쪽으로) -->
-                <div class="absolute left-0 top-1/2 transform -translate-x-full -translate-y-1/2">
-                    <div class="w-0 h-0 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent border-r-[15px] border-r-white/90"></div>
-                </div>
+                <div class="speech-tail"></div>
             </div>
         </div>
     </div>
@@ -113,6 +111,42 @@
 <style>
     button {
         user-select: none;
+    }
+    
+    /* 말풍선 꼬리 스타일 */
+    .speech-tail {
+        position: absolute;
+        left: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+    }
+    
+    .speech-tail::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+        border-right: 16px solid rgba(219, 234, 254, 0.5); /* border color */
+    }
+    
+    .speech-tail::after {
+        content: '';
+        position: absolute;
+        left: 2px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 14px solid rgba(255, 255, 255, 0.9); /* bubble color */
     }
     
     @keyframes bounce-gentle {
