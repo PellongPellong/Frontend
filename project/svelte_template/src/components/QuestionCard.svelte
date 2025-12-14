@@ -3,21 +3,26 @@
     export let value;
     export let onSelect;
 
+    // Reactive statement to track value changes
+    $: console.log('QuestionCard value updated:', value);
+    $: console.log('Question ID:', question.id);
+
     function handleClick(optionValue) {
         console.log('Clicked:', optionValue, 'Current value:', value);
         onSelect(optionValue);
     }
 
-    function isSelected(optionValue) {
+    // Simplified isSelected with reactive logging
+    $: selectedMap = question.options.reduce((map, opt) => {
         if (question.multiple) {
-            const result = Array.isArray(value) && value.includes(optionValue);
-            console.log('Multiple check:', optionValue, 'in', value, '=', result);
-            return result;
+            map[opt.value] = Array.isArray(value) && value.includes(opt.value);
+        } else {
+            map[opt.value] = value === opt.value;
         }
-        const result = value === optionValue;
-        console.log('Single check:', value, '===', optionValue, '=', result);
-        return result;
-    }
+        return map;
+    }, {});
+    
+    $: console.log('Selected map:', selectedMap);
 </script>
 
 <div class="glass rounded-3xl p-6 md:p-8 shadow-xl">
@@ -53,8 +58,8 @@
 
     <!-- 옵션 버튼들 -->
     <div class="space-y-3">
-        {#each question.options as option}
-            {@const selected = isSelected(option.value)}
+        {#each question.options as option (option.value)}
+            {@const selected = selectedMap[option.value]}
             <button
                 type="button"
                 class="w-full px-6 py-4 rounded-2xl text-left transition-all duration-300 transform hover:scale-[1.02] active:scale-95 {
@@ -62,7 +67,7 @@
                         ? 'gradient-jeju text-white shadow-xl' 
                         : 'bg-white hover:bg-blue-50 text-gray-700 border-2 border-gray-200 hover:border-blue-300 shadow-md'
                 }"
-                on:click|preventDefault|stopPropagation={() => handleClick(option.value)}
+                on:click={() => handleClick(option.value)}
             >
                 <div class="flex items-center gap-4">
                     <!-- 이모지 -->
