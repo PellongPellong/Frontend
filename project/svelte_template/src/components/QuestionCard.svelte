@@ -37,7 +37,7 @@
                         {question.subtitle}
                     </p>
                 </div>
-                <!-- 말풍선 꼬리 (왼쪽으로) -->
+                <!-- 말풍선 꼬리 (왼쪽 하단) -->
                 <div class="speech-tail"></div>
             </div>
         </div>
@@ -125,44 +125,19 @@
         overflow: visible;
     }
     
-    /* 말풍선 꼬리 스타일 */
+    /* 말풍선 꼬리 - 왼쪽 하단 */
     .speech-tail {
         position: absolute;
-        left: -12px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 24px;
-        overflow: visible;
-        z-index: 1;
-    }
-    
-    /* 외부 레이어 (테두리) */
-    .speech-tail::before {
-        content: '';
-        position: absolute;
         left: 0;
-        top: 50%;
-        transform: translateY(-50%);
+        bottom: 20px;
         width: 0;
         height: 0;
-        border-top: 12px solid transparent;
-        border-bottom: 12px solid transparent;
-        border-right: 16px solid rgba(219, 234, 254, 0.6);
-    }
-    
-    /* 내부 레이어 (배경) */
-    .speech-tail::after {
-        content: '';
-        position: absolute;
-        left: 2px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border-top: 10px solid transparent;
-        border-bottom: 10px solid transparent;
-        border-right: 14px solid rgba(255, 255, 255, 0.9);
+        border-style: solid;
+        border-width: 0 24px 28px 0;
+        border-color: transparent rgba(255, 255, 255, 0.9) transparent transparent;
+        transform: translateX(-20px) rotate(-8deg);
+        filter: drop-shadow(-2px 2px 3px rgba(0, 0, 0, 0.1));
+        z-index: 1;
     }
     
     @keyframes bounce-gentle {
