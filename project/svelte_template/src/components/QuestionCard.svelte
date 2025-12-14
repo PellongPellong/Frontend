@@ -29,7 +29,7 @@
 
             <!-- 말풍선 컨테이너 (우측) -->
             <div class="flex-grow speech-container">
-                <div class="speech-bubble bg-white/90 backdrop-blur-sm rounded-2xl px-5 py-4 shadow-lg border border-blue-100">
+                <div class="speech-bubble bg-white/90 backdrop-blur-sm rounded-2xl px-5 py-4 shadow-lg border border-indigo-100">
                     <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
                         {question.title}
                     </h2>
@@ -51,8 +51,8 @@
                 type="button"
                 class="w-full px-6 py-4 rounded-2xl text-left transition-all duration-300 transform hover:scale-[1.02] active:scale-95 {
                     selected 
-                        ? 'gradient-jeju text-white shadow-xl' 
-                        : 'bg-white hover:bg-blue-50 text-gray-700 border-2 border-gray-200 hover:border-blue-300 shadow-md'
+                        ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-xl' 
+                        : 'bg-white hover:bg-indigo-50 text-gray-700 border-2 border-gray-200 hover:border-indigo-300 shadow-md'
                 }"
                 on:click={() => onSelect(option.value)}
             >
@@ -73,7 +73,7 @@
                     <div class="flex-shrink-0">
                         {#if selected}
                             <div class="w-7 h-7 bg-white rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
@@ -98,7 +98,7 @@
     <!-- Selection Count (for multiple) -->
     {#if question.multiple && Array.isArray(value) && value.length > 0}
         <div class="mt-3 text-center">
-            <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
+            <div class="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-semibold">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                 </svg>
