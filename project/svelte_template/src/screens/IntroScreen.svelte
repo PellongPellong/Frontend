@@ -72,12 +72,14 @@
                     <!-- 마지막 장면: 그라디언트 배경 -->
                     <div class="absolute inset-0 bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"></div>
                 {:else}
-                    <!-- 만화 이미지 -->
-                    <img 
-                        src={scene.image}
-                        alt={scene.alt}
-                        class="w-full h-full object-cover"
-                    />
+                    <!-- 만화 이미지 - object-contain으로 변경 -->
+                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100">
+                        <img 
+                            src={scene.image}
+                            alt={scene.alt}
+                            class="max-w-full max-h-full object-contain"
+                        />
+                    </div>
                 {/if}
             </div>
         {/each}
@@ -96,7 +98,7 @@
                 
                 <!-- 마지막 장면: 마스코트 + 말풍선 + 버튼 -->
                 {#if scene.showButton}
-                    <div class="h-full flex flex-col justify-end pb-32 animate-fade-in">
+                    <div class="h-full flex flex-col justify-end items-center pb-32 animate-fade-in">
                         <!-- 마스코트 + 말풍선 영역 -->
                         <div class="flex flex-col items-center mb-16">
                             <!-- 말풍선 -->
@@ -123,10 +125,10 @@
                             </div>
                         </div>
                         
-                        <!-- 시작하기 버튼 (하단 고정) -->
-                        <div class="px-8">
+                        <!-- 시작하기 버튼 (하단 고정, 가운데 정렬) -->
+                        <div class="w-full flex justify-center px-8">
                             <button
-                                class="w-full max-w-md mx-auto bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+                                class="w-full max-w-md bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
                                 on:click|stopPropagation={() => goTo('survey')}
                             >
                                 <span class="flex items-center justify-center gap-3 text-xl">
