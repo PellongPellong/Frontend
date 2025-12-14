@@ -5,7 +5,7 @@
 
     let currentScene = 0;
     let autoTimer;
-    const AUTO_DELAY = 3500; // 3.5초
+    const AUTO_DELAY = 5000; // 5초
 
     // 동화책 장면 데이터
     const scenes = [
@@ -35,10 +35,6 @@
             currentScene++;
             resetTimer();
         }
-    }
-
-    function skipIntro() {
-        goTo('survey');
     }
 
     function resetTimer() {
@@ -86,16 +82,6 @@
             </div>
         {/each}
     </div>
-
-    <!-- 건너뛰기 버튼 -->
-    {#if !isLastScene}
-        <button
-            class="absolute top-6 right-6 glass px-4 py-2 rounded-full text-gray-700 font-semibold hover:scale-105 transition-transform z-20"
-            on:click={skipIntro}
-        >
-            건너뛰기
-        </button>
-    {/if}
 
     <!-- 컨텐츠 영역 -->
     <div 
