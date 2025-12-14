@@ -42,6 +42,7 @@
             <button
                 class="absolute top-6 left-6 glass p-3 rounded-full shadow-lg hover:scale-110 transition-transform z-10"
                 on:click={goBack}
+                aria-label="뒤로 가기"
             >
                 <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -146,6 +147,7 @@
                 <button
                     class="w-full gradient-jeju text-white font-bold py-4 rounded-2xl shadow-2xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-transform"
                     on:click={handleDirections}
+                    aria-label="길찾기 시작"
                 >
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
