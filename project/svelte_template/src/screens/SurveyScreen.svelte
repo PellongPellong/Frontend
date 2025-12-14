@@ -50,7 +50,7 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-green-50 py-6 px-4">
     <div class="max-w-2xl mx-auto h-full flex flex-col">
         <!-- Header -->
-        <div class="mb-8">
+        <div class="mb-6">
             <!-- Top Navigation -->
             <div class="flex justify-between items-center mb-6">
                 <button
@@ -83,9 +83,35 @@
             </div>
         </div>
 
-        <!-- Question Content -->
+        <!-- Mascot + Question Content -->
         <div class="flex-grow flex flex-col justify-center mb-8">
             <div class="animate-fade-in" key={currentStep}>
+                <!-- 마스코트 영역 -->
+                <div class="flex justify-center mb-6">
+                    <div class="relative">
+                        <!-- 마스코트 이미지 -->
+                        <img 
+                            src="/images/deer-mascot.png" 
+                            alt="백록 마스코트" 
+                            class="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-xl animate-bounce-gentle"
+                        />
+                        
+                        <!-- 말풍선 -->
+                        <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full">
+                            <div class="relative glass rounded-2xl px-5 py-3 shadow-xl max-w-[250px]">
+                                <p class="text-gray-800 text-center font-medium text-sm leading-relaxed whitespace-pre-line">
+                                    {currentQuestion.mascotSay}
+                                </p>
+                                <!-- 말풍선 꼬리 -->
+                                <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
+                                    <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[15px] border-t-white/80"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 질문 카드 -->
                 <QuestionCard
                     question={currentQuestion}
                     value={currentValue}
@@ -118,10 +144,10 @@
                 </span>
             </button>
             
-            <!-- Skip hint for optional questions -->
-            {#if !isEmpty(currentValue) && !isLastStep}
+            <!-- Hint for multiple selection -->
+            {#if currentQuestion.multiple && !isEmpty(currentValue)}
                 <p class="text-center text-xs text-gray-500 mt-3">
-                    선택을 변경하려면 다시 클릭하세요
+                    여러 개를 선택할 수 있어요
                 </p>
             {/if}
         </div>
@@ -129,6 +155,19 @@
 </div>
 
 <style>
+    @keyframes bounce-gentle {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-8px);
+        }
+    }
+    
+    .animate-bounce-gentle {
+        animation: bounce-gentle 2s ease-in-out infinite;
+    }
+    
     .animate-fade-in {
         animation: fadeIn 0.4s ease-out;
     }
