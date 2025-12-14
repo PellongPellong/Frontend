@@ -1,102 +1,201 @@
 # 제주 숨은 명소 - 남은 작업 가이드
 
+## 📁 폴더 구조 (준비 완료)
+
+```
+project/svelte_template/
+├── public/
+│   ├── images/          ✅ 생성됨 - 여기에 이미지 추가
+│   │   ├── .gitkeep
+│   │   ├── deer-natural.png      ⬅️ 여기에 추가 필요
+│   │   ├── deer-mascot.png       ⬅️ 여기에 추가 필요
+│   │   └── baekrokdam-background.jpg  ⬅️ 여기에 추가 필요
+│   └── videos/          ✅ 생성됨 - 여기에 영상 추가
+│       ├── .gitkeep
+│       └── baekrokdam-background.mp4  ⬅️ 여기에 추가 필요
+└── src/
+    └── screens/
+        └── IntroScreen.svelte  ⬅️ 이미지 경로 수정 필요
+```
+
+---
+
 ## 🎨 필수 작업: 에셋 추가
 
-### 1. 인트로 화면 에셋
+### 1단계: 파일 다운로드 및 준비
 
-#### 배경 영상 또는 이미지
-**위치:** `public/images/` 또는 `public/videos/`
+#### 필요한 파일 (3-4개)
+
+**A. 배경 (영상 또는 이미지 중 택 1)**
 
 **옵션 1: 영상 배경 (권장)**
-- 파일명: `baekrokdam-background.mp4`, `baekrokdam-background.webm`
+- 파일명: `baekrokdam-background.mp4`
+- 저장 위치: `public/videos/`
 - 해상도: 1920x1080 이상
 - 용량: 10MB 이하 권장
-- 특징: 백록담 자연 풍경, 루프 가능한 영상
+- 특징: 백록담/제주 자연 풍경, 루프 가능
 
 **옵션 2: 이미지 배경**
-- 파일명: `baekrokdam-background.jpg` 또는 `.webp`
+- 파일명: `baekrokdam-background.jpg` (또는 `.webp`)
+- 저장 위치: `public/images/`
 - 해상도: 1920x1080 이상
 - 용량: 500KB 이하 권장
 
-**수정 파일:** `src/screens/IntroScreen.svelte` (25-27번째 줄)
+**B. 흰사슴 이미지 (필수 2개)**
 
+1. **자연 상태 흰사슴**
+   - 파일명: `deer-natural.png`
+   - 저장 위치: `public/images/`
+   - 크기: 512x512px 권장
+   - 포맷: PNG (투명 배경)
+   - 스타일: 사실적, 우아한 느낌
+
+2. **마스코트 캐릭터**
+   - 파일명: `deer-mascot.png`
+   - 저장 위치: `public/images/`
+   - 크기: 512x512px 권장
+   - 포맷: PNG (투명 배경)
+   - 스타일: 귀엽고 친근한 캐릭터
+
+---
+
+### 2단계: 파일 저장
+
+#### Windows/Mac에서:
+
+1. 프로젝트 폴더 열기:
+   ```
+   C:\Users\notebiz001\Downloads\gypsy\team\project\svelte_template
+   ```
+
+2. 파일 복사:
+   - `public/images/` 폴더에 이미지 파일 3개 복사
+   - `public/videos/` 폴더에 영상 파일 1개 복사 (영상 사용 시)
+
+3. 파일명 확인:
+   - 정확한 파일명 사용 (대소문자 구분)
+   - 공백 없이 하이픈(-) 사용
+
+---
+
+### 3단계: IntroScreen.svelte 수정
+
+**파일 위치:** `src/screens/IntroScreen.svelte`
+
+#### A. 배경 영상으로 변경 (영상 사용 시)
+
+**현재 코드 (25-30번째 줄):**
 ```svelte
-<!-- 현재 코드 (Placeholder) -->
 <div
     class="relative w-full h-screen bg-cover bg-center overflow-hidden"
     style="background-image: url('https://placehold.co/1920x1080/2c3e50/ecf0f1?text=Baekrokdam+Background');"
->
-
-<!-- 영상으로 변경 시 -->
-<div class="relative w-full h-screen overflow-hidden">
-    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
-        <source src="/videos/baekrokdam-background.mp4" type="video/mp4" />
-        <source src="/videos/baekrokdam-background.webm" type="video/webm" />
-    </video>
-    
-<!-- 또는 이미지로 변경 시 -->
-<div
-    class="relative w-full h-screen bg-cover bg-center overflow-hidden"
-    style="background-image: url('/images/baekrokdam-background.jpg');"
+    on:click={handleInteraction}
+    role="button"
+    tabindex="0"
+    on:keypress={handleInteraction}
 >
 ```
 
----
-
-#### 흰사슴 이미지 (2개 필요)
-**위치:** `public/images/`
-
-**1) 자연 상태 흰사슴**
-- 파일명: `deer-natural.png`
-- 크기: 512x512px 권장
-- 포맷: PNG (투명 배경)
-- 스타일: 사실적, 우아한 느낌
-
-**2) 마스코트 캐릭터**
-- 파일명: `deer-mascot.png`
-- 크기: 512x512px 권장
-- 포맷: PNG (투명 배경)
-- 스타일: 귀엽고 친근한 캐릭터
-
-**수정 파일:** `src/screens/IntroScreen.svelte` (45-59번째 줄)
-
+**변경 후:**
 ```svelte
-<!-- 현재 코드 (Placeholder) -->
-<img
-    src="https://placehold.co/300x300/e67e22/fff?text=Mascot+Deer"
-    alt="Mascot"
-    class="w-40 h-40 md:w-56 md:h-56 object-contain animate-bounce-slow"
-/>
+<div
+    class="relative w-full h-screen overflow-hidden"
+    on:click={handleInteraction}
+    role="button"
+    tabindex="0"
+    on:keypress={handleInteraction}
+>
+    <!-- 배경 영상 -->
+    <video 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        class="absolute inset-0 w-full h-full object-cover"
+    >
+        <source src="/videos/baekrokdam-background.mp4" type="video/mp4" />
+    </video>
+```
 
-<img
-    src="https://placehold.co/300x300/bdc3c7/2c3e50?text=Natural+Deer"
-    alt="Natural Deer"
-    class="w-40 h-40 md:w-56 md:h-56 object-contain opacity-90 drop-shadow-2xl"
-/>
+#### B. 배경 이미지로 변경 (이미지 사용 시)
 
-<!-- 실제 에셋으로 변경 -->
-<img
-    src="/images/deer-mascot.png"
-    alt="Mascot"
-    class="w-40 h-40 md:w-56 md:h-56 object-contain animate-bounce-slow"
-/>
+**현재 코드:**
+```svelte
+style="background-image: url('https://placehold.co/1920x1080/2c3e50/ecf0f1?text=Baekrokdam+Background');"
+```
 
-<img
-    src="/images/deer-natural.png"
-    alt="Natural Deer"
-    class="w-40 h-40 md:w-56 md:h-56 object-contain opacity-90 drop-shadow-2xl"
-/>
+**변경 후:**
+```svelte
+style="background-image: url('/images/baekrokdam-background.jpg');"
+```
+
+#### C. 흰사슴 이미지 경로 변경
+
+**현재 코드 (52-62번째 줄):**
+```svelte
+{#if showMascot}
+    <div class="glass p-8 rounded-3xl">
+        <img
+            src="https://placehold.co/300x300/e67e22/fff?text=Mascot+Deer"
+            alt="Mascot"
+            class="w-40 h-40 md:w-56 md:h-56 object-contain animate-bounce-slow"
+        />
+    </div>
+{:else}
+    <img
+        src="https://placehold.co/300x300/bdc3c7/2c3e50?text=Natural+Deer"
+        alt="Natural Deer"
+        class="w-40 h-40 md:w-56 md:h-56 object-contain opacity-90 drop-shadow-2xl"
+    />
+{/if}
+```
+
+**변경 후:**
+```svelte
+{#if showMascot}
+    <div class="glass p-8 rounded-3xl">
+        <img
+            src="/images/deer-mascot.png"
+            alt="Mascot"
+            class="w-40 h-40 md:w-56 md:h-56 object-contain animate-bounce-slow"
+        />
+    </div>
+{:else}
+    <img
+        src="/images/deer-natural.png"
+        alt="Natural Deer"
+        class="w-40 h-40 md:w-56 md:h-56 object-contain opacity-90 drop-shadow-2xl"
+    />
+{/if}
 ```
 
 ---
 
-## 🔧 선택 작업
+## ✅ 체크리스트
+
+### 필수 작업
+- [ ] **Step 1**: 이미지/영상 파일 준비 완료
+- [ ] **Step 2**: 파일을 `public/images/` 또는 `public/videos/`에 저장
+- [ ] **Step 3**: IntroScreen.svelte 코드 수정
+  - [ ] 배경 영상 또는 이미지 경로 수정
+  - [ ] deer-natural.png 경로 수정
+  - [ ] deer-mascot.png 경로 수정
+- [ ] **Step 4**: `npm run dev`로 로컬 테스트
+- [ ] **Step 5**: 이미지가 정상적으로 보이는지 확인
+
+### 선택 작업
+- [ ] 장소 이미지 추가 (`public/images/places/`)
+- [ ] Favicon 변경 (`public/favicon.ico`)
+- [ ] index.html 메타데이터 수정
+- [ ] Mock 데이터 좌표 확인
+
+---
+
+## 🔧 선택 작업 상세
 
 ### 2. 장소 이미지 추가 (선택사항)
 
 현재 PlaceCard는 그라디언트 배경을 사용합니다. 실제 장소 이미지를 추가하려면:
-
-**위치:** `public/images/places/`
 
 **파일 구조:**
 ```
@@ -107,6 +206,7 @@ public/images/places/
 ```
 
 **수정 파일:**
+
 1. `src/lib/mock.js` - 각 Place 객체에 `imageUrl` 필드 추가
 ```javascript
 {
@@ -162,60 +262,6 @@ public/images/places/
 
 ---
 
-### 5. Mock 데이터 좌표 확인
-
-**수정 파일:** `src/lib/mock.js`
-
-현재 Mock 데이터의 위도/경도가 실제 제주 장소 좌표인지 확인하세요.
-- 제주도 대략 위도: 33.3-33.6
-- 제주도 대략 경도: 126.1-126.9
-
----
-
-### 6. 로딩 스피너 커스터마이징 (선택)
-
-**수정 파일:** `src/components/LoadingSpinner.svelte`
-
-현재 기본 스피너를 마스코트 기반 애니메이션으로 변경 가능:
-```svelte
-<!-- 현재: 기본 스피너 -->
-<div class="flex justify-center items-center">
-  <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-</div>
-
-<!-- 변경: 마스코트 스피너 -->
-<div class="flex justify-center items-center">
-  <img src="/images/deer-mascot.png" 
-       alt="Loading" 
-       class="w-16 h-16 animate-bounce" />
-</div>
-```
-
----
-
-## ✅ 배포 전 체크리스트
-
-### 필수
-- [ ] 배경 영상 또는 이미지 추가 (`public/images/` 또는 `public/videos/`)
-- [ ] 흰사슴 이미지 2개 추가 (`public/images/deer-natural.png`, `deer-mascot.png`)
-- [ ] IntroScreen.svelte에서 이미지 경로 수정
-- [ ] `npm run dev`로 로컬 테스트
-
-### 선택
-- [ ] 장소 이미지 추가 및 코드 수정
-- [ ] Favicon 변경
-- [ ] index.html 메타데이터 수정
-- [ ] Mock 데이터 좌표 확인
-- [ ] 로딩 스피너 커스터마이징
-
-### 테스트
-- [ ] 인트로 → 설문 → 결과 → 상세 전체 플로우 확인
-- [ ] 모바일 반응형 테스트 (크롬 DevTools)
-- [ ] 뒤로가기/다시하기 버튼 동작 확인
-- [ ] 길찾기 딥링크 동작 확인
-
----
-
 ## 🚀 실행 방법
 
 ```bash
@@ -231,38 +277,6 @@ npm run preview
 
 ---
 
-## 📁 프로젝트 구조
-
-```
-project/svelte_template/
-├── public/
-│   ├── images/           # ⬅️ 여기에 이미지 추가
-│   │   ├── deer-natural.png
-│   │   ├── deer-mascot.png
-│   │   ├── baekrokdam-background.jpg
-│   │   └── places/       # (선택) 장소 이미지
-│   ├── videos/           # ⬅️ 또는 여기에 영상 추가
-│   │   └── baekrokdam-background.mp4
-│   └── favicon.ico       # ⬅️ 파비콘 교체
-├── src/
-│   ├── screens/
-│   │   ├── IntroScreen.svelte      # ⬅️ 이미지 경로 수정 필요
-│   │   ├── SurveyScreen.svelte
-│   │   ├── ResultScreen.svelte
-│   │   └── DetailScreen.svelte
-│   ├── components/
-│   │   ├── PlaceCard.svelte        # (선택) 이미지 추가 시 수정
-│   │   ├── QuestionCard.svelte
-│   │   ├── ProgressBar.svelte
-│   │   └── LoadingSpinner.svelte   # (선택) 커스터마이징
-│   ├── lib/
-│   │   └── mock.js                 # (선택) 좌표/이미지 URL 추가
-│   └── app.css
-└── index.html                      # ⬅️ 메타데이터 수정
-```
-
----
-
 ## 💡 에셋 준비 팁
 
 ### 이미지 최적화
@@ -270,7 +284,7 @@ project/svelte_template/
 - **도구**: [Squoosh.app](https://squoosh.app/) 또는 [TinyPNG](https://tinypng.com/)
 
 ### 영상 최적화
-- **포맷**: MP4 (H.264) + WebM (VP9) 제공
+- **포맷**: MP4 (H.264)
 - **도구**: [HandBrake](https://handbrake.fr/) 또는 FFmpeg
 - **설정**: 
   - 해상도: 1920x1080
@@ -278,26 +292,101 @@ project/svelte_template/
   - 프레임레이트: 24-30fps
 
 ### AI 이미지 생성 (옵션)
+
 에셋이 없다면 AI로 생성 가능:
-- **Midjourney**: "white deer in jeju hallasan nature, peaceful, cinematic"
-- **DALL-E**: "cute white deer mascot character, friendly, simple design"
-- **Stable Diffusion**: 무료 대안
+
+**Midjourney 프롬프트:**
+- 배경: "jeju hallasan baekrokdam crater, aerial view, misty morning, cinematic, nature documentary style"
+- 자연 사슴: "white deer in jeju nature, peaceful, photorealistic, side view"
+- 마스코트: "cute white deer mascot character, friendly smile, simple design, flat illustration"
+
+**무료 대안:**
+- [Leonardo.ai](https://leonardo.ai/) - 무료 크레딧
+- [Bing Image Creator](https://www.bing.com/create) - 무료
+- [Stable Diffusion](https://huggingface.co/spaces/stabilityai/stable-diffusion) - 완전 무료
 
 ---
 
-## 📞 문제 발생 시
+## 🐛 문제 해결
 
 ### 이미지가 안 보일 때
-1. 파일 경로 확인 (`/images/...`로 시작)
-2. 파일명 대소문자 확인 (Linux는 구분함)
-3. 개발 서버 재시작 (`Ctrl+C` 후 `npm run dev`)
 
-### CSS 오류 발생 시
-- 이미 Tailwind 4.x 호환 수정 완료
-- 추가 오류 시 `node_modules` 삭제 후 `npm install` 재실행
+1. **파일 경로 확인**
+   - `/images/...`로 시작하는지 확인 (슬래시 필수)
+   - 파일명 대소문자 정확히 일치하는지 확인
+
+2. **파일 위치 확인**
+   ```
+   project/svelte_template/
+   └── public/           ⬅️ 여기에 있어야 함
+       └── images/
+           └── deer-natural.png
+   ```
+
+3. **개발 서버 재시작**
+   ```bash
+   # Ctrl+C로 중지
+   npm run dev  # 다시 시작
+   ```
+
+4. **브라우저 캐시 삭제**
+   - Chrome: `Ctrl+Shift+R` (강력 새로고침)
+   - 개발자도구: Network 탭 → "Disable cache" 체크
+
+### 영상이 재생 안 될 때
+
+1. **형식 확인**
+   - MP4 (H.264) 코덱 사용 권장
+   - WebM도 추가하면 더 좋음
+
+2. **속성 확인**
+   ```svelte
+   <video autoplay loop muted playsinline>
+   ```
+   - `autoplay`, `muted`는 필수 (브라우저 정책)
+   - `playsinline`는 모바일용
+
+3. **용량 확인**
+   - 10MB 초과 시 로딩 느림
+   - 압축 권장
+
+---
+
+## 📝 완료 후 확인사항
+
+### 테스트 시나리오
+
+1. **인트로 화면**
+   - [ ] 배경 영상/이미지가 보이는가?
+   - [ ] 5초 후 또는 클릭 시 흰사슴이 변하는가?
+   - [ ] 마스코트로 전환되는가?
+   - [ ] "여행 시작하기" 버튼이 나타나는가?
+
+2. **전체 플로우**
+   - [ ] 인트로 → 설문 이동
+   - [ ] 설문 7개 완료
+   - [ ] 결과 화면 5개 카드 표시
+   - [ ] 카드 클릭 시 상세 화면
+   - [ ] 뒤로가기 버튼 동작
+   - [ ] 길찾기 버튼 동작 (새 탭 열림)
+
+3. **반응형 테스트**
+   - [ ] 모바일 (375px)
+   - [ ] 태블릿 (768px)
+   - [ ] 데스크톱 (1920px)
 
 ---
 
 **작성일:** 2025-12-14  
 **프로젝트:** 제주 관광 분산 데모 서비스  
-**상태:** UI 개발 완료, 에셋 추가 대기 중
+**상태:** ✅ 폴더 구조 준비 완료, 에셋 추가 및 코드 수정 대기 중
+
+---
+
+## 🎯 다음 단계 요약
+
+1. **이미지/영상 파일 준비** (3-4개)
+2. **파일을 해당 폴더에 저장**
+3. **IntroScreen.svelte 코드 3군데 수정**
+4. **npm run dev로 확인**
+5. **완료! 🎉**
