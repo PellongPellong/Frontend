@@ -160,7 +160,7 @@
             {
                 type: 'text',
                 role: 'assistant',
-                content: '안녕하세요! 제주숨곧 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
+                content: '안녕하세요! 제주숨곡 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
                 suggestions: [
                     { display: '🌊 바다 볼 수 있는 카페', text: '바다 볼 수 있는 카페' },
                     { display: '🧺 오름 코스 추천', text: '오름 코스 추천' },
@@ -256,7 +256,7 @@
         <div class="p-4">
             <h1 class="text-xl font-bold text-white flex items-center gap-2">
                 <span>🦌</span>
-                <span>제주숨곧 AI</span>
+                <span>제주숨곡 AI</span>
             </h1>
             <button 
                 class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors"
@@ -379,7 +379,8 @@
                     class="w-full resize-none rounded-xl border py-3 pl-4 pr-14 text-base focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition {
                         isLoading ? 'border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed' : 'border-[#E0E0E0] bg-white text-gray-900'
                     }"
-                    placeholder={isLoading ? '응답을 기다리는 중...' : '제주 여행에 대해 물어보세요... (예: 성산일출봉 괜찮을까?)'}rows="1"
+                    placeholder={isLoading ? '응답을 기다리는 중...' : '제주 여행에 대해 물어보세요... (예: 성산일출봉 괜찮을까?)'}
+                    rows="1"
                     style="max-height: 120px;"
                     disabled={isLoading}
                 />
