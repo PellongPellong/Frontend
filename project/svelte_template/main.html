@@ -1,133 +1,185 @@
 <!DOCTYPE html>
-<html lang="ko"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AI 채팅 인터페이스</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        html, body {
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI 채팅 인터페이스</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        html,
+        body {
             height: 100%;
             overflow: hidden;
             font-family: 'Noto Sans KR', sans-serif;
         }
+
         .fade-in-up {
             animation: fadeInUp 0.5s ease-out forwards;
             opacity: 0;
         }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
-        }.custom-scrollbar::-webkit-scrollbar {
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background-color: #ccc;
             border-radius: 3px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-track {
             background-color: transparent;
-        }.typing-dot {
+        }
+
+        .typing-dot {
             animation: typing-blink 1.4s infinite both;
         }
+
         .typing-dot:nth-child(2) {
             animation-delay: 0.2s;
         }
+
         .typing-dot:nth-child(3) {
             animation-delay: 0.4s;
         }
+
         @keyframes typing-blink {
-            0% { opacity: 0.2; }
-            20% { opacity: 1; }
-            100% { opacity: 0.2; }
+            0% {
+                opacity: 0.2;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.2;
+            }
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-white">
-<div class="flex h-screen w-full font-sans">
-<aside class="hidden md:flex w-[250px] flex-col bg-[#2A2A2A] text-[#E5E5E5] p-2">
-<div class="p-3">
-<h1 class="text-lg font-bold text-white">제주숨곧 AI</h1>
-<button class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out">+ 새 대화</button>
-</div>
-<nav class="flex-grow overflow-y-auto custom-scrollbar px-2 space-y-1">
-<a class="block rounded-lg p-3 text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out" href="#">성산일출봉 추천해줘</a>
-<a class="block rounded-lg p-3 text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out" href="#">가족 여행 코스</a>
-</nav>
-<div class="p-2 border-t border-[#444]">
-<a class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out" href="#">
-<span class="material-symbols-outlined text-xl">settings</span>
-<span>설정</span>
-</a>
-<a class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out" href="#">
-<span class="material-symbols-outlined text-xl">person</span>
-<span>프로필</span>
-</a>
-</div>
-</aside>
-<main class="flex flex-1 flex-col h-full bg-white relative">
-<header class="fixed top-0 left-0 md:left-[250px] right-0 z-10 flex h-[60px] items-center justify-between border-b border-[#E5E5E5] bg-white px-4">
-<button class="md:hidden">
-<span class="material-symbols-outlined">menu</span>
-</button>
-<h2 class="absolute left-1/2 -translate-x-1/2 text-lg font-bold text-[#1A237E]">제주 여행 AI 어시스턴트</h2>
-<button>
-<span class="material-symbols-outlined">more_vert</span>
-</button>
-</header>
-<div class="flex-1 overflow-y-auto pt-[60px] pb-[96px] md:pb-[106px]">
-<div class="mx-auto max-w-[800px] p-5 md:py-10 space-y-6">
-<div class="fade-in-up">
-<div class="flex items-start gap-3">
-<div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-xl">🍊</div>
-<div class="max-w-[80%] rounded-2xl bg-[#F0F0F0] p-4 text-[#212121]">
-<p>안녕하세요! 제주숨곡 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?</p>
-</div>
-</div>
-<div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 pl-13">
-<button class="w-full sm:w-auto rounded-full border-2 border-[#E0E0E0] py-3 px-5 text-sm font-medium hover:bg-[#F5F5F5] transition-colors duration-200 ease-in-out">🌊 바다 볼 수 있는 카페</button>
-<button class="w-full sm:w-auto rounded-full border-2 border-[#E0E0E0] py-3 px-5 text-sm font-medium hover:bg-[#F5F5F5] transition-colors duration-200 ease-in-out">🧺 오름 코스 추천</button>
-<button class="w-full sm:w-auto rounded-full border-2 border-[#E0E0E0] py-3 px-5 text-sm font-medium hover:bg-[#F5F5F5] transition-colors duration-200 ease-in-out">👨‍👩‍👧 가족 여행 코스</button>
-</div>
-</div>
-<div class="fade-in-up flex justify-end" style="animation-delay: 0.5s;">
-<div class="max-w-[70%] rounded-t-2xl rounded-bl-2xl bg-gradient-to-r from-[#FF6B35] to-[#FFAA85] p-3 px-4 text-white">
-<p>바다 볼 수 있는 한산한 카페 추천해줘</p>
-</div>
-</div>
-<div class="fade-in-up flex items-start gap-3" style="animation-delay: 1s;">
-<div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-xl">🍊</div>
-<div class="max-w-[80%] rounded-t-2xl rounded-br-2xl bg-[#F0F0F0] p-3 px-4 text-[#212121]">
-<div class="flex items-center space-x-1 p-2">
-<div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
-<div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
-<div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="fixed bottom-0 left-0 md:left-[250px] right-0 bg-white p-5 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
-<div class="mx-auto max-w-[800px] relative">
-<textarea class="w-full resize-none rounded-xl border border-[#E0E0E0] py-3 pl-4 pr-14 text-base focus:ring-2 focus:ring-[#FF6B35]/50 focus:border-[#FF6B35] transition" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; const sendBtn = document.getElementById('send-btn'); if(this.value) {sendBtn.classList.remove('bg-[#E0E0E0]'); sendBtn.classList.add('bg-[#FF6B35]');} else {sendBtn.classList.add('bg-[#E0E0E0]'); sendBtn.classList.remove('bg-[#FF6B35]');}" placeholder="제주 여행에 대해 물어보세요... (예: 한산한 카페 추천해줘)" rows="1" style="max-height: 120px;"></textarea>
-<button class="absolute right-2 bottom-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#E0E0E0] text-white transition-colors duration-200 ease-in-out hover:bg-[#E55A2A]" id="send-btn">
-<span class="material-symbols-outlined">arrow_upward</span>
-</button>
-</div>
-</div>
-</main>
-</div>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
 
-</body></html>
+<body class="bg-white">
+    <div class="flex h-screen w-full font-sans">
+        <aside class="hidden md:flex w-[250px] flex-col bg-[#2A2A2A] text-[#E5E5E5] p-2">
+            <div class="p-3">
+                <h1 class="text-lg font-bold text-white">제주숨곧 AI</h1>
+                <button
+                    class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out">+
+                    새 대화</button>
+            </div>
+            <nav class="flex-grow overflow-y-auto custom-scrollbar px-2 space-y-1">
+                <a class="block rounded-lg p-3 text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out"
+                    href="#">성산일출봉 추천해줘</a>
+                <a class="block rounded-lg p-3 text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out"
+                    href="#">가족 여행 코스</a>
+            </nav>
+            <div class="p-2 border-t border-[#444]">
+                <a class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out"
+                    href="#">
+                    <span class="material-symbols-outlined text-xl">settings</span>
+                    <span>설정</span>
+                </a>
+                <a class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors duration-200 ease-in-out"
+                    href="#">
+                    <span class="material-symbols-outlined text-xl">person</span>
+                    <span>프로필</span>
+                </a>
+            </div>
+        </aside>
+        <main class="flex flex-1 flex-col h-full bg-white relative">
+            <header
+                class="fixed top-0 left-0 md:left-[250px] right-0 z-10 flex h-[60px] items-center justify-between border-b border-[#E5E5E5] bg-white px-4">
+                <button class="md:hidden">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <h2 class="absolute left-1/2 -translate-x-1/2 text-lg font-bold text-[#1A237E]">제주 여행 AI 어시스턴트</h2>
+                <button>
+                    <span class="material-symbols-outlined">more_vert</span>
+                </button>
+            </header>
+            <div class="flex-1 overflow-y-auto pt-[60px] pb-[96px] md:pb-[106px]">
+                <div class="mx-auto max-w-[800px] p-5 md:py-10 space-y-6">
+                    <div class="fade-in-up">
+                        <div class="flex items-start gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-xl">🍊
+                            </div>
+                            <div class="max-w-[80%] rounded-2xl bg-[#F0F0F0] p-4 text-[#212121]">
+                                <p>안녕하세요! 제주숨곳 백록이입니다. 한산한 제주 여행지를 추천해드릴게요. 어디를 가고싶으신가요?</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 pl-13">
+                            <button
+                                class="w-full sm:w-auto rounded-full border-2 border-[#E0E0E0] py-3 px-5 text-sm font-medium hover:bg-[#F5F5F5] transition-colors duration-200 ease-in-out">🌊
+                                바다 볼 수 있는 카페</button>
+                            <button
+                                class="w-full sm:w-auto rounded-full border-2 border-[#E0E0E0] py-3 px-5 text-sm font-medium hover:bg-[#F5F5F5] transition-colors duration-200 ease-in-out">🧺
+                                오름 코스 추천</button>
+                            <button
+                                class="w-full sm:w-auto rounded-full border-2 border-[#E0E0E0] py-3 px-5 text-sm font-medium hover:bg-[#F5F5F5] transition-colors duration-200 ease-in-out">👨‍👩‍👧
+                                가족 여행 코스</button>
+                        </div>
+                    </div>
+                    <div class="fade-in-up flex justify-end" style="animation-delay: 0.5s;">
+                        <div
+                            class="max-w-[70%] rounded-t-2xl rounded-bl-2xl bg-gradient-to-r from-[#FF6B35] to-[#FFAA85] p-3 px-4 text-white">
+                            <p>바다 볼 수 있는 한산한 카페 추천해줘</p>
+                        </div>
+                    </div>
+                    <div class="fade-in-up flex items-start gap-3" style="animation-delay: 1s;">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-xl">🍊
+                        </div>
+                        <div class="max-w-[80%] rounded-t-2xl rounded-br-2xl bg-[#F0F0F0] p-3 px-4 text-[#212121]">
+                            <div class="flex items-center space-x-1 p-2">
+                                <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
+                                <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
+                                <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="fixed bottom-0 left-0 md:left-[250px] right-0 bg-white p-5 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+                <div class="mx-auto max-w-[800px] relative">
+                    <textarea
+                        class="w-full resize-none rounded-xl border border-[#E0E0E0] py-3 pl-4 pr-14 text-base focus:ring-2 focus:ring-[#FF6B35]/50 focus:border-[#FF6B35] transition"
+                        oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; const sendBtn = document.getElementById('send-btn'); if(this.value) {sendBtn.classList.remove('bg-[#E0E0E0]'); sendBtn.classList.add('bg-[#FF6B35]');} else {sendBtn.classList.add('bg-[#E0E0E0]'); sendBtn.classList.remove('bg-[#FF6B35]');}"
+                        placeholder="제주 여행에 대해 물어보세요... (예: 한산한 카페 추천해줘)" rows="1"
+                        style="max-height: 120px;"></textarea>
+                    <button
+                        class="absolute right-2 bottom-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#E0E0E0] text-white transition-colors duration-200 ease-in-out hover:bg-[#E55A2A]"
+                        id="send-btn">
+                        <span class="material-symbols-outlined">arrow_upward</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>
