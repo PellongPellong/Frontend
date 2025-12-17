@@ -9,7 +9,8 @@
     let userInput = '';
     let isLoading = false;
     let chatContainer;
-    let cardScrollers = {};
+    let currentCardIndex = {}; // 각 메시지별 현재 카드 인덱스
+    let expandedCard = null; // 확대된 카드 정보 { messageIdx, cardIdx, card }
     
     // 목업 데이터
     const mockResponses = {
@@ -37,7 +38,7 @@
                     title: '월령지',
                     subtitle: '대신 추천',
                     icon: '✨',
-                    content: '조선시대 목마장으로 조용하고 평화로운 산책로',
+                    content: '조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.',
                     color: 'from-green-400/20 to-emerald-400/20'
                 },
                 {
@@ -61,8 +62,8 @@
                     content: '월령지 입장료 20% 할인',
                     color: 'from-purple-400/20 to-pink-400/20',
                     coupons: [
-                        { name: '월령지 20% 할인', code: '1234' },
-                        { name: '카페 음료 무료', code: '9876' }
+                        { name: '월령지 20% 할인', code: '1234-5678-9012' },
+                        { name: '카페 음료 무료', code: '9876-5432-1098' }
                     ]
                 }
             ]
@@ -75,7 +76,7 @@
                     title: '카페 더 클리프',
                     subtitle: '오션뷰 카페',
                     icon: '☕',
-                    content: '절벽 끝의 한라산과 바다 전망',
+                    content: '절벽 끝의 한라산과 바다 전망. 주말에도 비교적 한산하며 사진 촬영 명소로 유명합니다.',
                     color: 'from-amber-400/20 to-yellow-400/20'
                 },
                 {
@@ -98,7 +99,7 @@
                     content: '커피 할인 쿠폰',
                     color: 'from-purple-400/20 to-pink-400/20',
                     coupons: [
-                        { name: '커피 할인', code: '5555' }
+                        { name: '커피 할인', code: '5555-6666-7777' }
                     ]
                 }
             ]
@@ -111,7 +112,7 @@
                     title: '빌자루 숲',
                     subtitle: '가족 여행 코스',
                     icon: '🌳',
-                    content: '아이들과 함께하는 자연 산책로',
+                    content: '아이들과 함께하는 자연 산책로. 평일 오전 시간대는 비교적 한산합니다.',
                     color: 'from-green-400/20 to-teal-400/20'
                 },
                 {
@@ -135,8 +136,8 @@
                     content: '가족 할인권',
                     color: 'from-purple-400/20 to-pink-400/20',
                     coupons: [
-                        { name: '빌자루 가족 할인', code: '1111' },
-                        { name: '헤리테이지 30%', code: '4444' }
+                        { name: '빌자루 가족 할인', code: '1111-2222-3333' },
+                        { name: '헤리테이지 30%', code: '4444-5555-6666' }
                     ]
                 }
             ]
@@ -213,6 +214,9 @@
             sessionId = data.session_id;
             
             const messagesWithoutLoading = messages.slice(0, -1);
+            const newMessageIdx = messagesWithoutLoading.length;
+            currentCardIndex[newMessageIdx] = 0;
+            
             messages = [...messagesWithoutLoading, {
                 type: 'cards',
                 role: 'assistant',
@@ -234,15 +238,24 @@
         }
     }
     
-    function scrollCards(messageIndex, direction) {
-        const scrollContainer = cardScrollers[messageIndex];
-        if (scrollContainer) {
-            const scrollAmount = 380; // 카드 너비 + 간격
-            scrollContainer.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            });
-        }
+    function navigateCard(messageIdx, direction) {
+        const message = messages[messageIdx];
+        if (!message || !message.cards) return;
+        
+        const currentIdx = currentCardIndex[messageIdx] || 0;
+        const newIdx = direction === 'left' 
+            ? Math.max(0, currentIdx - 1)
+            : Math.min(message.cards.length - 1, currentIdx + 1);
+        
+        currentCardIndex[messageIdx] = newIdx;
+    }
+    
+    function openCardModal(messageIdx, cardIdx, card) {
+        expandedCard = { messageIdx, cardIdx, card };
+    }
+    
+    function closeCardModal() {
+        expandedCard = null;
     }
     
     function scrollToBottom() {
@@ -260,8 +273,13 @@
                 sendMessage();
             }
         }
+        if (e.key === 'Escape' && expandedCard) {
+            closeCardModal();
+        }
     }
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <div class="flex h-screen w-full bg-white">
     <aside class="hidden md:flex w-[250px] flex-col bg-[#2A2A2A] text-[#E5E5E5]">
@@ -275,6 +293,7 @@
                 on:click={() => {
                     sessionId = null;
                     messages = messages.slice(0, 1);
+                    currentCardIndex = {};
                 }}
             >
                 + 새 대화
@@ -315,27 +334,47 @@
                             </div>
                         </div>
                     {:else if message.type === 'cards'}
+                        {@const activeIdx = currentCardIndex[i] || 0}
                         <div class="fade-in-up flex items-start gap-3">
                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
                             
-                            <!-- 카드 컨테이너 -->
-                            <div class="flex-1 relative group">
-                                <!-- 왼쪽 네비게이션 버튼 -->
-                                <button 
-                                    on:click={() => scrollCards(i, 'left')}
-                                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
-                                >
-                                    <span class="text-gray-700 font-bold">←</span>
-                                </button>
+                            <div class="flex-1 relative">
+                                <!-- 네비게이션 버튼들 -->
+                                <div class="flex items-center justify-between mb-4">
+                                    <button 
+                                        on:click={() => navigateCard(i, 'left')}
+                                        disabled={activeIdx === 0}
+                                        class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+                                    >
+                                        <span class="text-gray-700 font-bold">←</span>
+                                    </button>
+                                    
+                                    <div class="text-sm text-gray-600 font-medium">
+                                        {activeIdx + 1} / {message.cards.length}
+                                    </div>
+                                    
+                                    <button 
+                                        on:click={() => navigateCard(i, 'right')}
+                                        disabled={activeIdx === message.cards.length - 1}
+                                        class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+                                    >
+                                        <span class="text-gray-700 font-bold">→</span>
+                                    </button>
+                                </div>
                                 
-                                <!-- 가로 스크롤 카드 -->
-                                <div 
-                                    bind:this={cardScrollers[i]}
-                                    class="overflow-x-auto pb-4 hide-scrollbar scroll-smooth"
-                                >
-                                    <div class="flex gap-4">
-                                        {#each message.cards as card, cardIdx}
-                                            <div class="glass-card flex-shrink-0 w-[360px] h-[400px] flex flex-col p-6 backdrop-blur-xl bg-gradient-to-br {card.color} border border-white/40 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                                <!-- 카드 컨테이너 (30% 겹침) -->
+                                <div class="relative h-[420px]">
+                                    {#each message.cards as card, cardIdx}
+                                        {@const offset = (cardIdx - activeIdx) * 252} <!-- 360 * 0.7 = 252 -->
+                                        {@const isActive = cardIdx === activeIdx}
+                                        {@const zIndex = message.cards.length - Math.abs(cardIdx - activeIdx)}
+                                        
+                                        <div 
+                                            class="absolute transition-all duration-500 ease-out cursor-pointer"
+                                            style="left: {offset}px; z-index: {zIndex}; opacity: {Math.abs(cardIdx - activeIdx) > 2 ? 0 : 1};"
+                                            on:click={() => openCardModal(i, cardIdx, card)}
+                                        >
+                                            <div class="glass-card w-[360px] h-[400px] flex flex-col p-6 backdrop-blur-xl bg-gradient-to-br {card.color} border border-white/40 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 {isActive ? 'scale-100' : 'scale-95'}">
                                                 <!-- 카드 헤더 -->
                                                 <div class="flex items-center justify-between mb-4">
                                                     <span class="text-5xl">{card.icon}</span>
@@ -347,57 +386,48 @@
                                                 <!-- 카드 타이틀 -->
                                                 <h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
                                                 
-                                                <!-- 카드 내용 -->
-                                                <div class="flex-1 overflow-y-auto custom-scrollbar">
+                                                <!-- 카드 내용 (간략) -->
+                                                <div class="flex-1 overflow-hidden">
                                                     {#if card.type === 'status' && card.timeTable}
                                                         <div class="grid grid-cols-3 gap-2">
-                                                            {#each card.timeTable as slot}
+                                                            {#each card.timeTable.slice(0, 6) as slot}
                                                                 {@const color = slot.level <= 2 ? 'bg-green-500/20' : slot.level <= 3 ? 'bg-yellow-500/20' : 'bg-red-500/20'}
-                                                                <div class="{color} rounded-lg p-3 text-center backdrop-blur-sm">
-                                                                    <div class="text-sm font-bold">{slot.time}</div>
-                                                                    <div class="text-base font-semibold">{slot.level}점</div>
+                                                                <div class="{color} rounded-lg p-2 text-center backdrop-blur-sm">
+                                                                    <div class="text-xs font-bold">{slot.time}</div>
+                                                                    <div class="text-sm">{slot.level}점</div>
                                                                 </div>
                                                             {/each}
                                                         </div>
                                                     {:else if card.places}
                                                         <div class="space-y-2">
-                                                            {#each card.places as place}
-                                                                <div class="bg-white/30 backdrop-blur-sm rounded-xl p-4 hover:bg-white/40 transition">
-                                                                    <div class="font-semibold text-gray-900 text-base">{place.name}</div>
-                                                                    <div class="text-sm text-gray-700 mt-1">{place.tag}</div>
+                                                            {#each card.places.slice(0, 3) as place}
+                                                                <div class="bg-white/30 backdrop-blur-sm rounded-lg p-3">
+                                                                    <div class="font-semibold text-gray-900 text-sm">{place.name}</div>
+                                                                    <div class="text-xs text-gray-700">{place.tag}</div>
                                                                 </div>
                                                             {/each}
                                                         </div>
                                                     {:else if card.coupons}
                                                         <div class="space-y-2">
-                                                            {#each card.coupons as coupon}
-                                                                <div class="bg-white/30 backdrop-blur-sm rounded-xl p-4 cursor-pointer hover:bg-white/50 transition">
-                                                                    <div class="font-semibold text-gray-900 text-base">{coupon.name}</div>
-                                                                    <div class="text-sm text-gray-600 font-mono mt-1">CODE: {coupon.code}</div>
+                                                            {#each card.coupons.slice(0, 2) as coupon}
+                                                                <div class="bg-white/30 backdrop-blur-sm rounded-lg p-3">
+                                                                    <div class="font-semibold text-gray-900 text-sm">{coupon.name}</div>
+                                                                    <div class="text-xs text-gray-600 font-mono">{coupon.code}</div>
                                                                 </div>
                                                             {/each}
                                                         </div>
                                                     {:else}
-                                                        <p class="text-base text-gray-700 leading-relaxed">{card.content}</p>
+                                                        <p class="text-sm text-gray-700 leading-relaxed line-clamp-6">{card.content}</p>
                                                     {/if}
                                                 </div>
                                                 
-                                                <!-- 카드 번호 표시 -->
                                                 <div class="mt-3 text-center text-xs text-gray-500">
-                                                    {cardIdx + 1} / {message.cards.length}
+                                                    클릭하여 자세히 보기
                                                 </div>
                                             </div>
-                                        {/each}
-                                    </div>
+                                        </div>
+                                    {/each}
                                 </div>
-                                
-                                <!-- 오른쪽 네비게이션 버튼 -->
-                                <button 
-                                    on:click={() => scrollCards(i, 'right')}
-                                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
-                                >
-                                    <span class="text-gray-700 font-bold">→</span>
-                                </button>
                             </div>
                         </div>
                     {/if}
@@ -439,13 +469,81 @@
     </main>
 </div>
 
+<!-- 모달 -->
+{#if expandedCard}
+    <div 
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in"
+        on:click={closeCardModal}
+    >
+        <div 
+            class="glass-card w-full max-w-[600px] max-h-[80vh] flex flex-col p-8 backdrop-blur-xl bg-gradient-to-br {expandedCard.card.color} border border-white/40 rounded-3xl shadow-2xl scale-in overflow-hidden"
+            on:click|stopPropagation
+        >
+            <!-- 모달 헤더 -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-4">
+                    <span class="text-6xl">{expandedCard.card.icon}</span>
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900">{expandedCard.card.title}</h2>
+                        <span class="text-sm font-semibold px-3 py-1 rounded-full bg-white/30 backdrop-blur-sm inline-block mt-2">
+                            {expandedCard.card.subtitle}
+                        </span>
+                    </div>
+                </div>
+                <button 
+                    on:click={closeCardModal}
+                    class="w-10 h-10 rounded-full bg-white/30 hover:bg-white/50 flex items-center justify-center transition"
+                >
+                    <span class="text-2xl text-gray-700">×</span>
+                </button>
+            </div>
+            
+            <!-- 모달 내용 -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                {#if expandedCard.card.type === 'status' && expandedCard.card.timeTable}
+                    <div class="mb-6">
+                        <p class="text-lg text-gray-800 mb-4">{expandedCard.card.content}</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        {#each expandedCard.card.timeTable as slot}
+                            {@const color = slot.level <= 2 ? 'bg-green-500/30' : slot.level <= 3 ? 'bg-yellow-500/30' : 'bg-red-500/30'}
+                            <div class="{color} rounded-xl p-4 text-center backdrop-blur-sm">
+                                <div class="text-base font-bold">{slot.time}</div>
+                                <div class="text-xl font-semibold mt-1">{slot.level}점</div>
+                            </div>
+                        {/each}
+                    </div>
+                {:else if expandedCard.card.places}
+                    <div class="space-y-3">
+                        {#each expandedCard.card.places as place}
+                            <div class="bg-white/40 backdrop-blur-sm rounded-xl p-5 hover:bg-white/50 transition">
+                                <div class="font-bold text-gray-900 text-xl">{place.name}</div>
+                                <div class="text-base text-gray-700 mt-2">{place.tag}</div>
+                            </div>
+                        {/each}
+                    </div>
+                {:else if expandedCard.card.coupons}
+                    <div class="space-y-3">
+                        {#each expandedCard.card.coupons as coupon}
+                            <div class="bg-white/40 backdrop-blur-sm rounded-xl p-5 cursor-pointer hover:bg-white/60 transition">
+                                <div class="font-bold text-gray-900 text-xl">{coupon.name}</div>
+                                <div class="text-base text-gray-600 font-mono mt-2">CODE: {coupon.code}</div>
+                                <div class="text-sm text-gray-500 mt-2">클릭하여 복사</div>
+                            </div>
+                        {/each}
+                    </div>
+                {:else}
+                    <p class="text-lg text-gray-800 leading-relaxed">{expandedCard.card.content}</p>
+                {/if}
+            </div>
+        </div>
+    </div>
+{/if}
+
 <style>
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
     .custom-scrollbar::-webkit-scrollbar-track { background-color: transparent; }
-    
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
     .glass-card {
         box-shadow: 
@@ -459,6 +557,18 @@
         to { opacity: 1; transform: translateY(0); }
     }
     
+    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .scale-in { animation: scaleIn 0.3s ease-out forwards; }
+    @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    
     .typing-dot { animation: typing-blink 1.4s infinite both; }
     .typing-dot:nth-child(2) { animation-delay: 0.2s; }
     .typing-dot:nth-child(3) { animation-delay: 0.4s; }
@@ -466,5 +576,12 @@
         0% { opacity: 0.2; }
         20% { opacity: 1; }
         100% { opacity: 0.2; }
+    }
+    
+    .line-clamp-6 {
+        display: -webkit-box;
+        -webkit-line-clamp: 6;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 </style>
