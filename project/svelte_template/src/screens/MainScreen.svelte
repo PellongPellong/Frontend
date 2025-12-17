@@ -631,7 +631,7 @@
 
                 <!-- 확대된 카드 -->
                 <div
-                    class="w-[500px] h-[500px] flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in"
+                    class="w-[500px] h-[500px] overflow-y-auto modal-scrollbar flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in"
                 >
                     {#if expandedCard.card.type === "status"}
                         <StatusCard
@@ -692,6 +692,14 @@
     .custom-scrollbar::-webkit-scrollbar-track {
         background-color: transparent;
     }
+    
+    .modal-scrollbar::-webkit-scrollbar {
+        width: 0px;
+    }
+    .modal-scrollbar {
+        scrollbar-width: none;
+    }
+    
     .fade-in-up {
         animation: fadeInUp 0.5s ease-out forwards;
     }
