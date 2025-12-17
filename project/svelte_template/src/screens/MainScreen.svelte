@@ -120,10 +120,12 @@
     async function sendMessage(text = userInput) {
         if (!text.trim() || isLoading) return;
         
+        const trimmedText = text.trim();
+        
         // 사용자 메시지 추가
         messages = [...messages, {
             role: 'user',
-            content: text
+            content: trimmedText
         }];
         
         userInput = '';
@@ -142,25 +144,23 @@
         
         try {
             // 목업 데이터 가져오기
-            const data = getMockResponse(text);
+            const data = getMockResponse(trimmedText);
             
             // 세션 ID 저장
             sessionId = data.session_id;
             
-            // 로딩 메시지 제거
-            messages = messages.slice(0, -1);
-            
-            // AI 응답 추가
-            messages = [...messages, {
+            // 로딩 메시지 제거하고 AI 응답 추가 (한 번에)
+            const messagesWithoutLoading = messages.slice(0, -1);
+            messages = [...messagesWithoutLoading, {
                 role: 'assistant',
                 content: generateResponseText(data),
-                data: data // 원본 데이터 저장
+                data: data
             }];
             
         } catch (error) {
             console.error('Error:', error);
-            messages = messages.slice(0, -1);
-            messages = [...messages, {
+            const messagesWithoutLoading = messages.slice(0, -1);
+            messages = [...messagesWithoutLoading, {
                 role: 'assistant',
                 content: '죄송합니다. 오류가 발생했어요. 다시 시도해주세요.'
             }];
