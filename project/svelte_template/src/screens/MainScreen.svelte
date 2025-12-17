@@ -33,13 +33,19 @@
                     subtitle: "혼잡도 5점",
                     icon: "📍",
                     content: "현재 매우 혼잡합니다",
-                    timeTable: [
-                        { time: "09시", level: 5 },
+                    time_table: [
+                        { time: "9시", level: 5 },
                         { time: "10시", level: 5 },
                         { time: "11시", level: 4 },
+                        { time: "12시", level: 3 },
+                        { time: "13시", level: 4 },
                         { time: "14시", level: 5 },
                         { time: "15시", level: 4 },
                         { time: "16시", level: 3 },
+                        { time: "17시", level: 2 },
+                        { time: "18시", level: 2 },
+                        { time: "19시", level: 1 },
+                        { time: "20시", level: 1 },
                     ],
                 },
                 {
