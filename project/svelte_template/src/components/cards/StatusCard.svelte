@@ -32,74 +32,92 @@
 
 <h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
 
-<div class="flex-1 overflow-hidden">
+<div class="flex-1 overflow-visible">
     {#if timeTable.length > 0}
         <!-- 라인 차트 (SVG) -->
         <div class="space-y-3 relative">
-            <svg viewBox="0 0 400 120" class="w-full {isCompact ? 'h-32' : 'h-48'}">
-                <!-- 배경 그리드 -->
-                {#each [1, 2, 3, 4, 5] as level}
-                    <line x1="0" y1={120 - (level * 24)} x2="400" y2={120 - (level * 24)} stroke="#e5e7eb" stroke-width="1" />
-                {/each}
-                
-                <!-- 라인 경로 -->
-                <polyline 
-                    points="{timeTable.map((slot, i) => `${i * (400 / (timeTable.length - 1))},${120 - (slot.level * 24)}`).join(' ')}"
-                    fill="none" 
-                    stroke="url(#lineGradient-reversed)" 
-                    stroke-width="3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                />
-                
-                <!-- 영역 채우기 -->
-                <polygon 
-                    points="{timeTable.map((slot, i) => `${i * (400 / (timeTable.length - 1))},${120 - (slot.level * 24)}`).join(' ')} 400,120 0,120"
-                    fill="url(#areaGradient-reversed)" 
-                    opacity="0.3"
-                />
-                
-                <!-- 점 -->
-                {#each timeTable as slot, i}
-                    {@const x = i * (400 / (timeTable.length - 1))}
-                    {@const y = 120 - (slot.level * 24)}
-                    <circle 
-                        cx={x} 
-                        cy={y} 
-                        r="4" 
-                        fill="white" 
-                        stroke={getColor(slot.level)} 
-                        stroke-width="2"
-                        class="cursor-pointer transition-all hover:r-6"
-                        on:mouseenter={() => hoveredPoint = { time: slot.time, level: slot.level, x, y }}
-                        on:mouseleave={() => hoveredPoint = null}
+            <div class="relative">
+                <svg viewBox="0 0 400 120" class="w-full {isCompact ? 'h-32' : 'h-48'}">
+                    <!-- 배경 그리드 -->
+                    {#each [1, 2, 3, 4, 5] as level}
+                        <line x1="0" y1={120 - (level * 24)} x2="400" y2={120 - (level * 24)} stroke="#e5e7eb" stroke-width="1" />
+                    {/each}
+                    
+                    <!-- 라인 경로 -->
+                    <polyline 
+                        points="{timeTable.map((slot, i) => `${i * (400 / (timeTable.length - 1))},${120 - (slot.level * 24)}`).join(' ')}"
+                        fill="none" 
+                        stroke="url(#lineGradient-reversed)" 
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
                     />
-                {/each}
+                    
+                    <!-- 영역 채우기 -->
+                    <polygon 
+                        points="{timeTable.map((slot, i) => `${i * (400 / (timeTable.length - 1))},${120 - (slot.level * 24)}`).join(' ')} 400,120 0,120"
+                        fill="url(#areaGradient-reversed)" 
+                        opacity="0.3"
+                    />
+                    
+                    <!-- 점 -->
+                    {#each timeTable as slot, i}
+                        {@const x = i * (400 / (timeTable.length - 1))}
+                        {@const y = 120 - (slot.level * 24)}
+                        <circle 
+                            cx={x} 
+                            cy={y} 
+                            r="4" 
+                            fill="white" 
+                            stroke={getColor(slot.level)} 
+                            stroke-width="2"
+                            class="cursor-pointer transition-all hover:r-6"
+                            on:mouseenter={() => hoveredPoint = { time: slot.time, level: slot.level, index: i }}
+                            on:mouseleave={() => hoveredPoint = null}
+                        />
+                    {/each}
+                    
+                    <defs>
+                        <linearGradient id="lineGradient-reversed" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#eab308;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="areaGradient-reversed" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#eab308;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
                 
-                <defs>
-                    <linearGradient id="lineGradient-reversed" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:#eab308;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
-                    </linearGradient>
-                    <linearGradient id="areaGradient-reversed" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:#eab308;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-            </svg>
-            
-            <!-- 호버 툴팁 -->
-            {#if hoveredPoint}
-                <div 
-                    class="absolute bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg pointer-events-none z-10"
-                    style="left: {hoveredPoint.x * 100 / 400}%; top: {hoveredPoint.y * (isCompact ? 128 : 192) / 120}px; transform: translate(-50%, -120%);"
-                >
-                    <div class="font-semibold">{hoveredPoint.time}엔</div>
-                    <div>혼잡도가 {hoveredPoint.level}일 거라고 예측돼요!</div>
-                </div>
-            {/if}
+                <!-- 호버 툴팁 -->
+                {#if hoveredPoint}
+                    {@const totalPoints = timeTable.length}
+                    {@const position = (hoveredPoint.index / (totalPoints - 1)) * 100}
+                    {@const shouldFlip = position > 70}
+                    <div 
+                        class="absolute bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg pointer-events-none z-50 whitespace-nowrap"
+                        style="
+                            left: {position}%; 
+                            top: -45px;
+                            transform: translateX({shouldFlip ? '-100%' : '-50%'});
+                        "
+                    >
+                        <div class="font-semibold">{hoveredPoint.time}엔</div>
+                        <div>혼잡도가 {hoveredPoint.level}일 거라고 예측돼요!</div>
+                        <!-- 화살표 -->
+                        <div 
+                            class="absolute w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"
+                            style="
+                                bottom: -4px;
+                                left: {shouldFlip ? 'calc(100% - 12px)' : '50%'};
+                                transform: translateX(-50%);
+                            "
+                        ></div>
+                    </div>
+                {/if}
+            </div>
             
             <div class="flex justify-between px-1">
                 {#each timeTable as slot, i}
