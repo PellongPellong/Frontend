@@ -23,10 +23,10 @@
   // Navigation Function
   function goTo(target, place = null) {
     // 인트로에서 메인으로 이동 시 캐싱
-    if (page === "intro" && target === "main") {
+    if (page === "intro" && (target === "main" || target === "survey")) {
       sessionStorage.setItem(INTRO_COMPLETED_KEY, "true");
     }
-    
+
     page = target;
     if (place) selectedPlace = place;
     window.scrollTo(0, 0);
@@ -40,7 +40,7 @@
     <!-- intro 후 main으로 -->
     <MainScreen {goTo} />
   {/if}
-  
+
   <!-- 기존 화면들은 주석 처리 -->
   <!-- {:else if page === "survey"}
     <SurveyScreen {goTo} />
