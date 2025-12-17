@@ -9,8 +9,8 @@
 <div class="fade-in-up {isUser ? 'flex justify-end' : 'flex items-start gap-3'}">
     {#if !isUser}
         <!-- AI 아바타 -->
-        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">
-            🦌
+        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0">
+            <img src="/images/mascot.png" alt="백록이" class="w-8 h-8 object-contain" />
         </div>
     {/if}
     
