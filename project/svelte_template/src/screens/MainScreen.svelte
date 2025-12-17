@@ -23,6 +23,30 @@
     const STORAGE_KEY = "jeju-chat-history";
     const MAX_HISTORY = 20;
 
+    // 제안 버튼 목업 데이터 15개
+    const allSuggestions = [
+        { display: "🌊 바다 볼 수 있는 카페", text: "바다 볼 수 있는 카페" },
+        { display: "⛰️ 오름 코스 추천", text: "오름 코스 추천" },
+        { display: "👨‍👩‍👧 가족 여행 코스", text: "가족 여행 코스" },
+        { display: "🍜 제주 맛집 추천", text: "제주 맛집 추천" },
+        { display: "🏖️ 한적한 해변 찾기", text: "한적한 해변" },
+        { display: "📸 사진 명소 추천", text: "사진 명소" },
+        { display: "🌄 일출 명소 추천", text: "일출 명소" },
+        { display: "🌃 일몽 보기 좋은 곳", text: "일몽 명소" },
+        { display: "🚶 산책로 추천", text: "산책로 추천" },
+        { display: "🏞️ 자연 휴양지", text: "자연 휴양지" },
+        { display: "🚗 드라이브 코스", text: "드라이브 코스" },
+        { display: "🏛️ 역사 유적지", text: "역사 유적지" },
+        { display: "🧘 힙링 스파", text: "힙링 스파" },
+        { display: "🎵 제주 축제 정보", text: "축제 정보" },
+        { display: "🌺 꽃 명소 추천", text: "꽃 명소" },
+    ];
+
+    function getRandomSuggestions(count = 3) {
+        const shuffled = [...allSuggestions].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    }
+
     const mockResponses = {
         성산: {
             session_id: "mock-session-001",
@@ -171,14 +195,7 @@
                 role: "assistant",
                 content:
                     "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
-                suggestions: [
-                    {
-                        display: "🌊 바다 볼 수 있는 카페",
-                        text: "바다 볼 수 있는 카페",
-                    },
-                    { display: "🧺 오름 코스 추천", text: "오름 코스 추천" },
-                    { display: "👨‍👩‍👧 가족 여행 코스", text: "가족 여행 코스" },
-                ],
+                suggestions: getRandomSuggestions(3),
             },
         ];
     });
@@ -254,7 +271,15 @@
     function startNewChat() {
         if (messages.length > 1) saveCurrentChat();
         sessionId = null;
-        messages = [messages[0]];
+        messages = [
+            {
+                type: "text",
+                role: "assistant",
+                content:
+                    "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                suggestions: getRandomSuggestions(3),
+            },
+        ];
         currentCardIndex = {};
         isSidebarOpen = false;
     }
