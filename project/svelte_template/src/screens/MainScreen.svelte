@@ -9,6 +9,7 @@
     let userInput = '';
     let isLoading = false;
     let chatContainer;
+    let cardScrollers = {};
     
     // 목업 데이터
     const mockResponses = {
@@ -160,7 +161,7 @@
             {
                 type: 'text',
                 role: 'assistant',
-                content: '안녕하세요! 제주숨곡 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
+                content: '안녕하세요! 제주숨곧 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
                 suggestions: [
                     { display: '🌊 바다 볼 수 있는 카페', text: '바다 볼 수 있는 카페' },
                     { display: '🧺 오름 코스 추천', text: '오름 코스 추천' },
@@ -233,6 +234,17 @@
         }
     }
     
+    function scrollCards(messageIndex, direction) {
+        const scrollContainer = cardScrollers[messageIndex];
+        if (scrollContainer) {
+            const scrollAmount = 380; // 카드 너비 + 간격
+            scrollContainer.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    }
+    
     function scrollToBottom() {
         setTimeout(() => {
             if (chatContainer) {
@@ -256,7 +268,7 @@
         <div class="p-4">
             <h1 class="text-xl font-bold text-white flex items-center gap-2">
                 <span>🦌</span>
-                <span>제주숨곡 AI</span>
+                <span>제주숨곧 AI</span>
             </h1>
             <button 
                 class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors"
@@ -287,7 +299,7 @@
         </header>
         
         <div bind:this={chatContainer} class="flex-1 overflow-y-auto custom-scrollbar">
-            <div class="mx-auto max-w-[1200px] p-5 md:py-10 space-y-6">
+            <div class="mx-auto max-w-[800px] p-5 md:py-10 space-y-6">
                 {#each messages as message, i (i)}
                     {#if message.type === 'text'}
                         <ChatMessage {message} onSuggestionClick={sendMessage} disabled={isLoading} />
@@ -306,59 +318,86 @@
                         <div class="fade-in-up flex items-start gap-3">
                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
                             
-                            <!-- 가로 스크롤 카드 컨테이너 -->
-                            <div class="flex-1 overflow-x-auto pb-4 hide-scrollbar">
-                                <div class="flex gap-4 min-w-max">
-                                    {#each message.cards as card}
-                                        <div class="glass-card w-[280px] h-[280px] flex flex-col p-6 backdrop-blur-xl bg-gradient-to-br {card.color} border border-white/40 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                                            <!-- 카드 헤더 -->
-                                            <div class="flex items-center justify-between mb-4">
-                                                <span class="text-4xl">{card.icon}</span>
-                                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/30 backdrop-blur-sm">
-                                                    {card.subtitle}
-                                                </span>
+                            <!-- 카드 컨테이너 -->
+                            <div class="flex-1 relative group">
+                                <!-- 왼쪽 네비게이션 버튼 -->
+                                <button 
+                                    on:click={() => scrollCards(i, 'left')}
+                                    class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                                >
+                                    <span class="text-gray-700 font-bold">←</span>
+                                </button>
+                                
+                                <!-- 가로 스크롤 카드 -->
+                                <div 
+                                    bind:this={cardScrollers[i]}
+                                    class="overflow-x-auto pb-4 hide-scrollbar scroll-smooth"
+                                >
+                                    <div class="flex gap-4">
+                                        {#each message.cards as card, cardIdx}
+                                            <div class="glass-card flex-shrink-0 w-[360px] h-[400px] flex flex-col p-6 backdrop-blur-xl bg-gradient-to-br {card.color} border border-white/40 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                                                <!-- 카드 헤더 -->
+                                                <div class="flex items-center justify-between mb-4">
+                                                    <span class="text-5xl">{card.icon}</span>
+                                                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/30 backdrop-blur-sm">
+                                                        {card.subtitle}
+                                                    </span>
+                                                </div>
+                                                
+                                                <!-- 카드 타이틀 -->
+                                                <h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
+                                                
+                                                <!-- 카드 내용 -->
+                                                <div class="flex-1 overflow-y-auto custom-scrollbar">
+                                                    {#if card.type === 'status' && card.timeTable}
+                                                        <div class="grid grid-cols-3 gap-2">
+                                                            {#each card.timeTable as slot}
+                                                                {@const color = slot.level <= 2 ? 'bg-green-500/20' : slot.level <= 3 ? 'bg-yellow-500/20' : 'bg-red-500/20'}
+                                                                <div class="{color} rounded-lg p-3 text-center backdrop-blur-sm">
+                                                                    <div class="text-sm font-bold">{slot.time}</div>
+                                                                    <div class="text-base font-semibold">{slot.level}점</div>
+                                                                </div>
+                                                            {/each}
+                                                        </div>
+                                                    {:else if card.places}
+                                                        <div class="space-y-2">
+                                                            {#each card.places as place}
+                                                                <div class="bg-white/30 backdrop-blur-sm rounded-xl p-4 hover:bg-white/40 transition">
+                                                                    <div class="font-semibold text-gray-900 text-base">{place.name}</div>
+                                                                    <div class="text-sm text-gray-700 mt-1">{place.tag}</div>
+                                                                </div>
+                                                            {/each}
+                                                        </div>
+                                                    {:else if card.coupons}
+                                                        <div class="space-y-2">
+                                                            {#each card.coupons as coupon}
+                                                                <div class="bg-white/30 backdrop-blur-sm rounded-xl p-4 cursor-pointer hover:bg-white/50 transition">
+                                                                    <div class="font-semibold text-gray-900 text-base">{coupon.name}</div>
+                                                                    <div class="text-sm text-gray-600 font-mono mt-1">CODE: {coupon.code}</div>
+                                                                </div>
+                                                            {/each}
+                                                        </div>
+                                                    {:else}
+                                                        <p class="text-base text-gray-700 leading-relaxed">{card.content}</p>
+                                                    {/if}
+                                                </div>
+                                                
+                                                <!-- 카드 번호 표시 -->
+                                                <div class="mt-3 text-center text-xs text-gray-500">
+                                                    {cardIdx + 1} / {message.cards.length}
+                                                </div>
                                             </div>
-                                            
-                                            <!-- 카드 타이틀 -->
-                                            <h3 class="text-xl font-bold text-gray-900 mb-2">{card.title}</h3>
-                                            
-                                            <!-- 카드 내용 -->
-                                            <div class="flex-1 overflow-y-auto custom-scrollbar">
-                                                {#if card.type === 'status' && card.timeTable}
-                                                    <div class="grid grid-cols-3 gap-2">
-                                                        {#each card.timeTable as slot}
-                                                            {@const color = slot.level <= 2 ? 'bg-green-500/20' : slot.level <= 3 ? 'bg-yellow-500/20' : 'bg-red-500/20'}
-                                                            <div class="{color} rounded-lg p-2 text-center backdrop-blur-sm">
-                                                                <div class="text-xs font-bold">{slot.time}</div>
-                                                                <div class="text-sm">{slot.level}점</div>
-                                                            </div>
-                                                        {/each}
-                                                    </div>
-                                                {:else if card.places}
-                                                    <div class="space-y-2">
-                                                        {#each card.places as place}
-                                                            <div class="bg-white/30 backdrop-blur-sm rounded-lg p-3">
-                                                                <div class="font-semibold text-gray-900">{place.name}</div>
-                                                                <div class="text-xs text-gray-700">{place.tag}</div>
-                                                            </div>
-                                                        {/each}
-                                                    </div>
-                                                {:else if card.coupons}
-                                                    <div class="space-y-2">
-                                                        {#each card.coupons as coupon}
-                                                            <div class="bg-white/30 backdrop-blur-sm rounded-lg p-3 cursor-pointer hover:bg-white/50 transition">
-                                                                <div class="font-semibold text-gray-900 text-sm">{coupon.name}</div>
-                                                                <div class="text-xs text-gray-600 font-mono">{coupon.code}</div>
-                                                            </div>
-                                                        {/each}
-                                                    </div>
-                                                {:else}
-                                                    <p class="text-sm text-gray-700 leading-relaxed">{card.content}</p>
-                                                {/if}
-                                            </div>
-                                        </div>
-                                    {/each}
+                                        {/each}
+                                    </div>
                                 </div>
+                                
+                                <!-- 오른쪽 네비게이션 버튼 -->
+                                <button 
+                                    on:click={() => scrollCards(i, 'right')}
+                                    class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                                >
+                                    <span class="text-gray-700 font-bold">→</span>
+                                </button>
                             </div>
                         </div>
                     {/if}
