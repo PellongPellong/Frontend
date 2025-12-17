@@ -562,7 +562,7 @@
         <div
             class="bg-white p-5 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex-shrink-0"
         >
-            <div class="mx-auto max-w-[800px] relative">
+            <div class="mx-auto max-w-[800px] relative group">
                 {#if isLoading}<div
                         class="absolute top-0 left-0 right-0 -mt-8 text-center"
                     >
@@ -586,11 +586,10 @@
                 <button
                     on:click={() => sendMessage()}
                     disabled={!userInput.trim() || isLoading}
-                    class="absolute right-2 bottom-2 flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 {userInput.trim() &&
-                    !isLoading
-                        ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 cursor-pointer'
-                        : 'bg-[#E0E0E0] cursor-not-allowed'} text-white"
-                    ><span>↑</span></button
+                    class="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center rounded-r-xl transition-all duration-200 {userInput.trim() && !isLoading
+                        ? 'opacity-0 group-hover:opacity-100 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 cursor-pointer'
+                        : 'opacity-0'} text-white"
+                    ><span class="text-xl">↑</span></button
                 >
             </div>
         </div>
