@@ -87,7 +87,7 @@
     onMount(() => {
         messages = [{
             type: 'text', role: 'assistant',
-            content: '안녕하세요! 제주숨곧 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
+            content: '안녕하세요! 제주숨곡 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
             suggestions: [
                 { display: '🌊 바다 볼 수 있는 카페', text: '바다 볼 수 있는 카페' },
                 { display: '🧺 오름 코스 추천', text: '오름 코스 추천' },
@@ -169,7 +169,10 @@
 <div class="flex h-screen w-full bg-white">
     <aside class="hidden md:flex w-[250px] flex-col bg-[#2A2A2A] text-[#E5E5E5]">
         <div class="p-4">
-            <h1 class="text-xl font-bold text-white flex items-center gap-2"><span>🦌</span><span>제주숨곧 AI</span></h1>
+            <h1 class="text-xl font-bold text-white flex items-center gap-2">
+                <img src="/images/mascot.png" alt="백록이" class="w-8 h-8 object-contain" />
+                <span>제주숨곡 AI</span>
+            </h1>
             <button class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors" on:click={() => { sessionId = null; messages = messages.slice(0, 1); currentCardIndex = {}; }}>+ 새 대화</button>
         </div>
         <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar"></nav>
@@ -190,13 +193,17 @@
                         <ChatMessage {message} onSuggestionClick={sendMessage} disabled={isLoading} />
                     {:else if message.type === 'loading'}
                         <div class="fade-in-up flex items-start gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0">
+                                <img src="/images/mascot.png" alt="백록이" class="w-8 h-8 object-contain" />
+                            </div>
                             <div class="rounded-t-2xl rounded-br-2xl bg-[#F0F0F0] text-[#212121] p-4"><div class="flex items-center space-x-1 p-2"><div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div><div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div><div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div></div></div>
                         </div>
                     {:else if message.type === 'cards'}
                         {@const activeIdx = currentCardIndex[i] || 0}
                         <div class="fade-in-up">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0 mb-3">🦌</div>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0 mb-3">
+                                <img src="/images/mascot.png" alt="백록이" class="w-8 h-8 object-contain" />
+                            </div>
                             <div class="w-full overflow-hidden">
                                 <div class="flex items-center justify-between mb-4">
                                     <button on:click={() => navigateCard(i, 'left')} disabled={activeIdx === 0} class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"><span class="text-gray-700 font-bold">←</span></button>
