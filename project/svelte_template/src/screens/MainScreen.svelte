@@ -645,7 +645,7 @@
                             ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 cursor-pointer'
                             : 'bg-[#E0E0E0] cursor-not-allowed'} text-white"
                     >
-                        <span class="text-2xl">↑</span>
+                        <span class="text-2xl">↵</span>
                     </button>
                 </div>
             </div>
