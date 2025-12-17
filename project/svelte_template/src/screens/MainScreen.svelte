@@ -147,7 +147,6 @@
                 cardIdx: newIdx,
                 card: message.cards[newIdx]
             };
-            // 배경 카드도 동기화
             currentCardIndex[expandedCard.messageIdx] = newIdx;
         }
     }
@@ -249,46 +248,55 @@
     {@const currentIdx = expandedCard.cardIdx}
     
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in" on:click={closeCardModal}>
-        <div class="relative" on:click|stopPropagation>
-            <!-- X 버튼 -->
+        <div class="relative flex items-center gap-5" on:click|stopPropagation>
+            <!-- 왼쪽 네비게이션 버튼 -->
             <button 
-                on:click={closeCardModal} 
-                class="absolute -top-4 -right-4 z-10 w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center transition hover:bg-gray-100"
+                on:click={() => navigateModalCard('left')} 
+                disabled={currentIdx === 0}
+                class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center transition-all hover:shadow-2xl hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed"
             >
-                <span class="text-2xl text-gray-700">×</span>
+                <span class="text-gray-700 font-bold text-xl">←</span>
             </button>
             
-            <!-- 네비게이션 버튼 -->
-            <div class="absolute -top-16 left-0 right-0 flex items-center justify-center gap-4">
+            <!-- 카드 컨테이너 -->
+            <div class="relative">
+                <!-- X 버튼 (우측 상단) -->
                 <button 
-                    on:click={() => navigateModalCard('left')} 
-                    disabled={currentIdx === 0}
-                    class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+                    on:click={closeCardModal} 
+                    class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center transition hover:bg-gray-100 rounded-lg"
                 >
-                    <span class="text-gray-700 font-bold">←</span>
+                    <span class="text-3xl text-gray-600 hover:text-gray-900">×</span>
                 </button>
-                <div class="text-sm text-white font-medium">{currentIdx + 1} / {totalCards}</div>
-                <button 
-                    on:click={() => navigateModalCard('right')} 
-                    disabled={currentIdx === totalCards - 1}
-                    class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                    <span class="text-gray-700 font-bold">→</span>
-                </button>
+                
+                <!-- 확대된 카드 -->
+                <div class="w-[500px] h-[500px] flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in">
+                    {#if expandedCard.card.type === 'status'}
+                        <StatusCard card={expandedCard.card} isCompact={false} />
+                    {:else if expandedCard.card.type === 'recommendation'}
+                        <RecommendationCard card={expandedCard.card} isCompact={false} />
+                    {:else if expandedCard.card.type === 'places'}
+                        <PlacesCard card={expandedCard.card} isCompact={false} />
+                    {:else if expandedCard.card.type === 'coupon'}
+                        <CouponCard card={expandedCard.card} isCompact={false} />
+                    {/if}
+                </div>
+                
+                <!-- 카드 인디케이터 (하단) -->
+                <div class="absolute -bottom-8 left-0 right-0 flex justify-center">
+                    <div class="text-sm text-white font-medium bg-black/50 px-4 py-1 rounded-full">
+                        {currentIdx + 1} / {totalCards}
+                    </div>
+                </div>
             </div>
             
-            <!-- 확대된 카드 -->
-            <div class="w-[500px] h-[500px] flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in">
-                {#if expandedCard.card.type === 'status'}
-                    <StatusCard card={expandedCard.card} isCompact={false} />
-                {:else if expandedCard.card.type === 'recommendation'}
-                    <RecommendationCard card={expandedCard.card} isCompact={false} />
-                {:else if expandedCard.card.type === 'places'}
-                    <PlacesCard card={expandedCard.card} isCompact={false} />
-                {:else if expandedCard.card.type === 'coupon'}
-                    <CouponCard card={expandedCard.card} isCompact={false} />
-                {/if}
-            </div>
+            <!-- 오른쪽 네비게이션 버튼 -->
+            <button 
+                on:click={() => navigateModalCard('right')} 
+                disabled={currentIdx === totalCards - 1}
+                class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center transition-all hover:shadow-2xl hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+                <span class="text-gray-700 font-bold text-xl">→</span>
+            </button>
         </div>
     </div>
 {/if}
