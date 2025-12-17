@@ -219,21 +219,20 @@
     </main>
 </div>
 
-<!-- 모달 -->
+<!-- 모달: 확대된 카드 -->
 {#if expandedCard}
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in" on:click={closeCardModal}>
-        <div class="w-full max-w-[600px] max-h-[80vh] flex flex-col p-8 bg-white rounded-3xl shadow-2xl scale-in overflow-hidden" on:click|stopPropagation>
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-4">
-                    <span class="text-6xl">{expandedCard.card.icon}</span>
-                    <div>
-                        <h2 class="text-3xl font-bold text-gray-900">{expandedCard.card.title}</h2>
-                        <span class="text-sm font-semibold px-3 py-1 rounded-full bg-gray-100 inline-block mt-2">{expandedCard.card.subtitle}</span>
-                    </div>
-                </div>
-                <button on:click={closeCardModal} class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"><span class="text-2xl text-gray-700">×</span></button>
-            </div>
-            <div class="flex-1 overflow-y-auto custom-scrollbar">
+        <div class="relative" on:click|stopPropagation>
+            <!-- X 버튼 -->
+            <button 
+                on:click={closeCardModal} 
+                class="absolute -top-4 -right-4 z-10 w-12 h-12 rounded-full bg-white shadow-xl flex items-center justify-center transition hover:bg-gray-100"
+            >
+                <span class="text-2xl text-gray-700">×</span>
+            </button>
+            
+            <!-- 확대된 카드 -->
+            <div class="w-[500px] h-[500px] flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in">
                 {#if expandedCard.card.type === 'status'}
                     <StatusCard card={expandedCard.card} isCompact={false} />
                 {:else if expandedCard.card.type === 'recommendation'}
