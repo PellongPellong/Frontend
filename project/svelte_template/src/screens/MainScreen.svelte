@@ -133,12 +133,35 @@
         currentCardIndex[messageIdx] = newIdx;
     }
     
+    function navigateModalCard(direction) {
+        if (!expandedCard) return;
+        const message = messages[expandedCard.messageIdx];
+        if (!message || !message.cards) return;
+        
+        const currentIdx = expandedCard.cardIdx;
+        const newIdx = direction === 'left' ? Math.max(0, currentIdx - 1) : Math.min(message.cards.length - 1, currentIdx + 1);
+        
+        if (newIdx !== currentIdx) {
+            expandedCard = {
+                messageIdx: expandedCard.messageIdx,
+                cardIdx: newIdx,
+                card: message.cards[newIdx]
+            };
+            // 배경 카드도 동기화
+            currentCardIndex[expandedCard.messageIdx] = newIdx;
+        }
+    }
+    
     function openCardModal(messageIdx, cardIdx, card) { expandedCard = { messageIdx, cardIdx, card }; }
     function closeCardModal() { expandedCard = null; }
     function scrollToBottom() { setTimeout(() => { if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight; }, 100); }
     function handleKeyDown(e) {
         if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!isLoading) sendMessage(); }
         if (e.key === 'Escape' && expandedCard) closeCardModal();
+        if (expandedCard) {
+            if (e.key === 'ArrowLeft') navigateModalCard('left');
+            if (e.key === 'ArrowRight') navigateModalCard('right');
+        }
     }
 </script>
 
@@ -221,6 +244,10 @@
 
 <!-- 모달: 확대된 카드 -->
 {#if expandedCard}
+    {@const message = messages[expandedCard.messageIdx]}
+    {@const totalCards = message?.cards?.length || 0}
+    {@const currentIdx = expandedCard.cardIdx}
+    
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in" on:click={closeCardModal}>
         <div class="relative" on:click|stopPropagation>
             <!-- X 버튼 -->
@@ -230,6 +257,25 @@
             >
                 <span class="text-2xl text-gray-700">×</span>
             </button>
+            
+            <!-- 네비게이션 버튼 -->
+            <div class="absolute -top-16 left-0 right-0 flex items-center justify-center gap-4">
+                <button 
+                    on:click={() => navigateModalCard('left')} 
+                    disabled={currentIdx === 0}
+                    class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                    <span class="text-gray-700 font-bold">←</span>
+                </button>
+                <div class="text-sm text-white font-medium">{currentIdx + 1} / {totalCards}</div>
+                <button 
+                    on:click={() => navigateModalCard('right')} 
+                    disabled={currentIdx === totalCards - 1}
+                    class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                    <span class="text-gray-700 font-bold">→</span>
+                </button>
+            </div>
             
             <!-- 확대된 카드 -->
             <div class="w-[500px] h-[500px] flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in">
