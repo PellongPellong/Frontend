@@ -1,6 +1,9 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     import ChatMessage from '../components/ChatMessage.svelte';
+    import LocationStatus from '../components/LocationStatus.svelte';
+    import RecommendationCard from '../components/RecommendationCard.svelte';
+    import CouponList from '../components/CouponList.svelte';
     
     export let goTo;
     
@@ -91,6 +94,7 @@
     onMount(() => {
         messages = [
             {
+                type: 'text',
                 role: 'assistant',
                 content: '안녕하세요! 제주숨곧 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
                 suggestions: [
@@ -124,6 +128,7 @@
         
         // 사용자 메시지 추가
         messages = [...messages, {
+            type: 'text',
             role: 'user',
             content: trimmedText
         }];
@@ -133,10 +138,11 @@
         
         // 로딩 메시지 추가
         messages = [...messages, {
-            role: 'assistant',
-            loading: true
+            type: 'loading',
+            role: 'assistant'
         }];
         
+        await tick();
         scrollToBottom();
         
         // 목업 API 호출 (로딩 시간 시뮬레이션)
@@ -145,53 +151,55 @@
         try {
             // 목업 데이터 가져오기
             const data = getMockResponse(trimmedText);
-            
-            // 세션 ID 저장
             sessionId = data.session_id;
             
-            // 로딩 메시지 제거하고 AI 응답 추가 (한 번에)
+            // 로딩 제거하고 카드들 추가
             const messagesWithoutLoading = messages.slice(0, -1);
-            messages = [...messagesWithoutLoading, {
-                role: 'assistant',
-                content: generateResponseText(data),
-                data: data
-            }];
+            const newMessages = [...messagesWithoutLoading];
+            
+            // 혼잡도 카드
+            if (data.status) {
+                newMessages.push({
+                    type: 'status',
+                    role: 'assistant',
+                    data: data.status
+                });
+            }
+            
+            // 추천 장소 카드
+            if (data.recommendation) {
+                newMessages.push({
+                    type: 'recommendation',
+                    role: 'assistant',
+                    data: data.recommendation,
+                    around: data.around
+                });
+            }
+            
+            // 쿠폰 카드
+            if (data.coupones && data.coupones.length > 0) {
+                newMessages.push({
+                    type: 'coupon',
+                    role: 'assistant',
+                    data: data.coupones
+                });
+            }
+            
+            messages = newMessages;
             
         } catch (error) {
             console.error('Error:', error);
             const messagesWithoutLoading = messages.slice(0, -1);
             messages = [...messagesWithoutLoading, {
+                type: 'text',
                 role: 'assistant',
                 content: '죄송합니다. 오류가 발생했어요. 다시 시도해주세요.'
             }];
         } finally {
             isLoading = false;
+            await tick();
             scrollToBottom();
         }
-    }
-    
-    function generateResponseText(data) {
-        let text = '';
-        
-        // 장소 상태 정보
-        if (data.status) {
-            text += `📍 ${data.status.location_name}\n${data.status.location_status}\n\n`;
-        }
-        
-        // 추천 장소
-        if (data.recommendation) {
-            text += `✨ 대신 **${data.recommendation.location_name}**를 추천드려요!\n\n${data.recommendation.story}\n\n`;
-        }
-        
-        // 주변 명소
-        if (data.around && data.around.length > 0) {
-            text += `🌿 **주변 추천 장소**\n`;
-            data.around.forEach(place => {
-                text += `• **${place.name}**: ${place.reason}\n`;
-            });
-        }
-        
-        return text.trim();
     }
     
     function scrollToBottom() {
@@ -231,10 +239,7 @@
             </button>
         </div>
         
-        <!-- 대화 기록 (추후 구현) -->
-        <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar">
-            <!-- 저장된 대화 목록 -->
-        </nav>
+        <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar"></nav>
         
         <div class="p-2 border-t border-[#444]">
             <button class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors w-full">
@@ -246,31 +251,67 @@
     
     <!-- 메인 채팅 영역 -->
     <main class="flex flex-1 flex-col h-full relative">
-        <!-- 헤더 -->
         <header class="flex h-[60px] items-center justify-between border-b border-[#E5E5E5] bg-white px-4 flex-shrink-0">
-            <button class="md:hidden" on:click={() => {/* 모바일 메뉴 */}}>
-                <span>☰</span>
-            </button>
+            <button class="md:hidden"><span>☰</span></button>
             <h2 class="absolute left-1/2 -translate-x-1/2 text-lg font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent">
                 제주 여행 AI 어시스턴트
             </h2>
-            <button>
-                <span>⋮</span>
-            </button>
+            <button><span>⋮</span></button>
         </header>
         
         <!-- 채팅 메시지 영역 -->
-        <div 
-            bind:this={chatContainer}
-            class="flex-1 overflow-y-auto custom-scrollbar"
-        >
+        <div bind:this={chatContainer} class="flex-1 overflow-y-auto custom-scrollbar">
             <div class="mx-auto max-w-[800px] p-5 md:py-10 space-y-6">
                 {#each messages as message, i (i)}
-                    <ChatMessage 
-                        {message} 
-                        onSuggestionClick={sendMessage}
-                        disabled={isLoading}
-                    />
+                    {#if message.type === 'text'}
+                        <ChatMessage {message} onSuggestionClick={sendMessage} disabled={isLoading} />
+                    {:else if message.type === 'loading'}
+                        <div class="fade-in-up flex items-start gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
+                            <div class="max-w-[80%]">
+                                <div class="rounded-t-2xl rounded-br-2xl bg-[#F0F0F0] text-[#212121] p-4">
+                                    <div class="flex items-center space-x-1 p-2">
+                                        <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
+                                        <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
+                                        <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {:else if message.type === 'status'}
+                        <div class="fade-in-up flex items-start gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
+                            <div class="max-w-[80%]"><LocationStatus status={message.data} /></div>
+                        </div>
+                    {:else if message.type === 'recommendation'}
+                        <div class="fade-in-up flex items-start gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
+                            <div class="max-w-[80%] space-y-3">
+                                <RecommendationCard recommendation={message.data} />
+                                {#if message.around && message.around.length > 0}
+                                    <div class="bg-white rounded-2xl p-4 shadow-md border border-gray-200">
+                                        <h4 class="font-bold text-gray-900 mb-3">🌿 주변 추천 장소</h4>
+                                        <div class="space-y-2">
+                                            {#each message.around as place}
+                                                <div class="flex items-start gap-2">
+                                                    <span class="text-indigo-500 mt-1">•</span>
+                                                    <div>
+                                                        <span class="font-semibold text-gray-900">{place.name}</span>
+                                                        <span class="text-gray-600">: {place.reason}</span>
+                                                    </div>
+                                                </div>
+                                            {/each}
+                                        </div>
+                                    </div>
+                                {/if}
+                            </div>
+                        </div>
+                    {:else if message.type === 'coupon'}
+                        <div class="fade-in-up flex items-start gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
+                            <div class="max-w-[80%]"><CouponList coupones={message.data} /></div>
+                        </div>
+                    {/if}
                 {/each}
             </div>
         </div>
@@ -311,14 +352,22 @@
 </div>
 
 <style>
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background-color: transparent; }
+    
+    .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        border-radius: 3px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background-color: transparent;
+    
+    .typing-dot { animation: typing-blink 1.4s infinite both; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing-blink {
+        0% { opacity: 0.2; }
+        20% { opacity: 1; }
+        100% { opacity: 0.2; }
     }
 </style>
