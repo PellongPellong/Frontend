@@ -1,11 +1,24 @@
 <script>
     export let card;
     export let isCompact = true;
+    
+    const recommendReasons = [
+        '이 곳을 추천드려요!',
+        '한산한 여행지로 좋아요!',
+        '조용히 즐길 수 있는 곳이에요!',
+        '숨은 명소를 찾았어요!'
+    ];
+    const randomReason = recommendReasons[Math.floor(Math.random() * recommendReasons.length)];
 </script>
 
-<div class="flex items-center justify-between mb-4">
-    <span class="text-5xl">{card.icon}</span>
-    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100">{card.subtitle}</span>
+<!-- 백록이 대화 -->
+<div class="flex items-start gap-3 mb-4 bg-indigo-50 rounded-2xl p-4">
+    <span class="text-4xl flex-shrink-0">🦌</span>
+    <div class="flex-1">
+        <div class="text-sm text-indigo-900 leading-relaxed">
+            {randomReason}
+        </div>
+    </div>
 </div>
 
 <h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>

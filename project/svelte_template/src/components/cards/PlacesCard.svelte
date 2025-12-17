@@ -1,18 +1,24 @@
 <script>
     export let card;
     export let isCompact = true;
+    
+    const placeCount = card.places?.length || 0;
 </script>
 
-<div class="flex items-center justify-between mb-4">
-    <span class="text-5xl">{card.icon}</span>
-    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100">{card.subtitle}</span>
+<!-- 백록이 대화 -->
+<div class="flex items-start gap-3 mb-4 bg-indigo-50 rounded-2xl p-4">
+    <span class="text-4xl flex-shrink-0">🦌</span>
+    <div class="flex-1">
+        <div class="text-sm text-indigo-900 leading-relaxed">
+            주변에 가볼 만한 곳 <span class="font-bold">{placeCount}곳</span>을 찾았어요!
+        </div>
+    </div>
 </div>
 
 <h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
 
 <div class="flex-1 overflow-hidden">
     {#if isCompact}
-        <!-- 간략 뷰: 최대 3개 -->
         <div class="space-y-2">
             {#each card.places.slice(0, 3) as place}
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
@@ -22,7 +28,6 @@
             {/each}
         </div>
     {:else}
-        <!-- 상세 뷰: 모든 장소 -->
         <div class="space-y-3">
             {#each card.places as place}
                 <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:bg-gray-100 transition">
