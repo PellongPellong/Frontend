@@ -17,6 +17,11 @@
     let currentCardIndex = {};
     let expandedCard = null;
     let hoveredCard = null;
+    let isSidebarOpen = false;
+    let chatHistory = [];
+    
+    const STORAGE_KEY = 'jeju-chat-history';
+    const MAX_HISTORY = 20;
 
     const mockResponses = {
         성산: {
@@ -153,12 +158,13 @@
     };
 
     onMount(() => {
+        loadChatHistory();
         messages = [
             {
                 type: "text",
                 role: "assistant",
                 content:
-                    "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                    "안녕하세요! 제주숨곡 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
                 suggestions: [
                     {
                         display: "🌊 바다 볼 수 있는 카페",
@@ -170,6 +176,69 @@
             },
         ];
     });
+    
+    function loadChatHistory() {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) chatHistory = JSON.parse(saved);
+        } catch (e) {
+            console.error('Failed to load chat history:', e);
+        }
+    }
+    
+    function saveChatHistory() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(chatHistory));
+        } catch (e) {
+            console.error('Failed to save chat history:', e);
+        }
+    }
+    
+    function saveCurrentChat() {
+        if (messages.length <= 1) return;
+        const firstUserMessage = messages.find(m => m.role === 'user');
+        if (!firstUserMessage) return;
+        
+        const title = firstUserMessage.content.slice(0, 30) + (firstUserMessage.content.length > 30 ? '...' : '');
+        const timestamp = new Date().toISOString();
+        const chatId = sessionId || `chat-${Date.now()}`;
+        
+        const existingIdx = chatHistory.findIndex(h => h.id === chatId);
+        if (existingIdx >= 0) {
+            chatHistory[existingIdx] = { id: chatId, title, timestamp, messages: [...messages], cardIndex: {...currentCardIndex} };
+        } else {
+            chatHistory.unshift({ id: chatId, title, timestamp, messages: [...messages], cardIndex: {...currentCardIndex} });
+            if (chatHistory.length > MAX_HISTORY) chatHistory = chatHistory.slice(0, MAX_HISTORY);
+        }
+        saveChatHistory();
+    }
+    
+    function loadChat(chat) {
+        sessionId = chat.id;
+        messages = [...chat.messages];
+        currentCardIndex = {...chat.cardIndex};
+        isSidebarOpen = false;
+        setTimeout(() => scrollToBottom(), 100);
+    }
+    
+    function startNewChat() {
+        if (messages.length > 1) saveCurrentChat();
+        sessionId = null;
+        messages = [messages[0]];
+        currentCardIndex = {};
+        isSidebarOpen = false;
+    }
+    
+    function formatDate(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = now - date;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        if (days === 0) return '오늘';
+        if (days === 1) return '어제';
+        if (days < 7) return `${days}일 전`;
+        return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+    }
 
     function getMockResponse(message) {
         const lowerMessage = message.toLowerCase();
@@ -205,6 +274,7 @@
                 ...messagesWithoutLoading,
                 { type: "cards", role: "assistant", cards: data.cards },
             ];
+            saveCurrentChat();
         } catch (error) {
             console.error("Error:", error);
             const messagesWithoutLoading = messages.slice(0, -1);
@@ -284,25 +354,31 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <div class="flex h-screen w-full bg-white">
+    <!-- 사이드바 -->
     <aside
-        class="hidden md:flex w-[250px] flex-col bg-[#2A2A2A] text-[#E5E5E5]"
+        class="{isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} fixed md:static inset-y-0 left-0 z-40 w-[250px] flex-col bg-[#2A2A2A] text-[#E5E5E5] transition-transform duration-300 flex"
     >
         <div class="p-4">
             <h1 class="text-xl font-bold text-white flex items-center gap-2">
-                <span>제주숨곳 AI</span>
+                <img src="/images/mascot.png" alt="백록이" class="w-8 h-8 object-contain" />
+                <span>제주숨곡 AI</span>
             </h1>
             <button
                 class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors"
-                on:click={() => {
-                    sessionId = null;
-                    messages = messages.slice(0, 1);
-                    currentCardIndex = {};
-                }}>+ 새 대화</button
+                on:click={startNewChat}>+ 새 대화</button
             >
         </div>
-        <nav
-            class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar"
-        ></nav>
+        <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar">
+            {#each chatHistory as chat (chat.id)}
+                <button 
+                    class="w-full text-left rounded-lg p-3 text-sm hover:bg-[#333] transition-colors {sessionId === chat.id ? 'bg-[#333]' : ''}"
+                    on:click={() => loadChat(chat)}
+                >
+                    <div class="font-medium text-white truncate">{chat.title}</div>
+                    <div class="text-xs text-gray-400 mt-1">{formatDate(chat.timestamp)}</div>
+                </button>
+            {/each}
+        </nav>
         <div class="p-2 border-t border-[#444]">
             <button
                 class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors w-full"
@@ -310,18 +386,23 @@
             >
         </div>
     </aside>
+    
+    <!-- 모바일 오버레이 -->
+    {#if isSidebarOpen}
+        <div class="fixed inset-0 bg-black/50 z-30 md:hidden" on:click={() => isSidebarOpen = false}></div>
+    {/if}
 
     <main class="flex flex-1 flex-col h-full relative">
         <header
             class="flex h-[60px] items-center justify-between border-b border-[#E5E5E5] bg-white px-4 flex-shrink-0"
         >
-            <button class="md:hidden"><span>☰</span></button>
+            <button class="md:hidden" on:click={() => isSidebarOpen = !isSidebarOpen}><span class="text-2xl">☰</span></button>
             <h2
                 class="absolute left-1/2 -translate-x-1/2 text-lg font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent"
             >
                 제주 여행 AI 어시스턴트
             </h2>
-            <button><span>⋮</span></button>
+            <div></div>
         </header>
 
         <div
