@@ -11,10 +11,12 @@
     ];
     const statusText = statusMessages.find(s => avgLevel <= s.max)?.text || '혼잡도를 확인해보세요!';
     
+    let hoveredPoint = null;
+    
     function getColor(level) {
-        if (level <= 2) return '#22c55e';
-        if (level === 3) return '#eab308';
-        return '#ef4444';
+        if (level >= 4) return '#ef4444'; // 빨강 (혼잡)
+        if (level === 3) return '#eab308'; // 노랑 (보통)
+        return '#22c55e'; // 초록 (한산)
     }
 </script>
 
@@ -33,7 +35,7 @@
 <div class="flex-1 overflow-hidden">
     {#if timeTable.length > 0}
         <!-- 라인 차트 (SVG) -->
-        <div class="space-y-3">
+        <div class="space-y-3 relative">
             <svg viewBox="0 0 400 120" class="w-full {isCompact ? 'h-32' : 'h-48'}">
                 <!-- 배경 그리드 -->
                 {#each [1, 2, 3, 4, 5] as level}
@@ -44,7 +46,7 @@
                 <polyline 
                     points="{timeTable.map((slot, i) => `${i * (400 / (timeTable.length - 1))},${120 - (slot.level * 24)}`).join(' ')}"
                     fill="none" 
-                    stroke="url(#lineGradient)" 
+                    stroke="url(#lineGradient-reversed)" 
                     stroke-width="3"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -53,38 +55,63 @@
                 <!-- 영역 채우기 -->
                 <polygon 
                     points="{timeTable.map((slot, i) => `${i * (400 / (timeTable.length - 1))},${120 - (slot.level * 24)}`).join(' ')} 400,120 0,120"
-                    fill="url(#areaGradient)" 
+                    fill="url(#areaGradient-reversed)" 
                     opacity="0.3"
                 />
                 
                 <!-- 점 -->
                 {#each timeTable as slot, i}
+                    {@const x = i * (400 / (timeTable.length - 1))}
+                    {@const y = 120 - (slot.level * 24)}
                     <circle 
-                        cx={i * (400 / (timeTable.length - 1))} 
-                        cy={120 - (slot.level * 24)} 
+                        cx={x} 
+                        cy={y} 
                         r="4" 
                         fill="white" 
                         stroke={getColor(slot.level)} 
                         stroke-width="2"
+                        class="cursor-pointer transition-all hover:r-6"
+                        on:mouseenter={() => hoveredPoint = { time: slot.time, level: slot.level, x, y }}
+                        on:mouseleave={() => hoveredPoint = null}
                     />
                 {/each}
                 
                 <defs>
-                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+                    <linearGradient id="lineGradient-reversed" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
                         <stop offset="50%" style="stop-color:#eab308;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
                     </linearGradient>
-                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+                    <linearGradient id="areaGradient-reversed" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
                         <stop offset="50%" style="stop-color:#eab308;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
                     </linearGradient>
                 </defs>
             </svg>
+            
+            <!-- 호버 툴팁 -->
+            {#if hoveredPoint}
+                <div 
+                    class="absolute bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg pointer-events-none z-10"
+                    style="left: {hoveredPoint.x * 100 / 400}%; top: {hoveredPoint.y * (isCompact ? 128 : 192) / 120}px; transform: translate(-50%, -120%);"
+                >
+                    <div class="font-semibold">{hoveredPoint.time}엔</div>
+                    <div>혼잡도가 {hoveredPoint.level}일 거라고 예측돼요!</div>
+                </div>
+            {/if}
+            
             <div class="flex justify-between px-1">
-                {#each timeTable as slot}
-                    <div class="flex-1 text-center text-xs text-gray-600">{slot.time.replace('시', '')}</div>
+                {#each timeTable as slot, i}
+                    <div class="flex-1 text-center relative">
+                        <div class="text-xs text-gray-600">{slot.time.replace('시', '')}</div>
+                        {#if i === 0}
+                            <div class="flex flex-col items-center mt-1">
+                                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                <div class="text-[10px] text-green-600 mt-0.5">현재 시각</div>
+                            </div>
+                        {/if}
+                    </div>
                 {/each}
             </div>
         </div>
