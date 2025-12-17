@@ -1,6 +1,11 @@
 <script>
     import { onMount, tick } from 'svelte';
     import ChatMessage from '../components/ChatMessage.svelte';
+    import CardWrapper from '../components/cards/CardWrapper.svelte';
+    import StatusCard from '../components/cards/StatusCard.svelte';
+    import RecommendationCard from '../components/cards/RecommendationCard.svelte';
+    import PlacesCard from '../components/cards/PlacesCard.svelte';
+    import CouponCard from '../components/cards/CouponCard.svelte';
     
     export let goTo;
     
@@ -169,19 +174,13 @@
                     {:else if message.type === 'cards'}
                         {@const activeIdx = currentCardIndex[i] || 0}
                         <div class="fade-in-up">
-                            <!-- 아이콘 -->
                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0 mb-3">🦌</div>
-                            
-                            <!-- 컨텐츠 영역 -->
                             <div class="w-full overflow-hidden">
-                                <!-- 네비게이션 버튼 -->
                                 <div class="flex items-center justify-between mb-4">
                                     <button on:click={() => navigateCard(i, 'left')} disabled={activeIdx === 0} class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"><span class="text-gray-700 font-bold">←</span></button>
                                     <div class="text-sm text-gray-600 font-medium">{activeIdx + 1} / {message.cards.length}</div>
                                     <button on:click={() => navigateCard(i, 'right')} disabled={activeIdx === message.cards.length - 1} class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"><span class="text-gray-700 font-bold">→</span></button>
                                 </div>
-                                
-                                <!-- 카드 컨테이너 -->
                                 <div class="relative h-[420px] overflow-hidden">
                                     {#each message.cards as card, cardIdx}
                                         {@const offset = (cardIdx - activeIdx) * 252}
@@ -190,36 +189,16 @@
                                         {@const isHovered = hoveredCard === `${i}-${cardIdx}`}
                                         {@const zIndex = isHovered ? 9999 : baseZ}
                                         
-                                        <div class="absolute transition-all duration-500 ease-out cursor-pointer" style="left: {offset}px; z-index: {zIndex}; opacity: {Math.abs(cardIdx - activeIdx) > 2 ? 0 : 1};" on:click={() => openCardModal(i, cardIdx, card)} on:mouseenter={() => hoveredCard = `${i}-${cardIdx}`} on:mouseleave={() => hoveredCard = null}>
-                                            <div class="w-[360px] h-[400px] flex flex-col p-6 bg-white border-2 border-gray-200 rounded-3xl shadow-lg transition-all duration-300 {isActive ? 'scale-100' : 'scale-95'} {isHovered ? 'scale-105 shadow-2xl border-indigo-300' : ''}">
-                                                <div class="flex items-center justify-between mb-4"><span class="text-5xl">{card.icon}</span><span class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100">{card.subtitle}</span></div>
-                                                <h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
-                                                <div class="flex-1 overflow-hidden">
-                                                    {#if card.type === 'status' && card.timeTable}
-                                                        <div class="grid grid-cols-3 gap-2">
-                                                            {#each card.timeTable.slice(0, 6) as slot}
-                                                                {@const color = slot.level <= 2 ? 'bg-green-100 text-green-800' : slot.level <= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}
-                                                                <div class="{color} rounded-lg p-2 text-center"><div class="text-xs font-bold">{slot.time}</div><div class="text-sm font-semibold">{slot.level}점</div></div>
-                                                            {/each}
-                                                        </div>
-                                                    {:else if card.places}
-                                                        <div class="space-y-2">
-                                                            {#each card.places.slice(0, 3) as place}
-                                                                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200"><div class="font-semibold text-gray-900 text-sm">{place.name}</div><div class="text-xs text-gray-600">{place.tag}</div></div>
-                                                            {/each}
-                                                        </div>
-                                                    {:else if card.coupons}
-                                                        <div class="space-y-2">
-                                                            {#each card.coupons.slice(0, 2) as coupon}
-                                                                <div class="bg-purple-50 rounded-lg p-3 border border-purple-200"><div class="font-semibold text-gray-900 text-sm">{coupon.name}</div><div class="text-xs text-purple-600 font-mono">{coupon.code}</div></div>
-                                                            {/each}
-                                                        </div>
-                                                    {:else}
-                                                        <p class="text-sm text-gray-700 leading-relaxed line-clamp-6">{card.content}</p>
-                                                    {/if}
-                                                </div>
-                                                <div class="mt-3 text-center text-xs text-gray-500">클릭하여 자세히 보기</div>
-                                            </div>
+                                        <div class="absolute transition-all duration-500 ease-out" style="left: {offset}px; z-index: {zIndex}; opacity: {Math.abs(cardIdx - activeIdx) > 2 ? 0 : 1};">
+                                            <CardWrapper 
+                                                {card} 
+                                                isCompact={true}
+                                                {isActive}
+                                                {isHovered}
+                                                onClick={() => openCardModal(i, cardIdx, card)}
+                                                onMouseEnter={() => hoveredCard = `${i}-${cardIdx}`}
+                                                onMouseLeave={() => hoveredCard = null}
+                                            />
                                         </div>
                                     {/each}
                                 </div>
@@ -240,33 +219,29 @@
     </main>
 </div>
 
+<!-- 모달 -->
 {#if expandedCard}
     <div class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in" on:click={closeCardModal}>
         <div class="w-full max-w-[600px] max-h-[80vh] flex flex-col p-8 bg-white rounded-3xl shadow-2xl scale-in overflow-hidden" on:click|stopPropagation>
-            <div class="flex items-center justify-between mb-6"><div class="flex items-center gap-4"><span class="text-6xl">{expandedCard.card.icon}</span><div><h2 class="text-3xl font-bold text-gray-900">{expandedCard.card.title}</h2><span class="text-sm font-semibold px-3 py-1 rounded-full bg-gray-100 inline-block mt-2">{expandedCard.card.subtitle}</span></div></div><button on:click={closeCardModal} class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"><span class="text-2xl text-gray-700">×</span></button></div>
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-4">
+                    <span class="text-6xl">{expandedCard.card.icon}</span>
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900">{expandedCard.card.title}</h2>
+                        <span class="text-sm font-semibold px-3 py-1 rounded-full bg-gray-100 inline-block mt-2">{expandedCard.card.subtitle}</span>
+                    </div>
+                </div>
+                <button on:click={closeCardModal} class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"><span class="text-2xl text-gray-700">×</span></button>
+            </div>
             <div class="flex-1 overflow-y-auto custom-scrollbar">
-                {#if expandedCard.card.type === 'status' && expandedCard.card.timeTable}
-                    <div class="mb-6"><p class="text-lg text-gray-800 mb-4">{expandedCard.card.content}</p></div>
-                    <div class="grid grid-cols-3 gap-3">
-                        {#each expandedCard.card.timeTable as slot}
-                            {@const color = slot.level <= 2 ? 'bg-green-100 text-green-900' : slot.level <= 3 ? 'bg-yellow-100 text-yellow-900' : 'bg-red-100 text-red-900'}
-                            <div class="{color} rounded-xl p-4 text-center"><div class="text-base font-bold">{slot.time}</div><div class="text-xl font-semibold mt-1">{slot.level}점</div></div>
-                        {/each}
-                    </div>
-                {:else if expandedCard.card.places}
-                    <div class="space-y-3">
-                        {#each expandedCard.card.places as place}
-                            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:bg-gray-100 transition"><div class="font-bold text-gray-900 text-xl">{place.name}</div><div class="text-base text-gray-700 mt-2">{place.tag}</div></div>
-                        {/each}
-                    </div>
-                {:else if expandedCard.card.coupons}
-                    <div class="space-y-3">
-                        {#each expandedCard.card.coupons as coupon}
-                            <div class="bg-purple-50 rounded-xl p-5 border border-purple-200 cursor-pointer hover:bg-purple-100 transition"><div class="font-bold text-gray-900 text-xl">{coupon.name}</div><div class="text-base text-purple-700 font-mono mt-2">CODE: {coupon.code}</div><div class="text-sm text-gray-500 mt-2">클릭하여 복사</div></div>
-                        {/each}
-                    </div>
-                {:else}
-                    <p class="text-lg text-gray-800 leading-relaxed">{expandedCard.card.content}</p>
+                {#if expandedCard.card.type === 'status'}
+                    <StatusCard card={expandedCard.card} isCompact={false} />
+                {:else if expandedCard.card.type === 'recommendation'}
+                    <RecommendationCard card={expandedCard.card} isCompact={false} />
+                {:else if expandedCard.card.type === 'places'}
+                    <PlacesCard card={expandedCard.card} isCompact={false} />
+                {:else if expandedCard.card.type === 'coupon'}
+                    <CouponCard card={expandedCard.card} isCompact={false} />
                 {/if}
             </div>
         </div>
@@ -287,5 +262,4 @@
     .typing-dot:nth-child(2) { animation-delay: 0.2s; }
     .typing-dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes typing-blink { 0% { opacity: 0.2; } 20% { opacity: 1; } 100% { opacity: 0.2; } }
-    .line-clamp-6 { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
 </style>
