@@ -6,6 +6,7 @@
     import RecommendationCard from "../components/cards/RecommendationCard.svelte";
     import PlacesCard from "../components/cards/PlacesCard.svelte";
     import CouponCard from "../components/cards/CouponCard.svelte";
+    import { allSuggestions, mockResponses } from "../data/mockData.js";
 
     export let goTo;
 
@@ -24,168 +25,11 @@
     const MAX_HISTORY = 20;
 
     // 제안 버튼 목업 데이터 15개
-    const allSuggestions = [
-        { display: "🌊 바다 볼 수 있는 카페", text: "바다 볼 수 있는 카페" },
-        { display: "⛰️ 오름 코스 추천", text: "오름 코스 추천" },
-        { display: "👨‍👩‍👧 가족 여행 코스", text: "가족 여행 코스" },
-        { display: "🍜 제주 맛집 추천", text: "제주 맛집 추천" },
-        { display: "🏖️ 한적한 해변 찾기", text: "한적한 해변" },
-        { display: "📸 사진 명소 추천", text: "사진 명소" },
-        { display: "🌄 일출 명소 추천", text: "일출 명소" },
-        { display: "🌃 일몽 보기 좋은 곳", text: "일몽 명소" },
-        { display: "🚶 산책로 추천", text: "산책로 추천" },
-        { display: "🏞️ 자연 휴양지", text: "자연 휴양지" },
-        { display: "🚗 드라이브 코스", text: "드라이브 코스" },
-        { display: "🏛️ 역사 유적지", text: "역사 유적지" },
-        { display: "🧘 힙링 스파", text: "힙링 스파" },
-        { display: "🎵 제주 축제 정보", text: "축제 정보" },
-        { display: "🌺 꽃 명소 추천", text: "꽃 명소" },
-    ];
 
     function getRandomSuggestions(count = 3) {
         const shuffled = [...allSuggestions].sort(() => 0.5 - Math.random());
         return shuffled.slice(0, count);
     }
-
-    const mockResponses = {
-        성산: {
-            session_id: "mock-session-001",
-            cards: [
-                {
-                    type: "status",
-                    title: "성산일출봉",
-                    subtitle: "혼잡도 5점",
-                    icon: "📍",
-                    content: "현재 매우 혼잡합니다",
-                    time_table: [
-                        { time: "9시", level: 5 },
-                        { time: "10시", level: 5 },
-                        { time: "11시", level: 4 },
-                        { time: "12시", level: 3 },
-                        { time: "13시", level: 4 },
-                        { time: "14시", level: 5 },
-                        { time: "15시", level: 4 },
-                        { time: "16시", level: 3 },
-                        { time: "17시", level: 2 },
-                        { time: "18시", level: 2 },
-                        { time: "19시", level: 1 },
-                        { time: "20시", level: 1 },
-                    ],
-                },
-                {
-                    type: "recommendation",
-                    title: "월령지",
-                    subtitle: "대신 추천",
-                    icon: "✨",
-                    content:
-                        "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                },
-                {
-                    type: "places",
-                    title: "주변 명소",
-                    subtitle: "3곳 추천",
-                    icon: "🌿",
-                    content: "",
-                    places: [
-                        { name: "성읍도", tag: "한적한 해변" },
-                        { name: "광치기해변", tag: "로컬 비치" },
-                        { name: "표선해변", tag: "풀빌라" },
-                    ],
-                },
-                {
-                    type: "coupon",
-                    title: "사용 가능 쿠폰",
-                    subtitle: "2개",
-                    icon: "🎫",
-                    content: "월령지 입장료 20% 할인",
-                    coupons: [
-                        { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                        { name: "카페 음료 무료", code: "9876-5432-1098" },
-                    ],
-                },
-            ],
-        },
-        카페: {
-            session_id: "mock-session-002",
-            cards: [
-                {
-                    type: "recommendation",
-                    title: "카페 더 클리프",
-                    subtitle: "오션뷰 카페",
-                    icon: "☕",
-                    content:
-                        "절벽 끝의 한라산과 바다 전망. 주말에도 비교적 한산하며 사진 촬영 명소로 유명합니다.",
-                },
-                {
-                    type: "places",
-                    title: "주변 명소",
-                    subtitle: "2곳 추천",
-                    icon: "🌊",
-                    content: "",
-                    places: [
-                        { name: "용머리 해안도로", tag: "드라이브" },
-                        { name: "상예 카페거리", tag: "감성 카페" },
-                    ],
-                },
-                {
-                    type: "coupon",
-                    title: "사용 가능 쿠폰",
-                    subtitle: "1개",
-                    icon: "🎫",
-                    content: "커피 할인 쿠폰",
-                    coupons: [{ name: "커피 할인", code: "5555-6666-7777" }],
-                },
-            ],
-        },
-        가족: {
-            session_id: "mock-session-003",
-            cards: [
-                {
-                    type: "recommendation",
-                    title: "빌자루 숲",
-                    subtitle: "가족 여행 코스",
-                    icon: "🌳",
-                    content:
-                        "아이들과 함께하는 자연 산책로. 평일 오전 시간대는 비교적 한산합니다.",
-                },
-                {
-                    type: "places",
-                    title: "주변 명소",
-                    subtitle: "3곳 추천",
-                    icon: "👨‍👩‍👧",
-                    content: "",
-                    places: [
-                        { name: "제주헤리테이지", tag: "체험" },
-                        { name: "에코랜드", tag: "테마파크" },
-                        { name: "한라수목원", tag: "산책" },
-                    ],
-                },
-                {
-                    type: "coupon",
-                    title: "사용 가능 쿠폰",
-                    subtitle: "2개",
-                    icon: "🎫",
-                    content: "가족 할인권",
-                    coupons: [
-                        { name: "빌자루 가족 할인", code: "1111-2222-3333" },
-                        { name: "헤리테이지 30%", code: "4444-5555-6666" },
-                    ],
-                },
-            ],
-        },
-        default: {
-            session_id: "mock-session-default",
-            cards: [
-                {
-                    type: "recommendation",
-                    title: "제주 숨은 명소",
-                    subtitle: "더 알아보기",
-                    icon: "🗺️",
-                    content: "키워드를 입력해주세요",
-                },
-            ],
-        },
-    };
 
     onMount(() => {
         loadChatHistory();
@@ -300,12 +144,29 @@
 
     function getMockResponse(message) {
         const lowerMessage = message.toLowerCase();
+
         if (lowerMessage.includes("성산") || lowerMessage.includes("일출봉"))
             return mockResponses["성산"];
         if (lowerMessage.includes("카페") || lowerMessage.includes("바다"))
             return mockResponses["카페"];
         if (lowerMessage.includes("가족") || lowerMessage.includes("아이"))
             return mockResponses["가족"];
+
+        if (lowerMessage.includes("오름")) return mockResponses["오름"];
+        if (lowerMessage.includes("맛집")) return mockResponses["맛집"];
+        if (lowerMessage.includes("해변")) return mockResponses["해변"];
+        if (lowerMessage.includes("사진")) return mockResponses["사진"];
+        if (lowerMessage.includes("일출")) return mockResponses["일출"];
+        if (lowerMessage.includes("일몰") || lowerMessage.includes("일몽"))
+            return mockResponses["일몰"];
+        if (lowerMessage.includes("산책")) return mockResponses["산책"];
+        if (lowerMessage.includes("휴양")) return mockResponses["휴양"];
+        if (lowerMessage.includes("드라이브")) return mockResponses["드라이브"];
+        if (lowerMessage.includes("역사")) return mockResponses["역사"];
+        if (lowerMessage.includes("스파")) return mockResponses["스파"];
+        if (lowerMessage.includes("축제")) return mockResponses["축제"];
+        if (lowerMessage.includes("꽃")) return mockResponses["꽃"];
+
         return mockResponses["default"];
     }
 
@@ -610,12 +471,15 @@
                                                 isCompact={true}
                                                 {isActive}
                                                 {isHovered}
-                                                onClick={() =>
+                                                onClick={() => {
+                                                    currentCardIndex[i] =
+                                                        cardIdx;
                                                     openCardModal(
                                                         i,
                                                         cardIdx,
                                                         card,
-                                                    )}
+                                                    );
+                                                }}
                                                 onMouseEnter={() =>
                                                     (hoveredCard = `${i}-${cardIdx}`)}
                                                 onMouseLeave={() =>
