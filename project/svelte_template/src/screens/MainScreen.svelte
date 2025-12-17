@@ -11,7 +11,7 @@
     let chatContainer;
     let currentCardIndex = {};
     let expandedCard = null;
-    let hoveredCard = null; // 호버된 카드 추적
+    let hoveredCard = null;
     
     const mockResponses = {
         '성산': {
@@ -82,7 +82,7 @@
     onMount(() => {
         messages = [{
             type: 'text', role: 'assistant',
-            content: '안녕하세요! 제주숨곡 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
+            content: '안녕하세요! 제주숨곧 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
             suggestions: [
                 { display: '🌊 바다 볼 수 있는 카페', text: '바다 볼 수 있는 카페' },
                 { display: '🧺 오름 코스 추천', text: '오름 코스 추천' },
@@ -142,7 +142,7 @@
 <div class="flex h-screen w-full bg-white">
     <aside class="hidden md:flex w-[250px] flex-col bg-[#2A2A2A] text-[#E5E5E5]">
         <div class="p-4">
-            <h1 class="text-xl font-bold text-white flex items-center gap-2"><span>🦌</span><span>제주숨곡 AI</span></h1>
+            <h1 class="text-xl font-bold text-white flex items-center gap-2"><span>🦌</span><span>제주숨곧 AI</span></h1>
             <button class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors" on:click={() => { sessionId = null; messages = messages.slice(0, 1); currentCardIndex = {}; }}>+ 새 대화</button>
         </div>
         <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar"></nav>
@@ -168,21 +168,28 @@
                         </div>
                     {:else if message.type === 'cards'}
                         {@const activeIdx = currentCardIndex[i] || 0}
-                        <div class="fade-in-up flex items-start gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
-                            <div class="flex-1 relative">
+                        <div class="fade-in-up">
+                            <!-- 아이콘 -->
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0 mb-3">🦌</div>
+                            
+                            <!-- 컨텐츠 영역 -->
+                            <div class="w-full overflow-hidden">
+                                <!-- 네비게이션 버튼 -->
                                 <div class="flex items-center justify-between mb-4">
                                     <button on:click={() => navigateCard(i, 'left')} disabled={activeIdx === 0} class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"><span class="text-gray-700 font-bold">←</span></button>
                                     <div class="text-sm text-gray-600 font-medium">{activeIdx + 1} / {message.cards.length}</div>
                                     <button on:click={() => navigateCard(i, 'right')} disabled={activeIdx === message.cards.length - 1} class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"><span class="text-gray-700 font-bold">→</span></button>
                                 </div>
-                                <div class="relative h-[420px]">
+                                
+                                <!-- 카드 컨테이너 -->
+                                <div class="relative h-[420px] overflow-hidden">
                                     {#each message.cards as card, cardIdx}
                                         {@const offset = (cardIdx - activeIdx) * 252}
                                         {@const isActive = cardIdx === activeIdx}
                                         {@const baseZ = message.cards.length - Math.abs(cardIdx - activeIdx)}
                                         {@const isHovered = hoveredCard === `${i}-${cardIdx}`}
                                         {@const zIndex = isHovered ? 9999 : baseZ}
+                                        
                                         <div class="absolute transition-all duration-500 ease-out cursor-pointer" style="left: {offset}px; z-index: {zIndex}; opacity: {Math.abs(cardIdx - activeIdx) > 2 ? 0 : 1};" on:click={() => openCardModal(i, cardIdx, card)} on:mouseenter={() => hoveredCard = `${i}-${cardIdx}`} on:mouseleave={() => hoveredCard = null}>
                                             <div class="w-[360px] h-[400px] flex flex-col p-6 bg-white border-2 border-gray-200 rounded-3xl shadow-lg transition-all duration-300 {isActive ? 'scale-100' : 'scale-95'} {isHovered ? 'scale-105 shadow-2xl border-indigo-300' : ''}">
                                                 <div class="flex items-center justify-between mb-4"><span class="text-5xl">{card.icon}</span><span class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100">{card.subtitle}</span></div>
