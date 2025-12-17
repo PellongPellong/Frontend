@@ -1,6 +1,7 @@
 <script>
     export let message;
     export let onSuggestionClick = () => {};
+    export let disabled = false;
     
     const isUser = message.role === 'user';
     const isLoading = message.loading;
@@ -38,8 +39,10 @@
                         {#if message.data.status.time_table && message.data.status.time_table.length > 0}
                             <div class="grid grid-cols-3 gap-2 mt-2">
                                 {#each message.data.status.time_table as slot}
-                                    <div class="text-xs p-2 bg-white/20 rounded">
-                                        <div class="font-bold">{slot.time}</div>
+                                    {@const level = slot.혼잡도}
+                                    {@const bgColor = level <= 2 ? 'bg-green-200 text-green-900' : level <= 3 ? 'bg-yellow-200 text-yellow-900' : 'bg-red-200 text-red-900'}
+                                    <div class="text-xs p-2 {bgColor} rounded font-semibold">
+                                        <div>{slot.time}</div>
                                         <div>{slot.혼잡도}점</div>
                                     </div>
                                 {/each}
@@ -68,10 +71,13 @@
             <div class="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-3">
                 {#each message.suggestions as suggestion}
                     <button 
-                        class="w-full sm:w-auto rounded-full border-2 border-[#E0E0E0] py-3 px-5 text-sm font-medium hover:bg-[#F5F5F5] transition-colors"
-                        on:click={() => onSuggestionClick(suggestion)}
+                        class="w-full sm:w-auto rounded-full border-2 py-3 px-5 text-sm font-medium transition-colors {
+                            disabled ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed' : 'border-[#E0E0E0] bg-white text-gray-900 hover:bg-[#F5F5F5]'
+                        }"
+                        on:click={() => !disabled && onSuggestionClick(suggestion.text)}
+                        disabled={disabled}
                     >
-                        {suggestion}
+                        {suggestion.display}
                     </button>
                 {/each}
             </div>

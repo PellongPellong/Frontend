@@ -28,10 +28,10 @@
             },
             recommendation: {
                 location_name: '월령지',
-                story: '월령지는 조선시대 목마장으로 사용되던 곳으로, 현재는 조용한 산책로와 아름다운 숨결림으로 유명합니다. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.'
+                story: '월령지는 조선시대 목마장으로 사용되던 곳으로, 현재는 조용한 산책로와 아름다운 숲길로 유명합니다. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.'
             },
             around: [
-                { name: '성읍도', reason: '해돁이가 많고 한적한 해변' },
+                { name: '성읍도', reason: '해돋이가 많고 한적한 해변' },
                 { name: '광치기해변', reason: '로컬들이 즐겨 찾는 조용한 비치' },
                 { name: '표선해변', reason: '탁 트인 풀빌라와 카페가 있는 평화로운 곳' }
             ],
@@ -59,16 +59,16 @@
             session_id: 'mock-session-003',
             status: null,
             recommendation: {
-                location_name: '빔자루 숲',
+                location_name: '빌자루 숲',
                 story: '제주에서 가장 유명한 숲길로, 아이들과 함께 걸으며 자연을 느낄 수 있어요. 평일 오전 시간대는 비교적 한산합니다.'
             },
             around: [
                 { name: '제주헤리테이지', reason: '아이들을 위한 체험 프로그램' },
-                { name: '에코랜드 테마파크', reason: '가족 단위 방문개가 좋음' },
+                { name: '에코랜드 테마파크', reason: '가족 단위 방문객이 좋음' },
                 { name: '한라수목원', reason: '산책하기 좋은 수목원' }
             ],
             coupones: [
-                { name: '빔자루 숲 가족 할인권', barcode: '1111-2222-3333' },
+                { name: '빌자루 숲 가족 할인권', barcode: '1111-2222-3333' },
                 { name: '제주헤리테이지 30% 할인', barcode: '4444-5555-6666' }
             ]
         },
@@ -81,7 +81,7 @@
             },
             around: [
                 { name: '월령지', reason: '조용한 산책로' },
-                { name: '가파도 해안도로', reason: '아름다운 해돁라인' }
+                { name: '가파도 해안도로', reason: '아름다운 해돋이라인' }
             ],
             coupones: []
         }
@@ -94,9 +94,9 @@
                 role: 'assistant',
                 content: '안녕하세요! 제주숨곧 AI입니다. 한산한 제주 여행지를 추천해드릴게요. 어떤 걸 찾고 계신가요?',
                 suggestions: [
-                    '🌊 바다 볼 수 있는 카페',
-                    '🧶 오름 코스 추천',
-                    '👨‍👩‍👧 가족 여행 코스'
+                    { display: '🌊 바다 볼 수 있는 카페', text: '바다 볼 수 있는 카페' },
+                    { display: '🧺 오름 코스 추천', text: '오름 코스 추천' },
+                    { display: '👨‍👩‍👧 가족 여행 코스', text: '가족 여행 코스' }
                 ]
             }
         ];
@@ -205,7 +205,9 @@
     function handleKeyDown(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            sendMessage();
+            if (!isLoading) {
+                sendMessage();
+            }
         }
     }
 </script>
@@ -267,6 +269,7 @@
                     <ChatMessage 
                         {message} 
                         onSuggestionClick={sendMessage}
+                        disabled={isLoading}
                     />
                 {/each}
             </div>
@@ -275,11 +278,18 @@
         <!-- 입력 영역 -->
         <div class="bg-white p-5 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex-shrink-0">
             <div class="mx-auto max-w-[800px] relative">
+                {#if isLoading}
+                    <div class="absolute top-0 left-0 right-0 -mt-8 text-center">
+                        <span class="text-sm text-gray-500">AI가 응답하는 중입니다...</span>
+                    </div>
+                {/if}
                 <textarea
                     bind:value={userInput}
                     on:keydown={handleKeyDown}
-                    class="w-full resize-none rounded-xl border border-[#E0E0E0] py-3 pl-4 pr-14 text-base focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition"
-                    placeholder="제주 여행에 대해 물어보세요... (예: 성산일출봉 괜찮을까?)"
+                    class="w-full resize-none rounded-xl border py-3 pl-4 pr-14 text-base focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition {
+                        isLoading ? 'border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed' : 'border-[#E0E0E0] bg-white text-gray-900'
+                    }"
+                    placeholder={isLoading ? '응답을 기다리는 중...' : '제주 여행에 대해 물어보세요... (예: 성산일출봉 괜찮을까?)'}
                     rows="1"
                     style="max-height: 120px;"
                     disabled={isLoading}
@@ -287,10 +297,10 @@
                 <button
                     on:click={() => sendMessage()}
                     disabled={!userInput.trim() || isLoading}
-                    class="absolute right-2 bottom-2 flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 {
+                    class="absolute right-2 bottom-2 flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 {
                         userInput.trim() && !isLoading
-                            ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600'
-                            : 'bg-[#E0E0E0]'
+                            ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 cursor-pointer'
+                            : 'bg-[#E0E0E0] cursor-not-allowed'
                     } text-white"
                 >
                     <span>↑</span>
