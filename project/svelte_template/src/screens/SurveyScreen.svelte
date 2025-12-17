@@ -15,7 +15,7 @@
 
     function handleSelect(value) {
         if (currentQuestion.multiple) {
-            preferences.toggleAvoid(value);
+            preferences.toggle(currentQuestion.id, value);
         } else {
             preferences.setField(currentQuestion.id, value);
         }

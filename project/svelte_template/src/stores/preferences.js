@@ -19,11 +19,12 @@ function createPreferences() {
         update,
         reset: () => set({ ...initialState }),
         setField: (field, value) => update(s => ({ ...s, [field]: value })),
-        toggleAvoid: (value) => update(s => {
-            const exists = s.avoid.includes(value);
+        toggle: (field, value) => update(s => {
+            const list = s[field] || [];
+            const exists = list.includes(value);
             return {
                 ...s,
-                avoid: exists ? s.avoid.filter(i => i !== value) : [...s.avoid, value]
+                [field]: exists ? list.filter(i => i !== value) : [...list, value]
             };
         })
     };
