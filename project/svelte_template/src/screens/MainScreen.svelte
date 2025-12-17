@@ -1,9 +1,6 @@
 <script>
     import { onMount, tick } from 'svelte';
     import ChatMessage from '../components/ChatMessage.svelte';
-    import LocationStatus from '../components/LocationStatus.svelte';
-    import RecommendationCard from '../components/RecommendationCard.svelte';
-    import CouponList from '../components/CouponList.svelte';
     
     export let goTo;
     
@@ -17,80 +14,147 @@
     const mockResponses = {
         '성산': {
             session_id: 'mock-session-001',
-            status: {
-                location_name: '성산일출봉',
-                location_status: '혼잡도가 5점으로 매우 높을 것으로 예상됩니다.',
-                time_table: [
-                    { time: '09시', 혼잡도: 5 },
-                    { time: '10시', 혼잡도: 5 },
-                    { time: '11시', 혼잡도: 4 },
-                    { time: '14시', 혼잡도: 5 },
-                    { time: '15시', 혼잡도: 4 },
-                    { time: '16시', 혼잡도: 3 },
-                ]
-            },
-            recommendation: {
-                location_name: '월령지',
-                story: '월령지는 조선시대 목마장으로 사용되던 곳으로, 현재는 조용한 산책로와 아름다운 숲길로 유명합니다. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.'
-            },
-            around: [
-                { name: '성읍도', reason: '해돋이가 많고 한적한 해변' },
-                { name: '광치기해변', reason: '로컬들이 즐겨 찾는 조용한 비치' },
-                { name: '표선해변', reason: '탁 트인 풀빌라와 카페가 있는 평화로운 곳' }
-            ],
-            coupones: [
-                { name: '월령지 입장료 20% 할인', barcode: '1234-5678-9012' },
-                { name: '근처 카페 음료 무료', barcode: '9876-5432-1098' }
+            cards: [
+                {
+                    type: 'status',
+                    title: '성산일출봉',
+                    subtitle: '혼잡도 5점',
+                    icon: '📍',
+                    content: '현재 매우 혼잡합니다',
+                    color: 'from-red-400/20 to-orange-400/20',
+                    timeTable: [
+                        { time: '09시', level: 5 },
+                        { time: '10시', level: 5 },
+                        { time: '11시', level: 4 },
+                        { time: '14시', level: 5 },
+                        { time: '15시', level: 4 },
+                        { time: '16시', level: 3 },
+                    ]
+                },
+                {
+                    type: 'recommendation',
+                    title: '월령지',
+                    subtitle: '대신 추천',
+                    icon: '✨',
+                    content: '조선시대 목마장으로 조용하고 평화로운 산책로',
+                    color: 'from-green-400/20 to-emerald-400/20'
+                },
+                {
+                    type: 'places',
+                    title: '주변 명소',
+                    subtitle: '3곳 추천',
+                    icon: '🌿',
+                    content: '',
+                    color: 'from-blue-400/20 to-cyan-400/20',
+                    places: [
+                        { name: '성읍도', tag: '한적한 해변' },
+                        { name: '광치기해변', tag: '로컬 비치' },
+                        { name: '표선해변', tag: '풀빌라' }
+                    ]
+                },
+                {
+                    type: 'coupon',
+                    title: '사용 가능 쿠폰',
+                    subtitle: '2개',
+                    icon: '🎫',
+                    content: '월령지 입장료 20% 할인',
+                    color: 'from-purple-400/20 to-pink-400/20',
+                    coupons: [
+                        { name: '월령지 20% 할인', code: '1234' },
+                        { name: '카페 음료 무료', code: '9876' }
+                    ]
+                }
             ]
         },
         '카페': {
             session_id: 'mock-session-002',
-            status: null,
-            recommendation: {
-                location_name: '카페 더 클리프',
-                story: '절벽 끝에 위치한 오션뷰 카페로, 한라산과 푸른 바다를 동시에 볼 수 있어요. 주말에도 비교적 한산하며, 사진 촬영 명소로도 유명합니다.'
-            },
-            around: [
-                { name: '용머리 해안도로', reason: '드라이브 코스로 좋음' },
-                { name: '상예 카페거리', reason: '다양한 감성 카페들' }
-            ],
-            coupones: [
-                { name: '카페 더 클리프 커피 할인', barcode: '5555-6666-7777' }
+            cards: [
+                {
+                    type: 'recommendation',
+                    title: '카페 더 클리프',
+                    subtitle: '오션뷰 카페',
+                    icon: '☕',
+                    content: '절벽 끝의 한라산과 바다 전망',
+                    color: 'from-amber-400/20 to-yellow-400/20'
+                },
+                {
+                    type: 'places',
+                    title: '주변 명소',
+                    subtitle: '2곳 추천',
+                    icon: '🌊',
+                    content: '',
+                    color: 'from-blue-400/20 to-cyan-400/20',
+                    places: [
+                        { name: '용머리 해안도로', tag: '드라이브' },
+                        { name: '상예 카페거리', tag: '감성 카페' }
+                    ]
+                },
+                {
+                    type: 'coupon',
+                    title: '사용 가능 쿠폰',
+                    subtitle: '1개',
+                    icon: '🎫',
+                    content: '커피 할인 쿠폰',
+                    color: 'from-purple-400/20 to-pink-400/20',
+                    coupons: [
+                        { name: '커피 할인', code: '5555' }
+                    ]
+                }
             ]
         },
         '가족': {
             session_id: 'mock-session-003',
-            status: null,
-            recommendation: {
-                location_name: '빌자루 숲',
-                story: '제주에서 가장 유명한 숲길로, 아이들과 함께 걸으며 자연을 느낄 수 있어요. 평일 오전 시간대는 비교적 한산합니다.'
-            },
-            around: [
-                { name: '제주헤리테이지', reason: '아이들을 위한 체험 프로그램' },
-                { name: '에코랜드 테마파크', reason: '가족 단위 방문객이 좋음' },
-                { name: '한라수목원', reason: '산책하기 좋은 수목원' }
-            ],
-            coupones: [
-                { name: '빌자루 숲 가족 할인권', barcode: '1111-2222-3333' },
-                { name: '제주헤리테이지 30% 할인', barcode: '4444-5555-6666' }
+            cards: [
+                {
+                    type: 'recommendation',
+                    title: '빌자루 숲',
+                    subtitle: '가족 여행 코스',
+                    icon: '🌳',
+                    content: '아이들과 함께하는 자연 산책로',
+                    color: 'from-green-400/20 to-teal-400/20'
+                },
+                {
+                    type: 'places',
+                    title: '주변 명소',
+                    subtitle: '3곳 추천',
+                    icon: '👨‍👩‍👧',
+                    content: '',
+                    color: 'from-blue-400/20 to-cyan-400/20',
+                    places: [
+                        { name: '제주헤리테이지', tag: '체험' },
+                        { name: '에코랜드', tag: '테마파크' },
+                        { name: '한라수목원', tag: '산책' }
+                    ]
+                },
+                {
+                    type: 'coupon',
+                    title: '사용 가능 쿠폰',
+                    subtitle: '2개',
+                    icon: '🎫',
+                    content: '가족 할인권',
+                    color: 'from-purple-400/20 to-pink-400/20',
+                    coupons: [
+                        { name: '빌자루 가족 할인', code: '1111' },
+                        { name: '헤리테이지 30%', code: '4444' }
+                    ]
+                }
             ]
         },
         'default': {
             session_id: 'mock-session-default',
-            status: null,
-            recommendation: {
-                location_name: '제주 숨은 명소',
-                story: '제주에는 아직 알려지지 않은 아름다운 곳들이 많아요. 좋은 키워드를 입력해주시면 더 정확한 추천을 해드릴 수 있어요!'
-            },
-            around: [
-                { name: '월령지', reason: '조용한 산책로' },
-                { name: '가파도 해안도로', reason: '아름다운 해돋이라인' }
-            ],
-            coupones: []
+            cards: [
+                {
+                    type: 'recommendation',
+                    title: '제주 숨은 명소',
+                    subtitle: '더 알아보기',
+                    icon: '🗺️',
+                    content: '키워드를 입력해주세요',
+                    color: 'from-indigo-400/20 to-purple-400/20'
+                }
+            ]
         }
     };
     
-    // 초기 메시지
     onMount(() => {
         messages = [
             {
@@ -106,7 +170,6 @@
         ];
     });
     
-    // 목업 데이터 검색 함수
     function getMockResponse(message) {
         const lowerMessage = message.toLowerCase();
         
@@ -126,7 +189,6 @@
         
         const trimmedText = text.trim();
         
-        // 사용자 메시지 추가
         messages = [...messages, {
             type: 'text',
             role: 'user',
@@ -136,7 +198,6 @@
         userInput = '';
         isLoading = true;
         
-        // 로딩 메시지 추가
         messages = [...messages, {
             type: 'loading',
             role: 'assistant'
@@ -144,48 +205,18 @@
         
         await tick();
         scrollToBottom();
-        
-        // 목업 API 호출 (로딩 시간 시뮬레이션)
         await new Promise(resolve => setTimeout(resolve, 1500));
         
         try {
-            // 목업 데이터 가져오기
             const data = getMockResponse(trimmedText);
             sessionId = data.session_id;
             
-            // 로딩 제거하고 카드들 추가
             const messagesWithoutLoading = messages.slice(0, -1);
-            const newMessages = [...messagesWithoutLoading];
-            
-            // 혼잡도 카드
-            if (data.status) {
-                newMessages.push({
-                    type: 'status',
-                    role: 'assistant',
-                    data: data.status
-                });
-            }
-            
-            // 추천 장소 카드
-            if (data.recommendation) {
-                newMessages.push({
-                    type: 'recommendation',
-                    role: 'assistant',
-                    data: data.recommendation,
-                    around: data.around
-                });
-            }
-            
-            // 쿠폰 카드
-            if (data.coupones && data.coupones.length > 0) {
-                newMessages.push({
-                    type: 'coupon',
-                    role: 'assistant',
-                    data: data.coupones
-                });
-            }
-            
-            messages = newMessages;
+            messages = [...messagesWithoutLoading, {
+                type: 'cards',
+                role: 'assistant',
+                cards: data.cards
+            }];
             
         } catch (error) {
             console.error('Error:', error);
@@ -221,7 +252,6 @@
 </script>
 
 <div class="flex h-screen w-full bg-white">
-    <!-- 사이드바 (데스크탑) -->
     <aside class="hidden md:flex w-[250px] flex-col bg-[#2A2A2A] text-[#E5E5E5]">
         <div class="p-4">
             <h1 class="text-xl font-bold text-white flex items-center gap-2">
@@ -238,9 +268,7 @@
                 + 새 대화
             </button>
         </div>
-        
         <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar"></nav>
-        
         <div class="p-2 border-t border-[#444]">
             <button class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors w-full">
                 <span>⚙️</span>
@@ -249,7 +277,6 @@
         </div>
     </aside>
     
-    <!-- 메인 채팅 영역 -->
     <main class="flex flex-1 flex-col h-full relative">
         <header class="flex h-[60px] items-center justify-between border-b border-[#E5E5E5] bg-white px-4 flex-shrink-0">
             <button class="md:hidden"><span>☰</span></button>
@@ -259,64 +286,86 @@
             <button><span>⋮</span></button>
         </header>
         
-        <!-- 채팅 메시지 영역 -->
         <div bind:this={chatContainer} class="flex-1 overflow-y-auto custom-scrollbar">
-            <div class="mx-auto max-w-[800px] p-5 md:py-10 space-y-6">
+            <div class="mx-auto max-w-[1200px] p-5 md:py-10 space-y-6">
                 {#each messages as message, i (i)}
                     {#if message.type === 'text'}
                         <ChatMessage {message} onSuggestionClick={sendMessage} disabled={isLoading} />
                     {:else if message.type === 'loading'}
                         <div class="fade-in-up flex items-start gap-3">
                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
-                            <div class="max-w-[80%]">
-                                <div class="rounded-t-2xl rounded-br-2xl bg-[#F0F0F0] text-[#212121] p-4">
-                                    <div class="flex items-center space-x-1 p-2">
-                                        <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
-                                        <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
-                                        <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
-                                    </div>
+                            <div class="rounded-t-2xl rounded-br-2xl bg-[#F0F0F0] text-[#212121] p-4">
+                                <div class="flex items-center space-x-1 p-2">
+                                    <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
+                                    <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
+                                    <div class="h-2 w-2 rounded-full bg-gray-500 typing-dot"></div>
                                 </div>
                             </div>
                         </div>
-                    {:else if message.type === 'status'}
+                    {:else if message.type === 'cards'}
                         <div class="fade-in-up flex items-start gap-3">
                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
-                            <div class="max-w-[80%]"><LocationStatus status={message.data} /></div>
-                        </div>
-                    {:else if message.type === 'recommendation'}
-                        <div class="fade-in-up flex items-start gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
-                            <div class="max-w-[80%] space-y-3">
-                                <RecommendationCard recommendation={message.data} />
-                                {#if message.around && message.around.length > 0}
-                                    <div class="bg-white rounded-2xl p-4 shadow-md border border-gray-200">
-                                        <h4 class="font-bold text-gray-900 mb-3">🌿 주변 추천 장소</h4>
-                                        <div class="space-y-2">
-                                            {#each message.around as place}
-                                                <div class="flex items-start gap-2">
-                                                    <span class="text-indigo-500 mt-1">•</span>
-                                                    <div>
-                                                        <span class="font-semibold text-gray-900">{place.name}</span>
-                                                        <span class="text-gray-600">: {place.reason}</span>
+                            
+                            <!-- 가로 스크롤 카드 컨테이너 -->
+                            <div class="flex-1 overflow-x-auto pb-4 hide-scrollbar">
+                                <div class="flex gap-4 min-w-max">
+                                    {#each message.cards as card}
+                                        <div class="glass-card w-[280px] h-[280px] flex flex-col p-6 backdrop-blur-xl bg-gradient-to-br {card.color} border border-white/40 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                                            <!-- 카드 헤더 -->
+                                            <div class="flex items-center justify-between mb-4">
+                                                <span class="text-4xl">{card.icon}</span>
+                                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/30 backdrop-blur-sm">
+                                                    {card.subtitle}
+                                                </span>
+                                            </div>
+                                            
+                                            <!-- 카드 타이틀 -->
+                                            <h3 class="text-xl font-bold text-gray-900 mb-2">{card.title}</h3>
+                                            
+                                            <!-- 카드 내용 -->
+                                            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                                                {#if card.type === 'status' && card.timeTable}
+                                                    <div class="grid grid-cols-3 gap-2">
+                                                        {#each card.timeTable as slot}
+                                                            {@const color = slot.level <= 2 ? 'bg-green-500/20' : slot.level <= 3 ? 'bg-yellow-500/20' : 'bg-red-500/20'}
+                                                            <div class="{color} rounded-lg p-2 text-center backdrop-blur-sm">
+                                                                <div class="text-xs font-bold">{slot.time}</div>
+                                                                <div class="text-sm">{slot.level}점</div>
+                                                            </div>
+                                                        {/each}
                                                     </div>
-                                                </div>
-                                            {/each}
+                                                {:else if card.places}
+                                                    <div class="space-y-2">
+                                                        {#each card.places as place}
+                                                            <div class="bg-white/30 backdrop-blur-sm rounded-lg p-3">
+                                                                <div class="font-semibold text-gray-900">{place.name}</div>
+                                                                <div class="text-xs text-gray-700">{place.tag}</div>
+                                                            </div>
+                                                        {/each}
+                                                    </div>
+                                                {:else if card.coupons}
+                                                    <div class="space-y-2">
+                                                        {#each card.coupons as coupon}
+                                                            <div class="bg-white/30 backdrop-blur-sm rounded-lg p-3 cursor-pointer hover:bg-white/50 transition">
+                                                                <div class="font-semibold text-gray-900 text-sm">{coupon.name}</div>
+                                                                <div class="text-xs text-gray-600 font-mono">{coupon.code}</div>
+                                                            </div>
+                                                        {/each}
+                                                    </div>
+                                                {:else}
+                                                    <p class="text-sm text-gray-700 leading-relaxed">{card.content}</p>
+                                                {/if}
+                                            </div>
                                         </div>
-                                    </div>
-                                {/if}
+                                    {/each}
+                                </div>
                             </div>
-                        </div>
-                    {:else if message.type === 'coupon'}
-                        <div class="fade-in-up flex items-start gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 text-xl flex-shrink-0">🦌</div>
-                            <div class="max-w-[80%]"><CouponList coupones={message.data} /></div>
                         </div>
                     {/if}
                 {/each}
             </div>
         </div>
         
-        <!-- 입력 영역 -->
         <div class="bg-white p-5 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex-shrink-0">
             <div class="mx-auto max-w-[800px] relative">
                 {#if isLoading}
@@ -330,8 +379,7 @@
                     class="w-full resize-none rounded-xl border py-3 pl-4 pr-14 text-base focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition {
                         isLoading ? 'border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed' : 'border-[#E0E0E0] bg-white text-gray-900'
                     }"
-                    placeholder={isLoading ? '응답을 기다리는 중...' : '제주 여행에 대해 물어보세요... (예: 성산일출봉 괜찮을까?)'}
-                    rows="1"
+                    placeholder={isLoading ? '응답을 기다리는 중...' : '제주 여행에 대해 물어보세요... (예: 성산일출봉 괜찮을까?)'}rows="1"
                     style="max-height: 120px;"
                     disabled={isLoading}
                 />
@@ -352,9 +400,18 @@
 </div>
 
 <style>
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 3px; }
     .custom-scrollbar::-webkit-scrollbar-track { background-color: transparent; }
+    
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .glass-card {
+        box-shadow: 
+            0 8px 32px 0 rgba(31, 38, 135, 0.15),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    }
     
     .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
     @keyframes fadeInUp {
