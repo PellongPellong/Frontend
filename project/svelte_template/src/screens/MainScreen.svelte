@@ -164,7 +164,7 @@
                 type: "text",
                 role: "assistant",
                 content:
-                    "안녕하세요! 제주숨곡 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                    "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
                 suggestions: [
                     {
                         display: "🌊 바다 볼 수 있는 카페",
@@ -211,6 +211,15 @@
             if (chatHistory.length > MAX_HISTORY) chatHistory = chatHistory.slice(0, MAX_HISTORY);
         }
         saveChatHistory();
+    }
+    
+    function deleteChat(chatId, event) {
+        event.stopPropagation();
+        chatHistory = chatHistory.filter(h => h.id !== chatId);
+        saveChatHistory();
+        if (sessionId === chatId) {
+            startNewChat();
+        }
     }
     
     function loadChat(chat) {
@@ -361,7 +370,7 @@
         <div class="p-4">
             <h1 class="text-xl font-bold text-white flex items-center gap-2">
                 <img src="/images/mascot.png" alt="백록이" class="w-8 h-8 object-contain" />
-                <span>제주숨곡 AI</span>
+                <span>제주숨곳 AI</span>
             </h1>
             <button
                 class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors"
@@ -370,13 +379,24 @@
         </div>
         <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar">
             {#each chatHistory as chat (chat.id)}
-                <button 
-                    class="w-full text-left rounded-lg p-3 text-sm hover:bg-[#333] transition-colors {sessionId === chat.id ? 'bg-[#333]' : ''}"
-                    on:click={() => loadChat(chat)}
-                >
-                    <div class="font-medium text-white truncate">{chat.title}</div>
-                    <div class="text-xs text-gray-400 mt-1">{formatDate(chat.timestamp)}</div>
-                </button>
+                <div class="relative group">
+                    <button 
+                        class="w-full text-left rounded-lg p-3 pr-10 text-sm hover:bg-[#333] transition-colors {sessionId === chat.id ? 'bg-[#333]' : ''}"
+                        on:click={() => loadChat(chat)}
+                    >
+                        <div class="font-medium text-white truncate">{chat.title}</div>
+                        <div class="text-xs text-gray-400 mt-1">{formatDate(chat.timestamp)}</div>
+                    </button>
+                    <button
+                        class="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all rounded-r-lg"
+                        on:click={(e) => deleteChat(chat.id, e)}
+                        title="삭제"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
             {/each}
         </nav>
         <div class="p-2 border-t border-[#444]">
