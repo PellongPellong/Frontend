@@ -7,7 +7,7 @@
 
 <!-- 백록이 대화 -->
 <div class="flex items-start gap-3 mb-4 bg-indigo-50 rounded-2xl p-4">
-    <span class="text-4xl flex-shrink-0">🦌</span>
+    <img src="/images/mascot.png" alt="백록이" class="w-10 h-10 flex-shrink-0 object-contain" />
     <div class="flex-1">
         <div class="text-sm text-indigo-900 leading-relaxed">
             주변에 가볼 만한 곳 <span class="font-bold">{placeCount}곳</span>을 찾았어요!
