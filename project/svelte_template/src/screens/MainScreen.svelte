@@ -562,7 +562,7 @@
         <div
             class="bg-white p-5 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex-shrink-0"
         >
-            <div class="mx-auto max-w-[800px] relative group">
+            <div class="mx-auto max-w-[800px] relative">
                 {#if isLoading}<div
                         class="absolute top-0 left-0 right-0 -mt-8 text-center"
                     >
@@ -570,27 +570,30 @@
                             >AI가 응답하는 중입니다...</span
                         >
                     </div>{/if}
-                <textarea
-                    bind:value={userInput}
-                    on:keydown={handleKeyDown}
-                    class="w-full resize-none rounded-xl border py-3 pl-4 pr-14 text-base focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition {isLoading
-                        ? 'border-gray-300 bg-gray-50 text-gray-400 cursor-not-allowed'
-                        : 'border-[#E0E0E0] bg-white text-gray-900'}"
-                    placeholder={isLoading
-                        ? "응답을 기다리는 중..."
-                        : "제주 여행에 대해 물어보세요... (예: 성산일출봉 괜찮을까?)"}
-                    rows="1"
-                    style="max-height: 120px;"
-                    disabled={isLoading}
-                />
-                <button
-                    on:click={() => sendMessage()}
-                    disabled={!userInput.trim() || isLoading}
-                    class="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center rounded-r-xl transition-all duration-200 {userInput.trim() && !isLoading
-                        ? 'opacity-0 group-hover:opacity-100 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 cursor-pointer'
-                        : 'opacity-0'} text-white"
-                    ><span class="text-xl">↑</span></button
-                >
+                
+                <!-- 입력 컨테이너 -->
+                <div class="flex rounded-xl border {isLoading ? 'border-gray-300 bg-gray-50' : 'border-[#E0E0E0] bg-white'} focus-within:ring-2 focus-within:ring-indigo-500/50 focus-within:border-indigo-500 transition">
+                    <textarea
+                        bind:value={userInput}
+                        on:keydown={handleKeyDown}
+                        class="flex-1 resize-none bg-transparent py-3 pl-4 pr-2 text-base outline-none {isLoading ? 'text-gray-400 cursor-not-allowed' : 'text-gray-900'}"
+                        placeholder={isLoading
+                            ? "응답을 기다리는 중..."
+                            : "제주 여행에 대해 물어보세요... (예: 성산일출봉 괜찮을까?)"}
+                        rows="1"
+                        style="max-height: 120px;"
+                        disabled={isLoading}
+                    />
+                    <button
+                        on:click={() => sendMessage()}
+                        disabled={!userInput.trim() || isLoading}
+                        class="w-14 flex items-center justify-center transition-all duration-200 rounded-r-xl {userInput.trim() && !isLoading
+                            ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 cursor-pointer'
+                            : 'bg-[#E0E0E0] cursor-not-allowed'} text-white"
+                    >
+                        <span class="text-2xl">↑</span>
+                    </button>
+                </div>
             </div>
         </div>
     </main>
