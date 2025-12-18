@@ -1,0 +1,151 @@
+[33m2cce0d8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdesign[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: reset: moving to origin/main
+[33m2cce0d8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdesign[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{1}: checkout: moving from design to design
+[33m2cce0d8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdesign[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{2}: reset: moving to origin/main
+[33mec5adff[m HEAD@{3}: checkout: moving from design to design
+[33mec5adff[m HEAD@{4}: commit: Fix unstaged changes
+[33mb3a10cb[m[33m ([m[1;31morigin/design[m[33m)[m HEAD@{5}: commit: n
+[33mab8d55a[m HEAD@{6}: commit: n
+[33mccbc865[m HEAD@{7}: pull: Fast-forward
+[33mde9b790[m HEAD@{8}: commit: n
+[33m6f8b426[m HEAD@{9}: commit: n
+[33m5efda26[m HEAD@{10}: commit: n
+[33m6069ed2[m HEAD@{11}: pull: Fast-forward
+[33m37b5102[m HEAD@{12}: pull: Fast-forward
+[33m4447984[m HEAD@{13}: commit: n
+[33m91f68d2[m HEAD@{14}: pull: Fast-forward
+[33m8e16f44[m HEAD@{15}: pull: Fast-forward
+[33mbee39b9[m HEAD@{16}: pull: Fast-forward
+[33m4c3bb59[m HEAD@{17}: pull: Fast-forward
+[33m7a6fbed[m HEAD@{18}: pull: Fast-forward
+[33mb43e167[m HEAD@{19}: pull: Fast-forward
+[33ma3da29e[m HEAD@{20}: pull: Fast-forward
+[33m0383bf4[m HEAD@{21}: commit: n
+[33mcf72cdf[m HEAD@{22}: pull: Fast-forward
+[33mf710f81[m HEAD@{23}: pull: Fast-forward
+[33m0905173[m HEAD@{24}: pull: Fast-forward
+[33m88b5d96[m HEAD@{25}: pull: Fast-forward
+[33me60ae50[m HEAD@{26}: pull: Fast-forward
+[33me4e7d48[m HEAD@{27}: pull: Fast-forward
+[33m3c6410e[m HEAD@{28}: pull: Fast-forward
+[33m352a128[m HEAD@{29}: pull: Fast-forward
+[33m3764307[m HEAD@{30}: pull: Fast-forward
+[33m339d6d8[m HEAD@{31}: pull: Fast-forward
+[33m597d094[m HEAD@{32}: pull: Fast-forward
+[33mc7a2122[m HEAD@{33}: pull: Fast-forward
+[33md1d6a10[m HEAD@{34}: pull: Fast-forward
+[33m30b06ad[m HEAD@{35}: pull: Fast-forward
+[33meb9afd2[m HEAD@{36}: pull: Fast-forward
+[33m7a5aa59[m HEAD@{37}: pull: Fast-forward
+[33mbdad75e[m HEAD@{38}: pull: Fast-forward
+[33m9811e82[m HEAD@{39}: commit: n
+[33m51587ad[m HEAD@{40}: commit: n
+[33mf792454[m HEAD@{41}: commit: n
+[33m81a6080[m HEAD@{42}: commit: n
+[33m209f31b[m HEAD@{43}: commit: n
+[33m8d2ac06[m HEAD@{44}: commit (merge): n
+[33me4c3a8f[m HEAD@{45}: reset: moving to HEAD
+[33me4c3a8f[m HEAD@{46}: pull: updating HEAD
+[33me4c3a8f[m HEAD@{47}: commit (merge): Merge branch 'design' of https://github.com/PellongPellong/Frontend into design
+[33m87a57de[m HEAD@{48}: commit: n
+[33mf44d067[m HEAD@{49}: commit (merge): n
+[33m7e2f630[m HEAD@{50}: commit: n
+[33m04fed9e[m HEAD@{51}: pull: Fast-forward
+[33m553c955[m HEAD@{52}: pull: Fast-forward
+[33m427e908[m HEAD@{53}: pull: Fast-forward
+[33m17fced2[m HEAD@{54}: pull: Fast-forward
+[33m3b6663d[m HEAD@{55}: pull: Fast-forward
+[33m8671c82[m HEAD@{56}: pull: Fast-forward
+[33m7712ed3[m HEAD@{57}: pull: Fast-forward
+[33mf087f20[m HEAD@{58}: pull: Fast-forward
+[33m6dee427[m HEAD@{59}: pull: Fast-forward
+[33m617b32c[m HEAD@{60}: pull: Fast-forward
+[33m2bf8be2[m HEAD@{61}: commit: n
+[33md837a0a[m HEAD@{62}: pull: Fast-forward
+[33me004b55[m HEAD@{63}: pull: Fast-forward
+[33ma82723f[m HEAD@{64}: pull: Fast-forward
+[33m737aa35[m HEAD@{65}: pull: Fast-forward
+[33mbae1336[m HEAD@{66}: pull: Fast-forward
+[33m1cb5fe1[m HEAD@{67}: commit: n
+[33m72ababe[m HEAD@{68}: commit: n
+[33m95007ea[m HEAD@{69}: pull: Fast-forward
+[33ma232f6d[m HEAD@{70}: pull: Fast-forward
+[33mbbfb102[m HEAD@{71}: pull: Fast-forward
+[33m2293498[m HEAD@{72}: commit: n
+[33mc55cf4e[m HEAD@{73}: pull: Fast-forward
+[33m6892aad[m HEAD@{74}: commit: n
+[33m61df48a[m HEAD@{75}: commit: cleaned_messy_file_dir
+[33m5282a9a[m HEAD@{76}: commit (merge): n
+[33me5909e0[m HEAD@{77}: commit: n
+[33m8e3e08d[m HEAD@{78}: pull: Fast-forward
+[33mdb339ce[m HEAD@{79}: commit: n
+[33mf7dafd9[m HEAD@{80}: pull: Fast-forward
+[33m0971caa[m HEAD@{81}: pull: Fast-forward
+[33ma0f87d7[m HEAD@{82}: pull: Fast-forward
+[33ma3c4fa6[m HEAD@{83}: pull: Fast-forward
+[33m137f350[m HEAD@{84}: pull: Fast-forward
+[33m02e9203[m HEAD@{85}: pull: Fast-forward
+[33md31d4eb[m HEAD@{86}: pull: Fast-forward
+[33m82012c8[m HEAD@{87}: pull: Fast-forward
+[33m7c40327[m HEAD@{88}: pull: Fast-forward
+[33m926066b[m HEAD@{89}: pull: Fast-forward
+[33m9b947a8[m HEAD@{90}: pull: Fast-forward
+[33mfa3803a[m HEAD@{91}: pull: Fast-forward
+[33m27c8128[m HEAD@{92}: pull: Fast-forward
+[33mfc9325d[m HEAD@{93}: pull: Fast-forward
+[33m2036b38[m HEAD@{94}: pull: Fast-forward
+[33ma5ccf4a[m HEAD@{95}: pull: Fast-forward
+[33m0cf2397[m HEAD@{96}: pull: Fast-forward
+[33m83b5d97[m HEAD@{97}: commit: n
+[33mcf2d096[m HEAD@{98}: pull: Fast-forward
+[33mf0939c1[m HEAD@{99}: pull: Fast-forward
+[33m9d51c54[m HEAD@{100}: pull: Fast-forward
+[33mff3522f[m HEAD@{101}: commit: n
+[33m6e6b81b[m HEAD@{102}: pull: Fast-forward
+[33m59227f6[m HEAD@{103}: pull: Fast-forward
+[33m46d8835[m HEAD@{104}: pull: Fast-forward
+[33mb98e78d[m HEAD@{105}: commit: n
+[33mb76f9f4[m HEAD@{106}: pull: Fast-forward
+[33m455dd0b[m HEAD@{107}: commit: n
+[33m3530f51[m HEAD@{108}: pull: Fast-forward
+[33m591be79[m HEAD@{109}: commit: n
+[33macd77c2[m HEAD@{110}: pull: Fast-forward
+[33m8a84d71[m HEAD@{111}: pull: Fast-forward
+[33m02564ad[m HEAD@{112}: pull: Fast-forward
+[33m64318c4[m HEAD@{113}: pull: Fast-forward
+[33m4aedac5[m HEAD@{114}: pull: Fast-forward
+[33m02bd7c7[m HEAD@{115}: pull: Fast-forward
+[33m7b8ad64[m HEAD@{116}: pull: Fast-forward
+[33m6a9b318[m HEAD@{117}: commit: n
+[33m939ffbc[m HEAD@{118}: commit: comeplete
+[33m1491c68[m HEAD@{119}: pull: Fast-forward
+[33m7f821bf[m HEAD@{120}: commit: n
+[33m94b0060[m HEAD@{121}: pull: Fast-forward
+[33mf239207[m HEAD@{122}: pull: Fast-forward
+[33m6c8ec29[m HEAD@{123}: pull: Fast-forward
+[33m9ecc787[m HEAD@{124}: commit: done
+[33m8de7186[m HEAD@{125}: pull: Fast-forward
+[33m1e7f096[m HEAD@{126}: pull: Fast-forward
+[33m10bdd57[m HEAD@{127}: pull: Fast-forward
+[33mf85d707[m HEAD@{128}: pull: Fast-forward
+[33md0cc53c[m HEAD@{129}: pull: Fast-forward
+[33m4956e18[m HEAD@{130}: commit (merge): n
+[33m9c789a1[m HEAD@{131}: commit: add_vid
+[33md9e29d1[m HEAD@{132}: pull: Fast-forward
+[33m1877be9[m HEAD@{133}: pull: Fast-forward
+[33meca4366[m HEAD@{134}: pull: Fast-forward
+[33m259bc36[m HEAD@{135}: pull: Fast-forward
+[33m232bd7d[m HEAD@{136}: pull: Fast-forward
+[33m799d277[m HEAD@{137}: pull: Fast-forward
+[33m86f844d[m HEAD@{138}: pull: Fast-forward
+[33me5c668f[m HEAD@{139}: pull: Fast-forward
+[33ma3ddcb4[m HEAD@{140}: pull: Fast-forward
+[33m63812e5[m HEAD@{141}: pull: Fast-forward
+[33mc31730e[m HEAD@{142}: pull: Fast-forward
+[33m18b71cb[m HEAD@{143}: pull: Fast-forward
+[33m931489d[m HEAD@{144}: pull: Fast-forward
+[33m27814ac[m HEAD@{145}: pull: Fast-forward
+[33md31b646[m HEAD@{146}: pull: Fast-forward
+[33m8b5f812[m HEAD@{147}: commit: change_font
+[33m2ce9a7f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{148}: checkout: moving from main to design
+[33m2ce9a7f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{149}: Branch: renamed refs/heads/master to refs/heads/main
+[33m2ce9a7f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{151}: commit (initial): Initial commit: Jeju Hidden AI landing page
