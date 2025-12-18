@@ -5,9 +5,10 @@
 
     let currentScene = 0;
     let autoTimer;
-    const AUTO_DELAY = 5000; // 5초
+    const AUTO_DELAY = 12000; // 12초
+    let slideDirection = 'right'; // 슬라이드 방향 추적
 
-    // 동화책 장면 데이터
+    // 동화책 장면 데이터 (3개만 사용)
     const scenes = [
         {
             image: "/images/scene1.png",
@@ -21,35 +22,31 @@
             image: "/images/scene3.png",
             alt: "여행을 떠나는 백록",
         },
-        {
-            image: "/images/mascot.png",
-            alt: "백록 마스코트",
-            showButton: true,
-        },
     ];
 
-    $: isLastScene = currentScene === scenes.length - 1;
-
     function nextScene() {
+        slideDirection = 'right';
         if (currentScene < scenes.length - 1) {
             currentScene++;
-            resetTimer();
+        } else {
+            currentScene = 0; // 마지막에서 처음으로
         }
+        resetTimer();
+    }
+
+    function prevScene() {
+        slideDirection = 'left';
+        if (currentScene > 0) {
+            currentScene--;
+        } else {
+            currentScene = scenes.length - 1; // 처음에서 마지막으로
+        }
+        resetTimer();
     }
 
     function resetTimer() {
         clearTimeout(autoTimer);
-        if (!isLastScene) {
-            autoTimer = setTimeout(nextScene, AUTO_DELAY);
-        }
-    }
-
-    function handleClick() {
-        if (isLastScene) {
-            goTo("survey");
-        } else {
-            nextScene();
-        }
+        autoTimer = setTimeout(nextScene, AUTO_DELAY);
     }
 
     onMount(() => {
@@ -62,187 +59,98 @@
 </script>
 
 <div
-    class="relative w-full h-screen overflow-hidden bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"
+    class="relative w-full h-screen overflow-hidden bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100 flex flex-col"
 >
-    <!-- 배경 이미지 -->
-    <div class="absolute inset-0">
-        {#each scenes as scene, index}
-            <div
-                class="absolute inset-0 transition-opacity duration-1000 {currentScene ===
-                index
-                    ? 'opacity-100'
-                    : 'opacity-0'}"
-            >
-                {#if scene.showButton}
-                    <!-- 마지막 장면: 그라디언트 배경 -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"
-                    ></div>
-                {:else}
-                    <!-- 만화 이미지 - object-contain으로 변경 (Remote 적용) -->
-                    <div
-                        class="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 via-cyan-50 to-sky-100"
-                    >
-                        <img
-                            src={scene.image}
-                            alt={scene.alt}
-                            class="max-w-full max-h-full object-contain"
-                        />
-                    </div>
-                {/if}
-            </div>
-        {/each}
-    </div>
-
-    <!-- 컨텐츠 영역 -->
-    <div
-        class="relative h-full flex flex-col justify-center items-center p-8 z-10 {!isLastScene
-            ? 'cursor-pointer'
-            : ''}"
-        on:click={handleClick}
-        role="button"
-        tabindex="0"
-        on:keypress={(e) => e.key === "Enter" && handleClick()}
-    >
-        {#each scenes as scene, index}
-            <div
-                class="absolute inset-0 flex flex-col transition-opacity duration-700 {currentScene ===
-                index
-                    ? 'opacity-100'
-                    : 'opacity-0'}"
-            >
-                <!-- 마지막 장면: 마스코트 + 말풍선 + 버튼 -->
-                {#if scene.showButton}
-                    <!-- Remote 레이아웃 적용 (items-center) -->
-                    <div
-                        class="h-full flex flex-col justify-end items-center pb-32 animate-fade-in"
-                    >
-                        <!-- 마스코트 + 말풍선 영역 -->
-                        <div class="flex flex-col items-center mb-16">
-                            <!-- 말풍선 -->
-                            <div class="relative mb-6">
-                                <div
-                                    class="glass rounded-3xl px-8 py-5 shadow-2xl max-w-md mx-4"
-                                >
-                                    <p
-                                        class="text-gray-800 text-center font-bold text-xl md:text-2xl leading-relaxed whitespace-pre-line"
-                                    >
-                                        백록과 함께 제주의 숨은 명소를
-                                        찾아볼까요?
-                                    </p>
-                                    <!-- 말풍선 꼬리 (아래로) -->
-                                    <div
-                                        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full"
-                                    >
-                                        <div
-                                            class="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[24px] border-t-white/80"
-                                        ></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 마스코트 이미지 -->
-                            <div class="mb-8">
-                                <img
-                                    src={scene.image}
-                                    alt={scene.alt}
-                                    class="w-40 h-40 md:w-48 md:h-48 object-contain drop-shadow-2xl animate-bounce-gentle"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- 시작하기 버튼 (Remote 레이아웃 - 중앙 정렬) -->
-                        <div class="w-full flex justify-center px-8">
-                            <button
-                                class="w-full max-w-md bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
-                                on:click|stopPropagation={() => goTo("survey")}
-                            >
-                                <span
-                                    class="flex items-center justify-center gap-3 text-xl"
-                                >
-                                    <span>여행 시작하기</span>
-                                    <svg
-                                        class="w-6 h-6"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                        ></path>
-                                    </svg>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                {/if}
-            </div>
-        {/each}
-    </div>
-
-    <!-- 하단 인디케이터 -->
-    <div
-        class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20"
-    >
-        {#each scenes as _, index}
+    <!-- 메인 컨텐츠 영역 -->
+    <div class="flex-1 flex items-center justify-center px-4 py-8">
+        <div class="relative w-full max-w-2xl">
+            <!-- 이전 버튼 -->
             <button
-                class="transition-all duration-300 rounded-full {currentScene ===
-                index
-                    ? 'w-8 h-3 bg-white'
-                    : 'w-3 h-3 bg-white/40'}"
-                on:click|stopPropagation={() => {
-                    currentScene = index;
-                    resetTimer();
-                }}
-                aria-label="{index + 1}번 장면으로 이동"
-            ></button>
-        {/each}
+                class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg hover:scale-110 transition-all duration-300"
+                on:click={prevScene}
+                aria-label="이전 장면"
+            >
+                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+
+            <!-- 카드 슬라이드 영역 -->
+            <div class="relative overflow-hidden rounded-3xl shadow-2xl bg-white" style="aspect-ratio: 4/3;">
+                {#each scenes as scene, index}
+                    <div
+                        class="absolute inset-0 transition-all duration-500 ease-in-out"
+                        style="
+                            transform: translateX({
+                                index < currentScene 
+                                    ? '-100%' 
+                                    : index > currentScene 
+                                    ? '100%' 
+                                    : '0'
+                            });
+                            opacity: {currentScene === index ? '1' : '0'};
+                        "
+                    >
+                        <div class="w-full h-full flex items-center justify-center p-8 bg-gradient-to-br from-indigo-50 via-cyan-50 to-sky-50">
+                            <img
+                                src={scene.image}
+                                alt={scene.alt}
+                                class="max-w-full max-h-full object-contain drop-shadow-xl"
+                            />
+                        </div>
+                    </div>
+                {/each}
+            </div>
+
+            <!-- 다음 버튼 -->
+            <button
+                class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg hover:scale-110 transition-all duration-300"
+                on:click={nextScene}
+                aria-label="다음 장면"
+            >
+                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
     </div>
 
-    <!-- 클릭 힌트 (마지막 장면 제외) -->
-    {#if !isLastScene}
-        <div
-            class="absolute bottom-20 left-0 right-0 text-center z-20 animate-pulse"
-        >
-            <p
-                class="glass-dark rounded-full px-4 py-2 text-white text-sm inline-block"
-            >
-                화면을 클릭하면 다음 장면으로
-            </p>
+    <!-- 하단 영역: 인디케이터 + 시작 버튼 -->
+    <div class="pb-12 px-8 space-y-6">
+        <!-- 인디케이터 -->
+        <div class="flex justify-center gap-3">
+            {#each scenes as _, index}
+                <button
+                    class="transition-all duration-300 rounded-full {currentScene === index
+                        ? 'w-8 h-3 bg-indigo-500'
+                        : 'w-3 h-3 bg-gray-300'}"
+                    on:click={() => {
+                        slideDirection = index > currentScene ? 'right' : 'left';
+                        currentScene = index;
+                        resetTimer();
+                    }}
+                    aria-label="{index + 1}번 장면으로 이동"
+                ></button>
+            {/each}
         </div>
-    {/if}
+
+        <!-- 시작하기 버튼 -->
+        <div class="w-full flex justify-center">
+            <button
+                class="w-full max-w-md bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+                on:click={() => goTo("survey")}
+            >
+                <span class="flex items-center justify-center gap-3 text-xl">
+                    <span>여행 시작하기</span>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </span>
+            </button>
+        </div>
+    </div>
 </div>
 
 <style>
-    @keyframes bounce-gentle {
-        0%,
-        100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-10px);
-        }
-    }
-
-    .animate-bounce-gentle {
-        animation: bounce-gentle 3s ease-in-out infinite;
-    }
-
-    .animate-fade-in {
-        animation: fadeIn 0.8s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
+    /* 슬라이드 애니메이션을 위한 추가 스타일 */
 </style>
