@@ -5,8 +5,8 @@
 
     let currentScene = 0;
     let autoTimer;
-    const AUTO_DELAY = 12000; // 12초
-    let slideDirection = 'right'; // 슬라이드 방향 추적
+    const AUTO_DELAY = 5000; // 5초
+    let slideDirection = "right"; // 슬라이드 방향 추적
 
     // 동화책 장면 데이터 (3개만 사용)
     const scenes = [
@@ -25,7 +25,7 @@
     ];
 
     function nextScene() {
-        slideDirection = 'right';
+        slideDirection = "right";
         if (currentScene < scenes.length - 1) {
             currentScene++;
         } else {
@@ -35,7 +35,7 @@
     }
 
     function prevScene() {
-        slideDirection = 'left';
+        slideDirection = "left";
         if (currentScene > 0) {
             currentScene--;
         } else {
@@ -70,28 +70,38 @@
                 on:click={prevScene}
                 aria-label="이전 장면"
             >
-                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                <svg
+                    class="w-6 h-6 text-gray-800"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                    ></path>
                 </svg>
             </button>
 
             <!-- 카드 슬라이드 영역 -->
-            <div class="relative overflow-hidden rounded-3xl shadow-2xl bg-white" style="aspect-ratio: 4/3;">
+            <div class="card-container relative overflow-hidden rounded-3xl">
                 {#each scenes as scene, index}
                     <div
                         class="absolute inset-0 transition-all duration-500 ease-in-out"
                         style="
-                            transform: translateX({
-                                index < currentScene 
-                                    ? '-100%' 
-                                    : index > currentScene 
-                                    ? '100%' 
-                                    : '0'
-                            });
+                            transform: translateX({index < currentScene
+                            ? '-100%'
+                            : index > currentScene
+                              ? '100%'
+                              : '0'});
                             opacity: {currentScene === index ? '1' : '0'};
                         "
                     >
-                        <div class="w-full h-full flex items-center justify-center p-8 bg-gradient-to-br from-indigo-50 via-cyan-50 to-sky-50">
+                        <div
+                            class="w-full h-full flex items-center justify-center"
+                        >
                             <img
                                 src={scene.image}
                                 alt={scene.alt}
@@ -108,8 +118,18 @@
                 on:click={nextScene}
                 aria-label="다음 장면"
             >
-                <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                <svg
+                    class="w-6 h-6 text-gray-800"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                    ></path>
                 </svg>
             </button>
         </div>
@@ -121,11 +141,13 @@
         <div class="flex justify-center gap-3">
             {#each scenes as _, index}
                 <button
-                    class="transition-all duration-300 rounded-full {currentScene === index
+                    class="transition-all duration-300 rounded-full {currentScene ===
+                    index
                         ? 'w-8 h-3 bg-indigo-500'
                         : 'w-3 h-3 bg-gray-300'}"
                     on:click={() => {
-                        slideDirection = index > currentScene ? 'right' : 'left';
+                        slideDirection =
+                            index > currentScene ? "right" : "left";
                         currentScene = index;
                         resetTimer();
                     }}
@@ -137,13 +159,23 @@
         <!-- 시작하기 버튼 -->
         <div class="w-full flex justify-center">
             <button
-                class="w-full max-w-md bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+                class="w-full max-w-md bg-gradient-to-r from-indigo-500 to-cyan-500 text-white font-bold py-5 px-10 rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
                 on:click={() => goTo("survey")}
             >
                 <span class="flex items-center justify-center gap-3 text-xl">
                     <span>여행 시작하기</span>
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    <svg
+                        class="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                        ></path>
                     </svg>
                 </span>
             </button>
@@ -152,5 +184,13 @@
 </div>
 
 <style>
-    /* 슬라이드 애니메이션을 위한 추가 스타일 */
+    .card-container {
+        aspect-ratio: 1/1;
+    }
+
+    @media (min-width: 550px) {
+        .card-container {
+            aspect-ratio: 4/3;
+        }
+    }
 </style>
