@@ -6,7 +6,8 @@
     import RecommendationCard from "../components/cards/RecommendationCard.svelte";
     import PlacesCard from "../components/cards/PlacesCard.svelte";
     import CouponCard from "../components/cards/CouponCard.svelte";
-    import { allSuggestions, mockResponses } from "../data/mockData.js";
+    import { allSuggestions } from "../data/mockData.js";
+    import { sendMessage as apiSendMessage } from "../lib/api.js";
 
     export let goTo;
 
@@ -142,34 +143,6 @@
         });
     }
 
-    function getMockResponse(message) {
-        const lowerMessage = message.toLowerCase();
-
-        if (lowerMessage.includes("성산") || lowerMessage.includes("일출봉"))
-            return mockResponses["성산"];
-        if (lowerMessage.includes("카페") || lowerMessage.includes("바다"))
-            return mockResponses["카페"];
-        if (lowerMessage.includes("가족") || lowerMessage.includes("아이"))
-            return mockResponses["가족"];
-
-        if (lowerMessage.includes("오름")) return mockResponses["오름"];
-        if (lowerMessage.includes("맛집")) return mockResponses["맛집"];
-        if (lowerMessage.includes("해변")) return mockResponses["해변"];
-        if (lowerMessage.includes("사진")) return mockResponses["사진"];
-        if (lowerMessage.includes("일출")) return mockResponses["일출"];
-        if (lowerMessage.includes("일몰") || lowerMessage.includes("일몽"))
-            return mockResponses["일몰"];
-        if (lowerMessage.includes("산책")) return mockResponses["산책"];
-        if (lowerMessage.includes("휴양")) return mockResponses["휴양"];
-        if (lowerMessage.includes("드라이브")) return mockResponses["드라이브"];
-        if (lowerMessage.includes("역사")) return mockResponses["역사"];
-        if (lowerMessage.includes("스파")) return mockResponses["스파"];
-        if (lowerMessage.includes("축제")) return mockResponses["축제"];
-        if (lowerMessage.includes("꽃")) return mockResponses["꽃"];
-
-        return mockResponses["default"];
-    }
-
     async function sendMessage(text = userInput) {
         if (!text.trim() || isLoading) return;
         const trimmedText = text.trim();
@@ -182,16 +155,21 @@
         messages = [...messages, { type: "loading", role: "assistant" }];
         await tick();
         scrollToBottom();
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+
         try {
-            const data = getMockResponse(trimmedText);
-            sessionId = data.session_id;
+            // Real API Call
+            const response = await apiSendMessage(sessionId, trimmedText);
+
+            sessionId = response.sessionId; // Update session ID
+            const newCards = response.cards;
+
             const messagesWithoutLoading = messages.slice(0, -1);
             const newMessageIdx = messagesWithoutLoading.length;
             currentCardIndex[newMessageIdx] = 0;
+
             messages = [
                 ...messagesWithoutLoading,
-                { type: "cards", role: "assistant", cards: data.cards },
+                { type: "cards", role: "assistant", cards: newCards },
             ];
             saveCurrentChat();
         } catch (error) {
@@ -246,6 +224,7 @@
     }
 
     function openCardModal(messageIdx, cardIdx, card) {
+        if (window.innerWidth < 768) return;
         expandedCard = { messageIdx, cardIdx, card };
     }
     function closeCardModal() {

@@ -13,18 +13,33 @@
   let selectedPlace = null;
 
   onMount(() => {
-    // 인트로 완료 여부 확인 (sessionStorage 사용)
-    const introCompleted = sessionStorage.getItem(INTRO_COMPLETED_KEY);
+    // 인트로 완료 여부 확인 (localStorage 사용)
+    const introCompleted = localStorage.getItem(INTRO_COMPLETED_KEY);
     if (introCompleted === "true") {
       page = "main";
     }
+
+    // 개발용: Control 키 누르면 로컬스토리지 초기화
+    const handleKeydown = (e) => {
+      if (e.key === "Insert") {
+        localStorage.removeItem(INTRO_COMPLETED_KEY);
+        console.log("Intro skip state cleared");
+        //alert("인트로 스킵 설정이 초기화되었습니다."); // Optional feedback
+      }
+    };
+
+    window.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
   });
 
   // Navigation Function
   function goTo(target, place = null) {
     // 인트로에서 메인으로 이동 시 캐싱
     if (page === "intro" && (target === "main" || target === "survey")) {
-      sessionStorage.setItem(INTRO_COMPLETED_KEY, "true");
+      localStorage.setItem(INTRO_COMPLETED_KEY, "true");
     }
 
     page = target;

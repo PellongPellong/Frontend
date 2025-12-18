@@ -241,7 +241,7 @@
 </div>
 
 {#if isCompact}
-    <div class="mt-3 text-center text-xs text-gray-500">
+    <div class="mt-3 text-center text-xs text-gray-500 hidden sm:block">
         클릭하여 자세히 보기
     </div>
 {/if}
