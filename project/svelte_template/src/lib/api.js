@@ -1,5 +1,5 @@
 
-const API_URL = "http://internet-ecs-alb-1941197226.ap-northeast-2.elb.amazonaws.com/chats";
+const API_URL = "https://d3sy74e1kjyc2m.cloudfront.net/api/chats";
 
 export async function sendMessage(sessionId, message) {
     try {
