@@ -38,7 +38,7 @@ export async function sendMessage(sessionId, message) {
         }
 
         return {
-            sessionId: data.sessionId,
+            sessionId: data.session_id,
             cards: transformResponseToCards(data)
         };
 
@@ -51,41 +51,49 @@ export async function sendMessage(sessionId, message) {
 function transformResponseToCards(data) {
     const cards = [];
 
+    // bedrockresponse로 한 단계 더 감싸진 구조
+    const bedrockData = data.bedrockresponse;
+    
+    if (!bedrockData) {
+        console.warn("No bedrockresponse in API data");
+        return cards;
+    }
+
     // 1. Status Card
-    if (data.status) {
+    if (bedrockData.status) {
         cards.push({
             type: "status",
-            title: data.status.locationName || "여행지 현황",
-            subtitle: `혼잡도 ${data.status.locationStatus}점`,
+            title: bedrockData.status.location_name || "여행지 현황",
+            subtitle: `혼잡도 ${bedrockData.status.location_status}점`,
             icon: "📍",
-            content: `현재 혼잡도는 ${data.status.locationStatus}점 입니다.`, // General description
-            time_table: (data.status.timeTable || []).map(t => ({
-                time: t.time.includes(":") ? t.time.split(":")[0] + "시" : t.time, // "10:00" -> "10시"
-                level: t.congestion
+            content: bedrockData.status.location_status || `현재 혼잡도는 ${bedrockData.status.location_status}점 입니다.`,
+            time_table: (bedrockData.status.time_table || []).map(t => ({
+                time: t.time.includes(":") ? t.time.split(":")[0] + "시" : t.time,
+                level: t.혼잡도
             }))
         });
     }
 
     // 2. Recommendation Card
-    if (data.recommendation) {
+    if (bedrockData.recommendation) {
         cards.push({
             type: "recommendation",
-            title: data.recommendation.locationName,
+            title: bedrockData.recommendation.location_name,
             subtitle: "AI 추천",
             icon: "✨",
-            content: data.recommendation.story
+            content: bedrockData.recommendation.story
         });
     }
 
     // 3. Places Card
-    if (data.around && data.around.length > 0) {
+    if (bedrockData.around && bedrockData.around.length > 0) {
         cards.push({
             type: "places",
             title: "주변 명소",
-            subtitle: `${data.around.length}곳 추천`,
+            subtitle: `${bedrockData.around.length}곳 추천`,
             icon: "🌿",
             content: "",
-            places: data.around.map(p => ({
+            places: bedrockData.around.map(p => ({
                 name: p.name,
                 tag: p.reason
             }))
@@ -93,14 +101,14 @@ function transformResponseToCards(data) {
     }
 
     // 4. Coupon Card
-    if (data.coupons && data.coupons.length > 0) {
+    if (bedrockData.coupones && bedrockData.coupones.length > 0) {
         cards.push({
             type: "coupon",
             title: "사용 가능 쿠폰",
-            subtitle: `${data.coupons.length}개`,
+            subtitle: `${bedrockData.coupones.length}개`,
             icon: "🎫",
             content: "할인 혜택을 확인하세요",
-            coupons: data.coupons.map(c => ({
+            coupons: bedrockData.coupones.map(c => ({
                 name: c.name,
                 code: c.barcode
             }))
