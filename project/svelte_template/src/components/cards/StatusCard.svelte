@@ -26,6 +26,19 @@
         if (level === 3) return "#eab308"; // 노랑 (보통)
         return "#22c55e"; // 초록 (한산)
     }
+
+    // 동적 그라디언트 생성 함수
+    function generateGradientStops() {
+        if (timeTable.length === 0) return [];
+        
+        return timeTable.map((slot, i) => {
+            const offset = (i / (timeTable.length - 1)) * 100;
+            const color = getColor(slot.level);
+            return { offset, color };
+        });
+    }
+
+    $: gradientStops = generateGradientStops();
 </script>
 
 <!-- 백록이 대화 -->
@@ -74,7 +87,7 @@
                             )
                             .join(" ")}
                         fill="none"
-                        stroke="url(#lineGradient-reversed)"
+                        stroke="url(#lineGradient-dynamic)"
                         stroke-width="3"
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -88,7 +101,7 @@
                                     `${i * (400 / (timeTable.length - 1))},${120 - slot.level * 24}`,
                             )
                             .join(' ')} 400,120 0,120"
-                        fill="url(#areaGradient-reversed)"
+                        fill="url(#areaGradient-dynamic)"
                         opacity="0.3"
                     />
 
@@ -115,45 +128,35 @@
                     {/each}
 
                     <defs>
+                        <!-- 동적 라인 그라디언트 -->
                         <linearGradient
-                            id="lineGradient-reversed"
+                            id="lineGradient-dynamic"
                             x1="0%"
                             y1="0%"
                             x2="100%"
                             y2="0%"
                         >
-                            <stop
-                                offset="0%"
-                                style="stop-color:#ef4444;stop-opacity:1"
-                            />
-                            <stop
-                                offset="50%"
-                                style="stop-color:#eab308;stop-opacity:1"
-                            />
-                            <stop
-                                offset="100%"
-                                style="stop-color:#22c55e;stop-opacity:1"
-                            />
+                            {#each gradientStops as stop}
+                                <stop
+                                    offset="{stop.offset}%"
+                                    style="stop-color:{stop.color};stop-opacity:1"
+                                />
+                            {/each}
                         </linearGradient>
+                        <!-- 동적 영역 그라디언트 -->
                         <linearGradient
-                            id="areaGradient-reversed"
+                            id="areaGradient-dynamic"
                             x1="0%"
                             y1="0%"
                             x2="100%"
                             y2="0%"
                         >
-                            <stop
-                                offset="0%"
-                                style="stop-color:#ef4444;stop-opacity:1"
-                            />
-                            <stop
-                                offset="50%"
-                                style="stop-color:#eab308;stop-opacity:1"
-                            />
-                            <stop
-                                offset="100%"
-                                style="stop-color:#22c55e;stop-opacity:1"
-                            />
+                            {#each gradientStops as stop}
+                                <stop
+                                    offset="{stop.offset}%"
+                                    style="stop-color:{stop.color};stop-opacity:1"
+                                />
+                            {/each}
                         </linearGradient>
                     </defs>
                 </svg>
