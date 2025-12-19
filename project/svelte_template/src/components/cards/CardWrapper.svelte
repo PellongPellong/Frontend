@@ -3,6 +3,7 @@
     import RecommendationCard from './RecommendationCard.svelte';
     import PlacesCard from './PlacesCard.svelte';
     import CouponCard from './CouponCard.svelte';
+    import NavigationCard from './NavigationCard.svelte';
     
     export let card;
     export let isCompact = true;
@@ -29,5 +30,7 @@
         <PlacesCard {card} {isCompact} />
     {:else if card.type === 'coupon'}
         <CouponCard {card} {isCompact} />
+    {:else if card.type === 'navigation'}
+        <NavigationCard {card} {isCompact} />
     {/if}
 </div>
