@@ -143,54 +143,95 @@
 
         map = new kakao.maps.Map(mapContainer, mapOption);
 
-        // 현재 위치 마커
-        const startMarker = new kakao.maps.Marker({
+        // 현재 위치 마커 (파란색)
+        const startMarkerContent = `
+            <div style="
+                width: 30px;
+                height: 30px;
+                background: #2196F3;
+                border: 3px solid white;
+                border-radius: 50%;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            "></div>
+        `;
+        
+        const startCustomOverlay = new kakao.maps.CustomOverlay({
             position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-            map: map
+            content: startMarkerContent,
+            yAnchor: 0.5
         });
+        startCustomOverlay.setMap(map);
 
         const startInfowindow = new kakao.maps.InfoWindow({
-            content: '<div style="padding:5px;font-size:12px;">현재 위치</div>'
+            content: '<div style="padding:5px;font-size:12px;">현재 위치</div>',
+            position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng)
         });
-        startInfowindow.open(map, startMarker);
+        startInfowindow.open(map);
 
-        // 목적지 마커 (기본 빨간색)
-        const endMarker = new kakao.maps.Marker({
+        // 목적지 마커 (빨간색)
+        const endMarkerContent = `
+            <div style="
+                width: 35px;
+                height: 35px;
+                background: #EF4444;
+                border: 3px solid white;
+                border-radius: 50%;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            "></div>
+        `;
+        
+        const endCustomOverlay = new kakao.maps.CustomOverlay({
             position: new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng),
-            map: map
+            content: endMarkerContent,
+            yAnchor: 0.5
         });
+        endCustomOverlay.setMap(map);
 
         const endInfowindow = new kakao.maps.InfoWindow({
-            content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${mockDestination.name}</div>`
+            content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${mockDestination.name}</div>`,
+            position: new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng)
         });
-        endInfowindow.open(map, endMarker);
+        endInfowindow.open(map);
 
         // 주변 장소 마커 추가 (초록색)
         if (additionalPlaces.length > 0) {
-            // 초록색 마커 이미지 URL
-            const greenMarkerImage = new kakao.maps.MarkerImage(
-                'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_green.png',
-                new kakao.maps.Size(34, 39)
-            );
-
             additionalPlaces.forEach(place => {
-                const marker = new kakao.maps.Marker({
+                const greenMarkerContent = `
+                    <div style="
+                        width: 25px;
+                        height: 25px;
+                        background: #22C55E;
+                        border: 3px solid white;
+                        border-radius: 50%;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                        cursor: pointer;
+                    "></div>
+                `;
+                
+                const customOverlay = new kakao.maps.CustomOverlay({
                     position: new kakao.maps.LatLng(place.lat, place.lng),
-                    map: map,
-                    image: greenMarkerImage
+                    content: greenMarkerContent,
+                    yAnchor: 0.5
                 });
+                customOverlay.setMap(map);
 
+                // 정보창 (호버 시 표시)
                 const infowindow = new kakao.maps.InfoWindow({
-                    content: `<div style="padding:5px;font-size:11px;color:#2E7D32;">${place.name}</div>`
+                    content: `<div style="padding:5px;font-size:11px;color:#16A34A;font-weight:600;">${place.name}</div>`,
+                    position: new kakao.maps.LatLng(place.lat, place.lng),
+                    removable: false
                 });
 
-                // 마우스 호버 시 정보창 표시
-                kakao.maps.event.addListener(marker, 'mouseover', () => {
-                    infowindow.open(map, marker);
-                });
-                kakao.maps.event.addListener(marker, 'mouseout', () => {
-                    infowindow.close();
-                });
+                // CustomOverlay에 마우스 이벤트 추가
+                const overlayElement = customOverlay.a;
+                if (overlayElement) {
+                    overlayElement.addEventListener('mouseenter', () => {
+                        infowindow.open(map);
+                    });
+                    overlayElement.addEventListener('mouseleave', () => {
+                        infowindow.close();
+                    });
+                }
             });
         }
 
@@ -342,9 +383,19 @@
             </div>
             
             {#if additionalPlaces.length > 0 && !isCompact}
-                <div class="text-xs text-gray-500 flex items-center gap-2">
-                    <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
-                    <span>초록색: 주변 명소 ({additionalPlaces.length}곳)</span>
+                <div class="text-xs text-gray-500 flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+                        <span>목적지</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+                        <span>주변 명소 ({additionalPlaces.length}곳)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-3 h-3 rounded-full bg-blue-500"></span>
+                        <span>현재 위치</span>
+                    </div>
                 </div>
             {/if}
         </div>
