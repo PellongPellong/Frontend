@@ -165,7 +165,7 @@
         });
         endInfowindow.open(map, endMarker);
 
-        // 주변 장소 마커 추가 (초록색 커스텀)
+        // 주변 장소 마커 추가 (초록색 커스텀 - z-index 낮게)
         if (additionalPlaces.length > 0) {
             additionalPlaces.forEach(place => {
                 const greenMarkerContent = `
@@ -182,14 +182,16 @@
                 const customOverlay = new kakao.maps.CustomOverlay({
                     position: new kakao.maps.LatLng(place.lat, place.lng),
                     content: greenMarkerContent,
-                    yAnchor: 0.5
+                    yAnchor: 0.5,
+                    zIndex: -1  // 가장 뒤로
                 });
                 customOverlay.setMap(map);
 
-                // 정보창 (기본으로 표시)
+                // 정보창 (기본으로 표시, z-index 낮게)
                 const infowindow = new kakao.maps.InfoWindow({
                     content: `<div style="padding:5px;font-size:11px;color:#16A34A;font-weight:600;">${place.name}</div>`,
-                    position: new kakao.maps.LatLng(place.lat, place.lng)
+                    position: new kakao.maps.LatLng(place.lat, place.lng),
+                    zIndex: 0  // 목적지보다 낮게
                 });
                 infowindow.open(map);
             });
