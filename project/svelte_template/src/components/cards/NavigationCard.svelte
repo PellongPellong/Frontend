@@ -143,68 +143,39 @@
 
         map = new kakao.maps.Map(mapContainer, mapOption);
 
-        // 현재 위치 마커 (파란색)
-        const startMarkerContent = `
-            <div style="
-                width: 30px;
-                height: 30px;
-                background: #2196F3;
-                border: 3px solid white;
-                border-radius: 50%;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            "></div>
-        `;
-        
-        const startCustomOverlay = new kakao.maps.CustomOverlay({
+        // 현재 위치 마커 (기본 블루)
+        const startMarker = new kakao.maps.Marker({
             position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-            content: startMarkerContent,
-            yAnchor: 0.5
+            map: map
         });
-        startCustomOverlay.setMap(map);
 
         const startInfowindow = new kakao.maps.InfoWindow({
-            content: '<div style="padding:5px;font-size:12px;">현재 위치</div>',
-            position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng)
+            content: '<div style="padding:5px;font-size:12px;">현재 위치</div>'
         });
-        startInfowindow.open(map);
+        startInfowindow.open(map, startMarker);
 
-        // 목적지 마커 (빨간색)
-        const endMarkerContent = `
-            <div style="
-                width: 35px;
-                height: 35px;
-                background: #EF4444;
-                border: 3px solid white;
-                border-radius: 50%;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-            "></div>
-        `;
-        
-        const endCustomOverlay = new kakao.maps.CustomOverlay({
+        // 목적지 마커 (기본 레드)
+        const endMarker = new kakao.maps.Marker({
             position: new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng),
-            content: endMarkerContent,
-            yAnchor: 0.5
+            map: map
         });
-        endCustomOverlay.setMap(map);
 
         const endInfowindow = new kakao.maps.InfoWindow({
-            content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${mockDestination.name}</div>`,
-            position: new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng)
+            content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${mockDestination.name}</div>`
         });
-        endInfowindow.open(map);
+        endInfowindow.open(map, endMarker);
 
-        // 주변 장소 마커 추가 (초록색)
+        // 주변 장소 마커 추가 (초록색 커스텀)
         if (additionalPlaces.length > 0) {
             additionalPlaces.forEach(place => {
                 const greenMarkerContent = `
                     <div style="
-                        width: 25px;
-                        height: 25px;
+                        width: 17px;
+                        height: 17px;
                         background: #22C55E;
-                        border: 3px solid white;
+                        border: 2px solid white;
                         border-radius: 50%;
-                        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-                        cursor: pointer;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
                     "></div>
                 `;
                 
@@ -215,23 +186,12 @@
                 });
                 customOverlay.setMap(map);
 
-                // 정보창 (호버 시 표시)
+                // 정보창 (기본으로 표시)
                 const infowindow = new kakao.maps.InfoWindow({
                     content: `<div style="padding:5px;font-size:11px;color:#16A34A;font-weight:600;">${place.name}</div>`,
-                    position: new kakao.maps.LatLng(place.lat, place.lng),
-                    removable: false
+                    position: new kakao.maps.LatLng(place.lat, place.lng)
                 });
-
-                // CustomOverlay에 마우스 이벤트 추가
-                const overlayElement = customOverlay.a;
-                if (overlayElement) {
-                    overlayElement.addEventListener('mouseenter', () => {
-                        infowindow.open(map);
-                    });
-                    overlayElement.addEventListener('mouseleave', () => {
-                        infowindow.close();
-                    });
-                }
+                infowindow.open(map);
             });
         }
 
@@ -381,23 +341,6 @@
             >
                 <div bind:this={mapContainer} class="w-full h-full"></div>
             </div>
-            
-            {#if additionalPlaces.length > 0 && !isCompact}
-                <div class="text-xs text-gray-500 flex items-center gap-4">
-                    <div class="flex items-center gap-2">
-                        <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
-                        <span>목적지</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
-                        <span>주변 명소 ({additionalPlaces.length}곳)</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="inline-block w-3 h-3 rounded-full bg-blue-500"></span>
-                        <span>현재 위치</span>
-                    </div>
-                </div>
-            {/if}
         </div>
     {/if}
 </div>
