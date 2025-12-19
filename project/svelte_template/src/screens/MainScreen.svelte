@@ -6,6 +6,7 @@
     import RecommendationCard from "../components/cards/RecommendationCard.svelte";
     import PlacesCard from "../components/cards/PlacesCard.svelte";
     import CouponCard from "../components/cards/CouponCard.svelte";
+    import NavigationCard from "../components/cards/NavigationCard.svelte";
     import { allSuggestions } from "../data/mockData.js";
     import { sendMessage as apiSendMessage } from "../lib/api.js";
 
@@ -39,7 +40,7 @@
                 type: "text",
                 role: "assistant",
                 content:
-                    "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                    "안녕하세요! 제주숙곧 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
                 suggestions: getRandomSuggestions(3),
             },
         ];
@@ -121,7 +122,7 @@
                 type: "text",
                 role: "assistant",
                 content:
-                    "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                    "안녕하세요! 제주숙곣 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
                 suggestions: getRandomSuggestions(3),
             },
         ];
@@ -265,7 +266,7 @@
                     alt="백록이"
                     class="w-8 h-8 object-contain"
                 />
-                <span>제주숨곳 AI</span>
+                <span>제주숙곣 AI</span>
             </h1>
             <button
                 class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors"
@@ -586,6 +587,11 @@
                         />
                     {:else if expandedCard.card.type === "coupon"}
                         <CouponCard
+                            card={expandedCard.card}
+                            isCompact={false}
+                        />
+                    {:else if expandedCard.card.type === "navigation"}
+                        <NavigationCard
                             card={expandedCard.card}
                             isCompact={false}
                         />
