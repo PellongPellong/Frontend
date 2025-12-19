@@ -201,3 +201,58 @@ export const mockPlaces = [
         congestion: 'high'
     }
 ];
+
+// Mock chat API response for testing
+export const mockChatResponse = {
+    sessionId: "mock-session-123",
+    cards: [
+        {
+            type: "status",
+            title: "성산일출봉",
+            subtitle: "혼잡도 75점",
+            icon: "📍",
+            content: "현재 혼잡도는 75점 입니다.",
+            time_table: [
+                { time: "09시", level: 40 },
+                { time: "10시", level: 60 },
+                { time: "11시", level: 75 },
+                { time: "12시", level: 85 },
+                { time: "13시", level: 80 },
+                { time: "14시", level: 70 },
+                { time: "15시", level: 55 },
+                { time: "16시", level: 40 },
+                { time: "17시", level: 30 }
+            ]
+        },
+        {
+            type: "recommendation",
+            title: "비자림 숲",
+            subtitle: "AI 추천",
+            icon: "✨",
+            content: "성산일출봉이 혼잡하니 비자림 숲에서 조용히 산책하시는 것을 추천드려요. 평화롭고 치유되는 시간을 보내실 수 있습니다."
+        },
+        {
+            type: "places",
+            title: "주변 명소",
+            subtitle: "3곳 추천",
+            icon: "🌿",
+            content: "",
+            places: [
+                { name: "만장굴", tag: "신비로운 용암 동굴" },
+                { name: "섹지코지", tag: "아름다운 해안 산책로" },
+                { name: "우도", tag: "평화로운 섬 여행" }
+            ]
+        },
+        {
+            type: "coupon",
+            title: "사용 가능 쿠폰",
+            subtitle: "2개",
+            icon: "🎫",
+            content: "할인 혜택을 확인하세요",
+            coupons: [
+                { name: "비자림 숲 입장료 20% 할인", code: "BIJARIM20" },
+                { name: "제주 카페 10% 할인", code: "CAFE10" }
+            ]
+        }
+    ]
+};
