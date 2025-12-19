@@ -111,7 +111,44 @@ function transformResponseToCards(data) {
         });
     }
 
-    // 4. Coupon Card
+    // 4. Navigation Card (if recommendation has coordinates)
+    if (bedrockData.recommendation && 
+        (bedrockData.recommendation.lat || bedrockData.recommendation.latitude) && 
+        (bedrockData.recommendation.lon || bedrockData.recommendation.lng || bedrockData.recommendation.longitude)) {
+        
+        const lat = bedrockData.recommendation.lat || bedrockData.recommendation.latitude;
+        const lng = bedrockData.recommendation.lon || bedrockData.recommendation.lng || bedrockData.recommendation.longitude;
+        
+        // around 장소들의 좌표 수집 (추가 마커용)
+        const additionalPlaces = [];
+        if (bedrockData.around && bedrockData.around.length > 0) {
+            bedrockData.around.forEach(place => {
+                const placeLat = place.lat || place.latitude;
+                const placeLng = place.lon || place.lng || place.longitude;
+                
+                if (placeLat && placeLng) {
+                    additionalPlaces.push({
+                        name: place.name,
+                        lat: placeLat,
+                        lng: placeLng
+                    });
+                }
+            });
+        }
+        
+        cards.push({
+            type: "navigation",
+            title: "길찾기",
+            subtitle: bedrockData.recommendation.locationName,
+            icon: "🗺️",
+            placeName: bedrockData.recommendation.locationName,
+            lat: lat,
+            lng: lng,
+            additionalPlaces: additionalPlaces  // 주변 장소들 좌표
+        });
+    }
+
+    // 5. Coupon Card
     if (bedrockData.coupons && bedrockData.coupons.length > 0) {
         cards.push({
             type: "coupon",
