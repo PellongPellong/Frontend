@@ -1,7 +1,20 @@
+import { mockChatResponse } from './mock.js';
 
 const API_URL = "https://d3sy74e1kjyc2m.cloudfront.net/api/chats";
 
+// Mock 모드 설정 (true: mock 사용, false: 실제 API 사용)
+// 환경 변수로 설정하려면: import.meta.env.VITE_USE_MOCK === 'true'
+const USE_MOCK_DATA = false;
+
 export async function sendMessage(sessionId, message) {
+    // Mock 모드 활성화 시
+    if (USE_MOCK_DATA) {
+        console.log('🧪 Using mock data (test mode)');
+        // 실제 API 호출처럼 지연 시뮬레이션
+        await new Promise(resolve => setTimeout(resolve, 800));
+        return mockChatResponse;
+    }
+
     try {
         const payload = {
             sessionId: sessionId || "",
@@ -25,7 +38,7 @@ export async function sendMessage(sessionId, message) {
         }
 
         const json = await response.json();
-        console.log("API Response:", json); // Debugging
+        console.log("API Response:", json);
 
         if (json.status !== "CREATED") {
             console.warn("API returned status:", json.status);
@@ -50,7 +63,6 @@ export async function sendMessage(sessionId, message) {
 function transformResponseToCards(data) {
     const cards = [];
 
-    // bedrockResponse로 한 단계 더 감싸진 구조 (camelCase)
     const bedrockData = data.bedrockResponse;
     
     if (!bedrockData) {
