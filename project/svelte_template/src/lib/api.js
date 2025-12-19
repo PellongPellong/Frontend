@@ -96,22 +96,7 @@ function transformResponseToCards(data) {
         });
     }
 
-    // 3. Places Card
-    if (bedrockData.around && bedrockData.around.length > 0) {
-        cards.push({
-            type: "places",
-            title: "주변 명소",
-            subtitle: `${bedrockData.around.length}곳 추천`,
-            icon: "🌿",
-            content: "",
-            places: bedrockData.around.map(p => ({
-                name: p.name,
-                tag: p.reason
-            }))
-        });
-    }
-
-    // 4. Navigation Card (if recommendation has coordinates)
+    // 3. Navigation Card (if recommendation has coordinates)
     if (bedrockData.recommendation && 
         (bedrockData.recommendation.lat || bedrockData.recommendation.latitude) && 
         (bedrockData.recommendation.lon || bedrockData.recommendation.lng || bedrockData.recommendation.longitude)) {
@@ -145,6 +130,21 @@ function transformResponseToCards(data) {
             lat: lat,
             lng: lng,
             additionalPlaces: additionalPlaces  // 주변 장소들 좌표
+        });
+    }
+
+    // 4. Places Card
+    if (bedrockData.around && bedrockData.around.length > 0) {
+        cards.push({
+            type: "places",
+            title: "주변 명소",
+            subtitle: `${bedrockData.around.length}곳 추천`,
+            icon: "🌿",
+            content: "",
+            places: bedrockData.around.map(p => ({
+                name: p.name,
+                tag: p.reason
+            }))
         });
     }
 
