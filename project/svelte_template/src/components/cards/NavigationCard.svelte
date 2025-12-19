@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, afterUpdate } from 'svelte';
     
     export let card;
     export let isCompact = true;
@@ -20,6 +20,7 @@
     let mapContainerModal;
     let compactMap;
     let modalMap;
+    let previousIsCompact = isCompact;
 
     // 카카오맵 SDK 로드
     function loadKakaoMapScript() {
@@ -129,6 +130,10 @@
         if (!container || !userLocation) return null;
 
         const kakao = window.kakao;
+        if (!kakao || !kakao.maps) {
+            console.error('Kakao maps not loaded');
+            return null;
+        }
         
         const centerLat = (userLocation.lat + mockDestination.lat) / 2;
         const centerLng = (userLocation.lng + mockDestination.lng) / 2;
@@ -231,6 +236,7 @@
             // 컴팩트 뷰 지도 초기화
             setTimeout(() => {
                 if (mapContainerCompact) {
+                    console.log('Initializing compact map');
                     initializeMap(mapContainerCompact).then(map => {
                         compactMap = map;
                     });
@@ -243,16 +249,22 @@
         }
     }
 
-    // isCompact 변경 감지 - 모달 지도 초기화
-    $: if (!isCompact && mapContainerModal && userLocation && !modalMap) {
-        setTimeout(() => {
-            if (mapContainerModal && userLocation) {
-                initializeMap(mapContainerModal).then(map => {
-                    modalMap = map;
-                });
+    // DOM 업데이트 후 모달 지도 초기화
+    afterUpdate(() => {
+        if (previousIsCompact !== isCompact) {
+            console.log('isCompact changed:', isCompact);
+            previousIsCompact = isCompact;
+            
+            if (!isCompact && mapContainerModal && userLocation && !modalMap) {
+                console.log('Initializing modal map');
+                setTimeout(() => {
+                    initializeMap(mapContainerModal).then(map => {
+                        modalMap = map;
+                    });
+                }, 200);
             }
-        }, 100);
-    }
+        }
+    });
 
     onMount(() => {
         getRouteInfo();
