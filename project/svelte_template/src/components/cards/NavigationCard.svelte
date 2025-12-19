@@ -98,7 +98,7 @@
     // 카카오 길찾기 API 호출 (실제 도로 경로)
     async function getCarRoute(startLat, startLng, endLat, endLng) {
         try {
-            const REST_API_KEY = '7b0fe4834ca5f6f2c4bee93e18bcb2f9'; // REST API 키 필요
+            const REST_API_KEY = '91e8c3ec281cbbc9419ae9832d2ffe4d';
             const url = `https://apis-navi.kakaomobility.com/v1/directions?origin=${startLng},${startLat}&destination=${endLng},${endLat}&priority=RECOMMEND`;
             
             const response = await fetch(url, {
