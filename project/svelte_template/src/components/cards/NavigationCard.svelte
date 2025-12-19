@@ -16,9 +16,10 @@
     let routeInfo = null;
     let error = null;
     let isLoading = true;
-    let mapContainer;
-    let map;
-    let isMapInitialized = false;
+    let mapContainerCompact;
+    let mapContainerModal;
+    let compactMap;
+    let modalMap;
 
     // 카카오맵 SDK 로드
     function loadKakaoMapScript() {
@@ -76,27 +77,7 @@
         return distance;
     }
 
-    // 방향 계산
-    function calculateBearing(lat1, lng1, lat2, lng2) {
-        const dLng = (lng2 - lng1) * Math.PI / 180;
-        const y = Math.sin(dLng) * Math.cos(lat2 * Math.PI / 180);
-        const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
-                  Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLng);
-        
-        let bearing = Math.atan2(y, x) * 180 / Math.PI;
-        bearing = (bearing + 360) % 360;
-        
-        return bearing;
-    }
-
-    // 방향 텍스트 변환
-    function getDirectionText(bearing) {
-        const directions = ['북', '북동', '동', '남동', '남', '남서', '서', '북서'];
-        const index = Math.round(bearing / 45) % 8;
-        return directions[index];
-    }
-
-    // 카카오 길찾기 API 호출 (실제 도로 경로)
+    // 카카오 길찾기 API 호출
     async function getCarRoute(startLat, startLng, endLat, endLng) {
         try {
             const REST_API_KEY = '91e8c3ec281cbbc9419ae9832d2ffe4d';
@@ -119,7 +100,6 @@
                 const route = data.routes[0];
                 const sections = route.sections[0];
                 
-                // 경로 좌표 추출
                 const path = [];
                 sections.roads.forEach(road => {
                     road.vertexes.forEach((coord, i) => {
@@ -139,18 +119,17 @@
                 };
             }
         } catch (error) {
-            console.warn('Failed to get car route, using straight line:', error);
+            console.warn('Failed to get car route:', error);
             return null;
         }
     }
 
-    // 카카오맵 초기화 및 경로 표시
-    async function initializeMap() {
-        if (!mapContainer || !userLocation) return;
+    // 지도 초기화 함수
+    async function initializeMap(container) {
+        if (!container || !userLocation) return null;
 
         const kakao = window.kakao;
         
-        // 중간 지점 계산
         const centerLat = (userLocation.lat + mockDestination.lat) / 2;
         const centerLng = (userLocation.lng + mockDestination.lng) / 2;
 
@@ -159,7 +138,7 @@
             level: 8
         };
 
-        map = new kakao.maps.Map(mapContainer, mapOption);
+        const map = new kakao.maps.Map(container, mapOption);
 
         // 현재 위치 마커
         const startMarker = new kakao.maps.Marker({
@@ -183,7 +162,7 @@
         });
         endInfowindow.open(map, endMarker);
 
-        // 실제 차량 경로 가져오기
+        // 경로 가져오기
         const routeData = await getCarRoute(
             userLocation.lat,
             userLocation.lng,
@@ -193,12 +172,10 @@
 
         let linePath;
         if (routeData && routeData.path) {
-            // 실제 도로 경로 사용
             linePath = routeData.path.map(coord => 
                 new kakao.maps.LatLng(coord.lat, coord.lng)
             );
         } else {
-            // 폴백: 직선 경로
             linePath = [
                 new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
                 new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng)
@@ -215,16 +192,15 @@
 
         polyline.setMap(map);
 
-        // 지도 범위 조정
         const bounds = new kakao.maps.LatLngBounds();
         bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
         bounds.extend(new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng));
         map.setBounds(bounds);
         
-        isMapInitialized = true;
+        return map;
     }
 
-    // 길찾기 정보 가져오기
+    // 초기 데이터 로드
     async function getRouteInfo() {
         try {
             const [location] = await Promise.all([
@@ -234,7 +210,6 @@
 
             userLocation = location;
 
-            // 거리 계산
             const dist = calculateDistance(
                 location.lat,
                 location.lng,
@@ -246,29 +221,21 @@
                 ? `${Math.round(dist * 1000)}m`
                 : `${dist.toFixed(1)}km`;
 
-            // 예상 소요 시간
             const drivingTime = Math.ceil(dist / 40 * 60);
             duration = drivingTime < 60 
                 ? `${drivingTime}분` 
                 : `${Math.floor(drivingTime/60)}시간 ${drivingTime%60}분`;
 
-            // 방향 계산
-            const bearing = calculateBearing(
-                location.lat,
-                location.lng,
-                mockDestination.lat,
-                mockDestination.lng
-            );
-
-            routeInfo = {
-                direction: getDirectionText(bearing),
-                bearing: bearing
-            };
-
             isLoading = false;
 
-            // 지도 초기화
-            setTimeout(() => initializeMap(), 100);
+            // 컴팩트 뷰 지도 초기화
+            setTimeout(() => {
+                if (mapContainerCompact) {
+                    initializeMap(mapContainerCompact).then(map => {
+                        compactMap = map;
+                    });
+                }
+            }, 100);
 
         } catch (err) {
             error = err.message;
@@ -276,11 +243,13 @@
         }
     }
 
-    // isCompact 변경 시 지도 재초기화
-    $: if (!isCompact && isMapInitialized && map) {
+    // isCompact 변경 감지 - 모달 지도 초기화
+    $: if (!isCompact && mapContainerModal && userLocation && !modalMap) {
         setTimeout(() => {
-            if (map) {
-                map.relayout();
+            if (mapContainerModal && userLocation) {
+                initializeMap(mapContainerModal).then(map => {
+                    modalMap = map;
+                });
             }
         }, 100);
     }
@@ -340,13 +309,22 @@
                 {/if}
             </div>
 
-            <!-- 카카오맵 임베드 -->
-            <div 
-                class="flex-1 rounded-xl overflow-hidden border-2 border-gray-200" 
-                style="min-height: {isCompact ? '200px' : '400px'};"
-            >
-                <div bind:this={mapContainer} class="w-full h-full"></div>
-            </div>
+            <!-- 지도 컴팩트/모달 별도 처리 -->
+            {#if isCompact}
+                <div 
+                    class="flex-1 rounded-xl overflow-hidden border-2 border-gray-200" 
+                    style="min-height: 200px;"
+                >
+                    <div bind:this={mapContainerCompact} class="w-full h-full"></div>
+                </div>
+            {:else}
+                <div 
+                    class="flex-1 rounded-xl overflow-hidden border-2 border-gray-200" 
+                    style="min-height: 400px;"
+                >
+                    <div bind:this={mapContainerModal} class="w-full h-full"></div>
+                </div>
+            {/if}
         </div>
     {/if}
 </div>
