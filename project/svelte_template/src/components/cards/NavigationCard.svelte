@@ -7,7 +7,7 @@
     // 모킹된 목적지 좌표 (실제로는 서버에서 받아올 데이터)
     const mockDestination = {
         name: card.placeName || "목적지",
-        lat: card.lat || 33.450701,  // 제주시청 좌표
+        lat: card.lat || 33.450701,
         lng: card.lng || 126.570667
     };
 
@@ -17,6 +17,8 @@
     let routeInfo = null;
     let error = null;
     let isLoading = true;
+    let mapContainer;
+    let map;
 
     // 카카오맵 SDK 로드
     function loadKakaoMapScript() {
@@ -58,9 +60,9 @@
         });
     }
 
-    // 두 지점 간 거리 계산 (Haversine formula 사용)
+    // 두 지점 간 거리 계산
     function calculateDistance(lat1, lng1, lat2, lng2) {
-        const R = 6371; // 지구 반지름 (km)
+        const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLng = (lng2 - lng1) * Math.PI / 180;
         
@@ -72,6 +74,90 @@
         const distance = R * c;
         
         return distance;
+    }
+
+    // 방향 계산
+    function calculateBearing(lat1, lng1, lat2, lng2) {
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const y = Math.sin(dLng) * Math.cos(lat2 * Math.PI / 180);
+        const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
+                  Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLng);
+        
+        let bearing = Math.atan2(y, x) * 180 / Math.PI;
+        bearing = (bearing + 360) % 360;
+        
+        return bearing;
+    }
+
+    // 방향 텍스트 변환
+    function getDirectionText(bearing) {
+        const directions = ['북', '북동', '동', '남동', '남', '남서', '서', '북서'];
+        const index = Math.round(bearing / 45) % 8;
+        return directions[index];
+    }
+
+    // 카카오맵 초기화 및 경로 표시
+    function initializeMap() {
+        if (!mapContainer || !userLocation) return;
+
+        const kakao = window.kakao;
+        
+        // 중간 지점 계산 (지도 중심)
+        const centerLat = (userLocation.lat + mockDestination.lat) / 2;
+        const centerLng = (userLocation.lng + mockDestination.lng) / 2;
+
+        const mapOption = {
+            center: new kakao.maps.LatLng(centerLat, centerLng),
+            level: 8
+        };
+
+        map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 현재 위치 마커
+        const startMarker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+            map: map
+        });
+
+        // 현재 위치 인포윈도우
+        const startInfowindow = new kakao.maps.InfoWindow({
+            content: '<div style="padding:5px;font-size:12px;">현재 위치</div>'
+        });
+        startInfowindow.open(map, startMarker);
+
+        // 목적지 마커
+        const endMarker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng),
+            map: map
+        });
+
+        // 목적지 인포윈도우
+        const endInfowindow = new kakao.maps.InfoWindow({
+            content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${mockDestination.name}</div>`
+        });
+        endInfowindow.open(map, endMarker);
+
+        // 경로 라인 그리기
+        const linePath = [
+            new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+            new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng)
+        ];
+
+        const polyline = new kakao.maps.Polyline({
+            path: linePath,
+            strokeWeight: 4,
+            strokeColor: '#4F46E5',
+            strokeOpacity: 0.8,
+            strokeStyle: 'solid'
+        });
+
+        polyline.setMap(map);
+
+        // 지도 범위 조정
+        const bounds = new kakao.maps.LatLngBounds();
+        bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
+        bounds.extend(new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng));
+        map.setBounds(bounds);
     }
 
     // 길찾기 정보 가져오기
@@ -96,9 +182,8 @@
                 ? `${Math.round(dist * 1000)}m`
                 : `${dist.toFixed(1)}km`;
 
-            // 예상 소요 시간 계산 (차량: 40km/h 가정)
-            const drivingTime = Math.ceil(dist / 40 * 60); // 분
-            
+            // 예상 소요 시간
+            const drivingTime = Math.ceil(dist / 40 * 60);
             duration = drivingTime < 60 
                 ? `${drivingTime}분` 
                 : `${Math.floor(drivingTime/60)}시간 ${drivingTime%60}분`;
@@ -118,36 +203,13 @@
 
             isLoading = false;
 
+            // 지도 초기화
+            setTimeout(() => initializeMap(), 100);
+
         } catch (err) {
             error = err.message;
             isLoading = false;
         }
-    }
-
-    // 방향 계산 (각도)
-    function calculateBearing(lat1, lng1, lat2, lng2) {
-        const dLng = (lng2 - lng1) * Math.PI / 180;
-        const y = Math.sin(dLng) * Math.cos(lat2 * Math.PI / 180);
-        const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
-                  Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLng);
-        
-        let bearing = Math.atan2(y, x) * 180 / Math.PI;
-        bearing = (bearing + 360) % 360;
-        
-        return bearing;
-    }
-
-    // 방향을 텍스트로 변환
-    function getDirectionText(bearing) {
-        const directions = ['북', '북동', '동', '남동', '남', '남서', '서', '북서'];
-        const index = Math.round(bearing / 45) % 8;
-        return directions[index];
-    }
-
-    // 카카오맵으로 길찾기 실행
-    function openKakaoNavigation() {
-        const url = `https://map.kakao.com/link/to/${encodeURIComponent(mockDestination.name)},${mockDestination.lat},${mockDestination.lng}`;
-        window.open(url, '_blank');
     }
 
     onMount(() => {
@@ -187,69 +249,28 @@
         </div>
     {:else}
         <!-- 거리 및 경로 정보 -->
-        <div class="flex-1 space-y-4">
+        <div class="flex-1 flex flex-col space-y-3">
             <!-- 거리 정보 -->
-            {#if distance}
-                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 mb-1">현재 위치에서</p>
-                            <p class="text-3xl font-bold text-indigo-600">{distance}</p>
-                        </div>
-                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md">
-                            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                            </svg>
-                        </div>
+            <div class="grid grid-cols-2 gap-3">
+                {#if distance}
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3">
+                        <p class="text-xs text-gray-600 mb-1">거리</p>
+                        <p class="text-xl font-bold text-indigo-600">{distance}</p>
                     </div>
-                </div>
-            {/if}
+                {/if}
 
-            <!-- 예상 소요 시간 -->
-            {#if duration}
-                <div class="bg-gray-50 rounded-xl p-4">
-                    <div class="flex items-center gap-3 mb-2">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span class="text-sm text-gray-600 font-medium">차량 이동 시</span>
+                {#if duration}
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-3">
+                        <p class="text-xs text-gray-600 mb-1">소요 시간</p>
+                        <p class="text-xl font-bold text-purple-600">{duration}</p>
                     </div>
-                    <p class="text-2xl font-bold text-gray-800 ml-9">{duration}</p>
-                </div>
-            {/if}
+                {/if}
+            </div>
 
-            <!-- 방향 안내 -->
-            {#if routeInfo}
-                <div class="bg-white border-2 border-gray-200 rounded-xl p-4">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs text-gray-500 mb-1">이동 방향</p>
-                            <p class="text-xl font-bold text-gray-800">{routeInfo.direction}쪽</p>
-                        </div>
-                        <div class="relative w-12 h-12">
-                            <div 
-                                class="absolute inset-0 flex items-center justify-center"
-                                style="transform: rotate({routeInfo.bearing}deg);"
-                            >
-                                <svg class="w-12 h-12 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {/if}
-
-            <!-- 길찾기 버튼 -->
-            <button 
-                on:click={openKakaoNavigation}
-                class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-            >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                </svg>
-                카카오맵에서 길찾기
-            </button>
+            <!-- 카카오맵 임베드 -->
+            <div class="flex-1 rounded-xl overflow-hidden border-2 border-gray-200" style="min-height: 200px;">
+                <div bind:this={mapContainer} class="w-full h-full"></div>
+            </div>
         </div>
     {/if}
 </div>
