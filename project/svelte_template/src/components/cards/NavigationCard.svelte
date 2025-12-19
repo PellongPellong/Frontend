@@ -4,7 +4,6 @@
     export let card;
     export let isCompact = true;
 
-    // 모킹된 목적지 좌표 (실제로는 서버에서 받아올 데이터)
     const mockDestination = {
         name: card.placeName || "목적지",
         lat: card.lat || 33.450701,
@@ -96,13 +95,61 @@
         return directions[index];
     }
 
+    // 카카오 길찾기 API 호출 (실제 도로 경로)
+    async function getCarRoute(startLat, startLng, endLat, endLng) {
+        try {
+            const REST_API_KEY = '7b0fe4834ca5f6f2c4bee93e18bcb2f9'; // REST API 키 필요
+            const url = `https://apis-navi.kakaomobility.com/v1/directions?origin=${startLng},${startLat}&destination=${endLng},${endLat}&priority=RECOMMEND`;
+            
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `KakaoAK ${REST_API_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Route API failed');
+            }
+
+            const data = await response.json();
+            
+            if (data.routes && data.routes.length > 0) {
+                const route = data.routes[0];
+                const sections = route.sections[0];
+                
+                // 경로 좌표 추출
+                const path = [];
+                sections.roads.forEach(road => {
+                    road.vertexes.forEach((coord, i) => {
+                        if (i % 2 === 0) {
+                            path.push({
+                                lng: coord,
+                                lat: road.vertexes[i + 1]
+                            });
+                        }
+                    });
+                });
+
+                return {
+                    path: path,
+                    distance: route.summary.distance,
+                    duration: route.summary.duration
+                };
+            }
+        } catch (error) {
+            console.warn('Failed to get car route, using straight line:', error);
+            return null;
+        }
+    }
+
     // 카카오맵 초기화 및 경로 표시
-    function initializeMap() {
+    async function initializeMap() {
         if (!mapContainer || !userLocation) return;
 
         const kakao = window.kakao;
         
-        // 중간 지점 계산 (지도 중심)
+        // 중간 지점 계산
         const centerLat = (userLocation.lat + mockDestination.lat) / 2;
         const centerLng = (userLocation.lng + mockDestination.lng) / 2;
 
@@ -119,7 +166,6 @@
             map: map
         });
 
-        // 현재 위치 인포윈도우
         const startInfowindow = new kakao.maps.InfoWindow({
             content: '<div style="padding:5px;font-size:12px;">현재 위치</div>'
         });
@@ -131,21 +177,36 @@
             map: map
         });
 
-        // 목적지 인포윈도우
         const endInfowindow = new kakao.maps.InfoWindow({
             content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${mockDestination.name}</div>`
         });
         endInfowindow.open(map, endMarker);
 
-        // 경로 라인 그리기
-        const linePath = [
-            new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-            new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng)
-        ];
+        // 실제 차량 경로 가져오기
+        const routeData = await getCarRoute(
+            userLocation.lat,
+            userLocation.lng,
+            mockDestination.lat,
+            mockDestination.lng
+        );
+
+        let linePath;
+        if (routeData && routeData.path) {
+            // 실제 도로 경로 사용
+            linePath = routeData.path.map(coord => 
+                new kakao.maps.LatLng(coord.lat, coord.lng)
+            );
+        } else {
+            // 폴백: 직선 경로
+            linePath = [
+                new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
+                new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng)
+            ];
+        }
 
         const polyline = new kakao.maps.Polyline({
             path: linePath,
-            strokeWeight: 4,
+            strokeWeight: 5,
             strokeColor: '#4F46E5',
             strokeOpacity: 0.8,
             strokeStyle: 'solid'
@@ -268,9 +329,18 @@
             </div>
 
             <!-- 카카오맵 임베드 -->
-            <div class="flex-1 rounded-xl overflow-hidden border-2 border-gray-200" style="min-height: 200px;">
+            <div 
+                class="flex-1 rounded-xl overflow-hidden border-2 border-gray-200" 
+                style="min-height: {isCompact ? '200px' : '400px'};"
+            >
                 <div bind:this={mapContainer} class="w-full h-full"></div>
             </div>
         </div>
     {/if}
 </div>
+
+{#if isCompact}
+    <div class="mt-3 text-center text-xs text-gray-500 hidden sm:block">
+        클릭하여 자세히 보기
+    </div>
+{/if}
