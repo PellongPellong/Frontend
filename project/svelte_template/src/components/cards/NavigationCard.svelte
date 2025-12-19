@@ -18,6 +18,7 @@
     let isLoading = true;
     let mapContainer;
     let map;
+    let isMapInitialized = false;
 
     // 카카오맵 SDK 로드
     function loadKakaoMapScript() {
@@ -219,6 +220,8 @@
         bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
         bounds.extend(new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng));
         map.setBounds(bounds);
+        
+        isMapInitialized = true;
     }
 
     // 길찾기 정보 가져오기
@@ -271,6 +274,15 @@
             error = err.message;
             isLoading = false;
         }
+    }
+
+    // isCompact 변경 시 지도 재초기화
+    $: if (!isCompact && isMapInitialized && map) {
+        setTimeout(() => {
+            if (map) {
+                map.relayout();
+            }
+        }, 100);
     }
 
     onMount(() => {
