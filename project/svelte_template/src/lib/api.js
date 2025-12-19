@@ -4,7 +4,7 @@ const API_URL = "https://d3sy74e1kjyc2m.cloudfront.net/api/chats";
 
 // Mock 모드 설정 (true: mock 사용, false: 실제 API 사용)
 // 환경 변수로 설정하려면: import.meta.env.VITE_USE_MOCK === 'true'
-const USE_MOCK_DATA = false;
+const USE_MOCK_DATA = true;
 
 export async function sendMessage(sessionId, message) {
     // Mock 모드 활성화 시
@@ -64,7 +64,7 @@ function transformResponseToCards(data) {
     const cards = [];
 
     const bedrockData = data.bedrockResponse;
-    
+
     if (!bedrockData) {
         console.warn("No bedrockResponse in API data", data);
         return cards;
