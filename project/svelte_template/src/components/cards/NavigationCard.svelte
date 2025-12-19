@@ -10,6 +10,9 @@
         lng: card.lng || 126.570667
     };
 
+    // 주변 장소들 (card.additionalPlaces에서 가져옴)
+    const additionalPlaces = card.additionalPlaces || [];
+
     let userLocation = null;
     let distance = null;
     let duration = null;
@@ -73,26 +76,6 @@
         const distance = R * c;
         
         return distance;
-    }
-
-    // 방향 계산
-    function calculateBearing(lat1, lng1, lat2, lng2) {
-        const dLng = (lng2 - lng1) * Math.PI / 180;
-        const y = Math.sin(dLng) * Math.cos(lat2 * Math.PI / 180);
-        const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
-                  Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLng);
-        
-        let bearing = Math.atan2(y, x) * 180 / Math.PI;
-        bearing = (bearing + 360) % 360;
-        
-        return bearing;
-    }
-
-    // 방향 텍스트 변환
-    function getDirectionText(bearing) {
-        const directions = ['북', '북동', '동', '남동', '남', '남서', '서', '북서'];
-        const index = Math.round(bearing / 45) % 8;
-        return directions[index];
     }
 
     // 카카오 길찾기 API 호출 (실제 도로 경로)
@@ -171,7 +154,7 @@
         });
         startInfowindow.open(map, startMarker);
 
-        // 목적지 마커
+        // 목적지 마커 (기본 빨간색)
         const endMarker = new kakao.maps.Marker({
             position: new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng),
             map: map
@@ -181,6 +164,35 @@
             content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${mockDestination.name}</div>`
         });
         endInfowindow.open(map, endMarker);
+
+        // 주변 장소 마커 추가 (초록색)
+        if (additionalPlaces.length > 0) {
+            // 초록색 마커 이미지 URL
+            const greenMarkerImage = new kakao.maps.MarkerImage(
+                'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_green.png',
+                new kakao.maps.Size(34, 39)
+            );
+
+            additionalPlaces.forEach(place => {
+                const marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(place.lat, place.lng),
+                    map: map,
+                    image: greenMarkerImage
+                });
+
+                const infowindow = new kakao.maps.InfoWindow({
+                    content: `<div style="padding:5px;font-size:11px;color:#2E7D32;">${place.name}</div>`
+                });
+
+                // 마우스 호버 시 정보창 표시
+                kakao.maps.event.addListener(marker, 'mouseover', () => {
+                    infowindow.open(map, marker);
+                });
+                kakao.maps.event.addListener(marker, 'mouseout', () => {
+                    infowindow.close();
+                });
+            });
+        }
 
         // 실제 차량 경로 가져오기
         const routeData = await getCarRoute(
@@ -214,10 +226,16 @@
 
         polyline.setMap(map);
 
-        // 지도 범위 조정
+        // 지도 범위 조정 (모든 마커 포함)
         const bounds = new kakao.maps.LatLngBounds();
         bounds.extend(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
         bounds.extend(new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng));
+        
+        // 주변 장소들도 bounds에 포함
+        additionalPlaces.forEach(place => {
+            bounds.extend(new kakao.maps.LatLng(place.lat, place.lng));
+        });
+        
         map.setBounds(bounds);
     }
 
@@ -248,19 +266,6 @@
             duration = drivingTime < 60 
                 ? `${drivingTime}분` 
                 : `${Math.floor(drivingTime/60)}시간 ${drivingTime%60}분`;
-
-            // 방향 계산
-            const bearing = calculateBearing(
-                location.lat,
-                location.lng,
-                mockDestination.lat,
-                mockDestination.lng
-            );
-
-            routeInfo = {
-                direction: getDirectionText(bearing),
-                bearing: bearing
-            };
 
             isLoading = false;
 
@@ -335,6 +340,13 @@
             >
                 <div bind:this={mapContainer} class="w-full h-full"></div>
             </div>
+            
+            {#if additionalPlaces.length > 0 && !isCompact}
+                <div class="text-xs text-gray-500 flex items-center gap-2">
+                    <span class="inline-block w-3 h-3 rounded-full bg-green-500"></span>
+                    <span>초록색: 주변 명소 ({additionalPlaces.length}곳)</span>
+                </div>
+            {/if}
         </div>
     {/if}
 </div>
