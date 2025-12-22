@@ -1,9 +1,9 @@
 <script>
     export let card;
     export let isCompact = true;
+    export let recommendation = "이 지역"; // 외부에서 전달받음
 
-    const placeCount = card.places?.length || 0;
-    const recommendation = card.recommendation || "이 지역";
+    const placeCount = card.around?.length || 0;
 </script>
 
 <!-- 백록이 대화 -->
@@ -21,30 +21,30 @@
     </div>
 </div>
 
-<h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
+<h3 class="text-2xl font-bold text-gray-900 mb-3">주변 명소</h3>
 
 <div class="flex-1">
     {#if isCompact}
         <div class="space-y-2">
-            {#each card.places.slice(0, 3) as place}
+            {#each card.around.slice(0, 3) as place}
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                     <div class="font-semibold text-gray-900 text-sm">
                         {place.name}
                     </div>
-                    <div class="text-xs text-gray-600">{place.tag}</div>
+                    <div class="text-xs text-gray-600">{place.reason}</div>
                 </div>
             {/each}
         </div>
     {:else}
         <div class="space-y-3">
-            {#each card.places as place}
+            {#each card.around as place}
                 <div
                     class="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:bg-gray-100 transition"
                 >
                     <div class="font-bold text-gray-900 text-xl">
                         {place.name}
                     </div>
-                    <div class="text-base text-gray-700 mt-2">{place.tag}</div>
+                    <div class="text-base text-gray-700 mt-2">{place.reason}</div>
                 </div>
             {/each}
         </div>
