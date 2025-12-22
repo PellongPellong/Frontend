@@ -885,13 +885,17 @@
                                 <!-- 3개의 스켈레톤 카드 -->
                                 <div class="relative h-[420px] overflow-hidden">
                                     {#each [0, 1, 2] as idx}
+                                        {@const offset = (idx - 1) * 252}
+                                        {@const zIndex = 3 - Math.abs(idx - 1)}
                                         <div
                                             class="absolute transition-all duration-500 ease-out"
-                                            style="left: {(idx - 1) *
-                                                252}px; z-index: {3 -
-                                                Math.abs(idx - 1)}; opacity: 1;"
+                                            style="left: {offset}px; z-index: {zIndex};"
                                         >
-                                            <SkeletonCard />
+                                            <CardWrapper
+                                                isSkeleton={true}
+                                                isCompact={true}
+                                                isActive={idx === 1}
+                                            />
                                         </div>
                                     {/each}
                                 </div>
@@ -919,10 +923,11 @@
                                     <button
                                         on:click={() => navigateCard(i, "left")}
                                         class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl"
-                                        ><span class="text-gray-700 font-bold"
-                                            >←</span
-                                        ></button
                                     >
+                                        <span class="text-gray-700 font-bold"
+                                            >←</span
+                                        >
+                                    </button>
                                     <div
                                         class="text-sm text-gray-600 font-medium"
                                     >
@@ -932,10 +937,11 @@
                                         on:click={() =>
                                             navigateCard(i, "right")}
                                         class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl"
-                                        ><span class="text-gray-700 font-bold"
-                                            >→</span
-                                        ></button
                                     >
+                                        <span class="text-gray-700 font-bold"
+                                            >→</span
+                                        >
+                                    </button>
                                 </div>
                                 <div class="relative h-[420px] overflow-hidden">
                                     {#each message.cards as card, cardIdx}
