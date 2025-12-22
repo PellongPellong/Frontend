@@ -363,14 +363,29 @@
         favorites.toggleLike(cardId, card, sessionId);
     }
 
-    function getCardDisplayTitle(card) {
-        const recommendation = card.recommendation;
-        const title = card.title || "카드";
+    function getCardDisplayTitle(card, messageCards) {
+        // recommendation 타입 카드에서 locationName 추출
+        const recommendCard = messageCards?.find(c => c.type === 'recommendation');
+        const recommendationName = recommendCard?.locationName || "";
         
-        if (recommendation) {
-            return `${recommendation} 관련 ${title}`;
+        if (card.type === 'status') {
+            return card.locationName || "카드";
+        } else if (card.type === 'recommendation') {
+            return card.locationName || "카드";
+        } else if (card.type === 'places') {
+            if (recommendationName) {
+                return `${recommendationName} 관련 주변 명소`;
+            }
+            return "주변 명소";
+        } else if (card.type === 'coupon') {
+            return "사용 가능 쿠폰";
         }
-        return title;
+        return "카드";
+    }
+
+    function getRecommendationFromMessage(messageCards) {
+        const recommendCard = messageCards?.find(c => c.type === 'recommendation');
+        return recommendCard?.locationName || "이 지역";
     }
 
     $: filteredChats = chatHistory.filter((chat) => {
@@ -616,6 +631,12 @@
                             </button>
                         </div>
                     {:else}
+                        {@const chat = chatHistory.find((c) => c.id === item.data.threadId)}
+                        {@const messageCards = chat?.messages?.find((m, idx) => {
+                            const parts = item.data.id.split('-');
+                            const messageIdx = parseInt(parts[parts.length - 2]);
+                            return idx === messageIdx;
+                        })?.cards}
                         <div class="relative group">
                             <button
                                 class="w-full text-left rounded-lg p-3 text-sm hover:bg-[#333] transition-colors flex items-start gap-2"
@@ -628,7 +649,7 @@
                                     <div
                                         class="font-medium text-white truncate"
                                     >
-                                        {getCardDisplayTitle(item.data.card)}
+                                        {getCardDisplayTitle(item.data.card, messageCards)}
                                     </div>
                                     <div class="text-xs text-gray-400 mt-1">
                                         {formatDate(item.data.timestamp)}
@@ -762,6 +783,7 @@
                         </div>
                     {:else if message.type === "cards"}
                         {@const activeIdx = currentCardIndex[i] || 0}
+                        {@const recommendation = getRecommendationFromMessage(message.cards)}
                         <div class="fade-in-up">
                             <div
                                 class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0 mb-3"
@@ -825,29 +847,49 @@
                                                 ? 0
                                                 : 1};"
                                         >
-                                            <CardWrapper
-                                                {card}
-                                                isCompact={true}
-                                                {isActive}
-                                                {isHovered}
-                                                onClick={() => {
-                                                    currentCardIndex[i] =
-                                                        cardIdx;
-                                                    openCardModal(
-                                                        i,
-                                                        cardIdx,
-                                                        card,
-                                                    );
-                                                }}
-                                                onMouseEnter={() =>
-                                                    (hoveredCard = `${i}-${cardIdx}`)}
-                                                onMouseLeave={() =>
-                                                    (hoveredCard = null)}
-                                                showFavorite={true}
-                                                {isLiked}
-                                                onFavoriteClick={() =>
-                                                    toggleLike(i, cardIdx)}
-                                            />
+                                            {#if card.type === 'places'}
+                                                <div 
+                                                    class="w-[360px] h-[400px] flex flex-col p-6 bg-white border-2 border-gray-200 rounded-3xl shadow-lg transition-all duration-300 cursor-pointer overflow-visible relative {isActive ? 'scale-100' : 'scale-95'} {isHovered ? 'scale-105 shadow-2xl border-indigo-300' : ''}"
+                                                    on:click={() => {
+                                                        currentCardIndex[i] = cardIdx;
+                                                        openCardModal(i, cardIdx, card);
+                                                    }}
+                                                    on:mouseenter={() => (hoveredCard = `${i}-${cardIdx}`)}
+                                                    on:mouseleave={() => (hoveredCard = null)}
+                                                    role="button"
+                                                    tabindex="0"
+                                                >
+                                                    <div class="absolute top-3 right-3 z-10">
+                                                        <FavoriteButton 
+                                                            {isLiked}
+                                                            onClick={() => toggleLike(i, cardIdx)}
+                                                            size="sm"
+                                                        />
+                                                    </div>
+                                                    <div class="flex-1 overflow-hidden">
+                                                        <PlacesCard {card} isCompact={true} {recommendation} />
+                                                    </div>
+                                                </div>
+                                                <span class="block mt-[1.5px] text-center text-xs text-gray-500">
+                                                    클릭하여 자세히 보기
+                                                </span>
+                                            {:else}
+                                                <CardWrapper
+                                                    {card}
+                                                    isCompact={true}
+                                                    {isActive}
+                                                    {isHovered}
+                                                    onClick={() => {
+                                                        currentCardIndex[i] = cardIdx;
+                                                        openCardModal(i, cardIdx, card);
+                                                    }}
+                                                    onMouseEnter={() => (hoveredCard = `${i}-${cardIdx}`)}
+                                                    onMouseLeave={() => (hoveredCard = null)}
+                                                    showFavorite={true}
+                                                    {isLiked}
+                                                    onFavoriteClick={() => toggleLike(i, cardIdx)}
+                                                />
+                                            {/if}
                                         </div>
                                     {/each}
                                 </div>
@@ -923,6 +965,7 @@
     {@const currentIdx = expandedCard.cardIdx}
     {@const cardId = `${sessionId}-${expandedCard.messageIdx}-${expandedCard.cardIdx}`}
     {@const isLiked = $favorites.likedCards.some((item) => item.id === cardId)}
+    {@const recommendation = getRecommendationFromMessage(message?.cards)}
 
     <div
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in"
@@ -949,18 +992,29 @@
                 <div
                     class="w-[500px] h-[500px] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden"
                 >
-                    <CardWrapper
-                        card={expandedCard.card}
-                        isCompact={false}
-                        isModal={true}
-                        showFavorite={true}
-                        {isLiked}
-                        onFavoriteClick={() =>
-                            toggleLike(
-                                expandedCard.messageIdx,
-                                expandedCard.cardIdx,
-                            )}
-                    />
+                    {#if expandedCard.card.type === 'places'}
+                        <div class="w-full h-full flex flex-col bg-white">
+                            <div class="flex-1 overflow-y-auto p-6 modal-scrollbar">
+                                <PlacesCard card={expandedCard.card} isCompact={false} {recommendation} />
+                            </div>
+                            <div class="px-6 pb-6 pt-4 border-t border-gray-200 flex justify-center flex-shrink-0">
+                                <FavoriteButton 
+                                    {isLiked}
+                                    onClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
+                                    size="lg"
+                                />
+                            </div>
+                        </div>
+                    {:else}
+                        <CardWrapper
+                            card={expandedCard.card}
+                            isCompact={false}
+                            isModal={true}
+                            showFavorite={true}
+                            {isLiked}
+                            onFavoriteClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
+                        />
+                    {/if}
                 </div>
 
                 <div class="mt-4">
@@ -989,6 +1043,7 @@
     {@const currentIdx = expandedCardMobile.cardIdx}
     {@const cardId = `${sessionId}-${expandedCardMobile.messageIdx}-${expandedCardMobile.cardIdx}`}
     {@const isLiked = $favorites.likedCards.some((item) => item.id === cardId)}
+    {@const recommendation = getRecommendationFromMessage(message?.cards)}
 
     <div
         class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 fade-in"
@@ -1012,18 +1067,29 @@
                 on:touchend={handleTouchEnd}
             >
                 <div class="absolute inset-0 overflow-hidden">
-                    <CardWrapper
-                        card={expandedCardMobile.card}
-                        isCompact={false}
-                        isModal={true}
-                        showFavorite={true}
-                        {isLiked}
-                        onFavoriteClick={() =>
-                            toggleLike(
-                                expandedCardMobile.messageIdx,
-                                expandedCardMobile.cardIdx,
-                            )}
-                    />
+                    {#if expandedCardMobile.card.type === 'places'}
+                        <div class="w-full h-full flex flex-col bg-white">
+                            <div class="flex-1 overflow-y-auto p-6 modal-scrollbar">
+                                <PlacesCard card={expandedCardMobile.card} isCompact={false} {recommendation} />
+                            </div>
+                            <div class="px-6 pb-6 pt-4 border-t border-gray-200 flex justify-center flex-shrink-0">
+                                <FavoriteButton 
+                                    {isLiked}
+                                    onClick={() => toggleLike(expandedCardMobile.messageIdx, expandedCardMobile.cardIdx)}
+                                    size="lg"
+                                />
+                            </div>
+                        </div>
+                    {:else}
+                        <CardWrapper
+                            card={expandedCardMobile.card}
+                            isCompact={false}
+                            isModal={true}
+                            showFavorite={true}
+                            {isLiked}
+                            onFavoriteClick={() => toggleLike(expandedCardMobile.messageIdx, expandedCardMobile.cardIdx)}
+                        />
+                    {/if}
                 </div>
             </div>
 
