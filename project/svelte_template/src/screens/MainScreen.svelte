@@ -229,10 +229,15 @@
         const message = messages[messageIdx];
         if (!message || !message.cards) return;
         const currentIdx = currentCardIndex[messageIdx] || 0;
-        const newIdx =
-            direction === "left"
-                ? Math.max(0, currentIdx - 1)
-                : Math.min(message.cards.length - 1, currentIdx + 1);
+        const totalCards = message.cards.length;
+        
+        let newIdx;
+        if (direction === "left") {
+            newIdx = currentIdx === 0 ? totalCards - 1 : currentIdx - 1;
+        } else {
+            newIdx = currentIdx === totalCards - 1 ? 0 : currentIdx + 1;
+        }
+        
         currentCardIndex[messageIdx] = newIdx;
     }
 
@@ -242,19 +247,21 @@
         if (!message || !message.cards) return;
 
         const currentIdx = expandedCard.cardIdx;
-        const newIdx =
-            direction === "left"
-                ? Math.max(0, currentIdx - 1)
-                : Math.min(message.cards.length - 1, currentIdx + 1);
-
-        if (newIdx !== currentIdx) {
-            expandedCard = {
-                messageIdx: expandedCard.messageIdx,
-                cardIdx: newIdx,
-                card: message.cards[newIdx],
-            };
-            currentCardIndex[expandedCard.messageIdx] = newIdx;
+        const totalCards = message.cards.length;
+        
+        let newIdx;
+        if (direction === "left") {
+            newIdx = currentIdx === 0 ? totalCards - 1 : currentIdx - 1;
+        } else {
+            newIdx = currentIdx === totalCards - 1 ? 0 : currentIdx + 1;
         }
+
+        expandedCard = {
+            messageIdx: expandedCard.messageIdx,
+            cardIdx: newIdx,
+            card: message.cards[newIdx],
+        };
+        currentCardIndex[expandedCard.messageIdx] = newIdx;
     }
 
     function navigateModalCardMobile(direction) {
@@ -263,19 +270,21 @@
         if (!message || !message.cards) return;
 
         const currentIdx = expandedCardMobile.cardIdx;
-        const newIdx =
-            direction === "left"
-                ? Math.max(0, currentIdx - 1)
-                : Math.min(message.cards.length - 1, currentIdx + 1);
-
-        if (newIdx !== currentIdx) {
-            expandedCardMobile = {
-                messageIdx: expandedCardMobile.messageIdx,
-                cardIdx: newIdx,
-                card: message.cards[newIdx],
-            };
-            currentCardIndex[expandedCardMobile.messageIdx] = newIdx;
+        const totalCards = message.cards.length;
+        
+        let newIdx;
+        if (direction === "left") {
+            newIdx = currentIdx === 0 ? totalCards - 1 : currentIdx - 1;
+        } else {
+            newIdx = currentIdx === totalCards - 1 ? 0 : currentIdx + 1;
         }
+
+        expandedCardMobile = {
+            messageIdx: expandedCardMobile.messageIdx,
+            cardIdx: newIdx,
+            card: message.cards[newIdx],
+        };
+        currentCardIndex[expandedCardMobile.messageIdx] = newIdx;
     }
 
     function openCardModal(messageIdx, cardIdx, card) {
@@ -736,8 +745,7 @@
                                 >
                                     <button
                                         on:click={() => navigateCard(i, "left")}
-                                        disabled={activeIdx === 0}
-                                        class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+                                        class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl"
                                         ><span class="text-gray-700 font-bold"
                                             >←</span
                                         ></button
@@ -750,9 +758,7 @@
                                     <button
                                         on:click={() =>
                                             navigateCard(i, "right")}
-                                        disabled={activeIdx ===
-                                            message.cards.length - 1}
-                                        class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+                                        class="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:shadow-xl"
                                         ><span class="text-gray-700 font-bold"
                                             >→</span
                                         ></button
@@ -892,8 +898,7 @@
         <div class="relative flex items-center gap-5" on:click|stopPropagation>
             <button
                 on:click={() => navigateModalCard("left")}
-                disabled={currentIdx === 0}
-                class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center transition-all hover:shadow-2xl hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed"
+                class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center transition-all hover:shadow-2xl hover:scale-110"
             >
                 <span class="text-gray-700 font-bold text-xl">←</span>
             </button>
@@ -936,8 +941,7 @@
 
             <button
                 on:click={() => navigateModalCard("right")}
-                disabled={currentIdx === totalCards - 1}
-                class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center transition-all hover:shadow-2xl hover:scale-110 disabled:opacity-30 disabled:cursor-not-allowed"
+                class="w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center transition-all hover:shadow-2xl hover:scale-110"
             >
                 <span class="text-gray-700 font-bold text-xl">→</span>
             </button>
@@ -1001,15 +1005,13 @@
             <div class="mt-2 flex gap-4">
                 <button
                     on:click={() => navigateModalCardMobile("left")}
-                    disabled={currentIdx === 0}
-                    class="px-5 py-2 rounded-full bg-white/90 text-sm font-medium shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+                    class="px-5 py-2 rounded-full bg-white/90 text-sm font-medium shadow-md"
                 >
                     이전
                 </button>
                 <button
                     on:click={() => navigateModalCardMobile("right")}
-                    disabled={currentIdx === totalCards - 1}
-                    class="px-5 py-2 rounded-full bg-white/90 text-sm font-medium shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+                    class="px-5 py-2 rounded-full bg-white/90 text-sm font-medium shadow-md"
                 >
                     다음
                 </button>
