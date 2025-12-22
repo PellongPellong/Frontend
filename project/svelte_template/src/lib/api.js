@@ -1,8 +1,5 @@
 const API_URL = "https://d3sy74e1kjyc2m.cloudfront.net/api/chats";
 
-// Mock 모드 설정 (true: mock 사용, false: 실제 API 사용)
-const USE_MOCK_DATA = false;
-
 export async function sendMessage(sessionId, message) {
     try {
         const payload = {
@@ -29,8 +26,14 @@ export async function sendMessage(sessionId, message) {
         const json = await response.json();
         console.log("API Response:", json);
 
+        // CREATED 상태 체크
         if (json.status !== "CREATED") {
-            console.warn("API returned status:", json.status);
+            throw new Error(`Unexpected status: ${json.status}`);
+        }
+
+        // errorMessage 체크
+        if (json.errorMessage) {
+            throw new Error(json.errorMessage);
         }
 
         const data = json.data;
@@ -40,7 +43,7 @@ export async function sendMessage(sessionId, message) {
 
         return {
             sessionId: data.sessionId,
-            cards: transformResponseToCards(data)
+            cards: transformResponseToCards(data.bedrockResponse)
         };
 
     } catch (error) {
@@ -49,13 +52,11 @@ export async function sendMessage(sessionId, message) {
     }
 }
 
-function transformResponseToCards(data) {
+function transformResponseToCards(bedrockData) {
     const cards = [];
 
-    const bedrockData = data?.bedrockResponse;
-
     if (!bedrockData) {
-        console.warn("No bedrockResponse in API data", data);
+        console.warn("No bedrockResponse in API data");
         return cards;
     }
 
