@@ -19,6 +19,9 @@
     export let isLiked = false;
     export let onFavoriteClick = () => {};
     export let isModal = false; // 모달 모드 여부
+    
+    // PlacesCard에 전달할 recommendation 이름
+    export let recommendation = "이 지역";
 </script>
 
 {#if isModal}
@@ -31,7 +34,7 @@
             {:else if card.type === 'recommendation'}
                 <RecommendationCard {card} {isCompact} />
             {:else if card.type === 'places'}
-                <PlacesCard {card} {isCompact} />
+                <PlacesCard {card} {isCompact} {recommendation} />
             {:else if card.type === 'coupon'}
                 <CouponCard {card} {isCompact} />
             {:else if card.type === 'navigation'}
@@ -79,7 +82,7 @@
                 {:else if card.type === 'recommendation'}
                     <RecommendationCard {card} {isCompact} />
                 {:else if card.type === 'places'}
-                    <PlacesCard {card} {isCompact} />
+                    <PlacesCard {card} {isCompact} {recommendation} />
                 {:else if card.type === 'coupon'}
                     <CouponCard {card} {isCompact} />
                 {:else if card.type === 'navigation'}
