@@ -3,6 +3,7 @@
     export let isCompact = true;
 
     const placeCount = card.places?.length || 0;
+    const recommendation = card.recommendation || "이 지역";
 </script>
 
 <!-- 백록이 대화 -->
@@ -14,7 +15,7 @@
     />
     <div class="flex-1">
         <div class="text-sm text-indigo-900 leading-relaxed">
-            주변에 가볼 만한 곳 <span class="font-bold">{placeCount}곳</span>을
+            <span class="font-bold">{recommendation}</span> 주변의 가볼 만한 곳 <span class="font-bold">{placeCount}곳</span>을
             찾았어요!
         </div>
     </div>
