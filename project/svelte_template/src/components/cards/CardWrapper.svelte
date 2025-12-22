@@ -38,7 +38,19 @@
             class="close-btn absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300"
             aria-label="닫기"
         >
-            <span class="text-2xl text-gray-500 hover:text-gray-800">×</span>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5 text-gray-500 hover:text-gray-800"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
         </button>
 
         <!-- 내부 컨텐츠 (스크롤 가능) -->
