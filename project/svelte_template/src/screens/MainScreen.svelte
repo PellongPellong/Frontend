@@ -23,6 +23,7 @@
     let chatContainer;
     let currentCardIndex = {};
     let expandedCard = null;
+    let expandedCardMobile = null;
     let hoveredCard = null;
     let isSidebarOpen = false;
     let chatHistory = [];
@@ -30,6 +31,10 @@
     let sidebarTab = "chats";
     let favoritesFilter = "all";
     let searchQuery = "";
+
+    // 터치 스와이프 관련
+    let touchStartX = 0;
+    let touchEndX = 0;
 
     const STORAGE_KEY = "jeju-chat-history";
     const MAX_HISTORY = 20;
@@ -70,7 +75,6 @@
     }
 
     function generateUniqueChatId() {
-        // 타임스탬프 + 랜덤 문자열로 유니크한 ID 생성
         const timestamp = Date.now();
         const random = Math.random().toString(36).substring(2, 9);
         return `chat-${timestamp}-${random}`;
@@ -82,7 +86,6 @@
             (firstUserMessage.length > 30 ? "..." : "");
         const timestamp = new Date().toISOString();
 
-        // sessionId가 없으면 새로 생성 (중복 방지)
         if (!sessionId) {
             sessionId = generateUniqueChatId();
         }
@@ -95,10 +98,8 @@
             cardIndex: { ...currentCardIndex },
         };
 
-        // 맨 위에 새 항목 추가
         chatHistory = [chatData, ...chatHistory];
 
-        // 최대 개수 초과 시 제거
         if (chatHistory.length > MAX_HISTORY) {
             chatHistory = chatHistory.slice(0, MAX_HISTORY);
         }
@@ -172,7 +173,6 @@
         if (!text.trim() || isLoading) return;
         const trimmedText = text.trim();
 
-        // 첫 메시지 여부 확인 (assistant 초기 메시지 외에 user 메시지가 없으면 첫 메시지)
         const isFirstMessage = messages.length === 1;
 
         messages = [
@@ -187,7 +187,6 @@
 
         try {
             const response = await apiSendMessage(sessionId, trimmedText);
-            // API에서 받은 sessionId가 있으면 사용
             if (response.sessionId) {
                 sessionId = response.sessionId;
             }
@@ -202,11 +201,9 @@
                 { type: "cards", role: "assistant", cards: newCards },
             ];
 
-            // 첫 메시지일 경우 새 항목 생성
             if (isFirstMessage) {
                 createChatHistory(trimmedText);
             } else {
-                // 기존 대화는 업데이트
                 updateChatHistory();
             }
         } catch (error) {
@@ -260,13 +257,66 @@
         }
     }
 
+    function navigateModalCardMobile(direction) {
+        if (!expandedCardMobile) return;
+        const message = messages[expandedCardMobile.messageIdx];
+        if (!message || !message.cards) return;
+
+        const currentIdx = expandedCardMobile.cardIdx;
+        const newIdx =
+            direction === "left"
+                ? Math.max(0, currentIdx - 1)
+                : Math.min(message.cards.length - 1, currentIdx + 1);
+
+        if (newIdx !== currentIdx) {
+            expandedCardMobile = {
+                messageIdx: expandedCardMobile.messageIdx,
+                cardIdx: newIdx,
+                card: message.cards[newIdx],
+            };
+            currentCardIndex[expandedCardMobile.messageIdx] = newIdx;
+        }
+    }
+
     function openCardModal(messageIdx, cardIdx, card) {
-        if (window.innerWidth < 768) return;
-        expandedCard = { messageIdx, cardIdx, card };
+        if (window.innerWidth < 768) {
+            expandedCardMobile = { messageIdx, cardIdx, card };
+        } else {
+            expandedCard = { messageIdx, cardIdx, card };
+        }
     }
 
     function closeCardModal() {
         expandedCard = null;
+    }
+
+    function closeCardModalMobile() {
+        expandedCardMobile = null;
+    }
+
+    function handleTouchStart(e) {
+        touchStartX = e.touches[0].clientX;
+        touchEndX = touchStartX;
+    }
+
+    function handleTouchMove(e) {
+        touchEndX = e.touches[0].clientX;
+    }
+
+    function handleTouchEnd() {
+        const diff = touchEndX - touchStartX;
+        const threshold = 40;
+
+        if (Math.abs(diff) > threshold) {
+            if (diff < 0) {
+                navigateModalCardMobile("right");
+            } else {
+                navigateModalCardMobile("left");
+            }
+        }
+
+        touchStartX = 0;
+        touchEndX = 0;
     }
 
     function scrollToBottom() {
@@ -789,6 +839,7 @@
     </main>
 </div>
 
+<!-- PC용 모달 (기존) -->
 {#if expandedCard}
     {@const message = messages[expandedCard.messageIdx]}
     {@const totalCards = message?.cards?.length || 0}
@@ -852,6 +903,79 @@
             >
                 <span class="text-gray-700 font-bold text-xl">→</span>
             </button>
+        </div>
+    </div>
+{/if}
+
+<!-- 모바일용 모달 (신규) -->
+{#if expandedCardMobile}
+    {@const message = messages[expandedCardMobile.messageIdx]}
+    {@const totalCards = message?.cards?.length || 0}
+    {@const currentIdx = expandedCardMobile.cardIdx}
+    {@const cardId = `${sessionId}-${expandedCardMobile.messageIdx}-${expandedCardMobile.cardIdx}`}
+    {@const isLiked = $favorites.likedCards.some((item) => item.id === cardId)}
+
+    <div
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 fade-in"
+        on:click={closeCardModalMobile}
+    >
+        <div
+            class="relative flex-1 flex flex-col items-center w-full max-w-[520px]"
+            on:click|stopPropagation
+        >
+            <button
+                on:click={closeCardModalMobile}
+                class="absolute -top-10 right-2 z-10 w-9 h-9 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition"
+            >
+                <span class="text-xl text-gray-600 hover:text-gray-900">×</span>
+            </button>
+
+            <div
+                class="w-full h-[80vh] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden relative"
+                on:touchstart={handleTouchStart}
+                on:touchmove={handleTouchMove}
+                on:touchend={handleTouchEnd}
+            >
+                <div class="absolute inset-0 overflow-hidden">
+                    <CardWrapper
+                        card={expandedCardMobile.card}
+                        isCompact={false}
+                        isModal={true}
+                        showFavorite={true}
+                        {isLiked}
+                        onFavoriteClick={() =>
+                            toggleLike(
+                                expandedCardMobile.messageIdx,
+                                expandedCardMobile.cardIdx,
+                            )}
+                    />
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <div
+                    class="text-xs text-white font-medium bg-black/60 px-3 py-1.5 rounded-full"
+                >
+                    {currentIdx + 1} / {totalCards}
+                </div>
+            </div>
+
+            <div class="mt-2 flex gap-4">
+                <button
+                    on:click={() => navigateModalCardMobile("left")}
+                    disabled={currentIdx === 0}
+                    class="px-5 py-2 rounded-full bg-white/90 text-sm font-medium shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                    이전
+                </button>
+                <button
+                    on:click={() => navigateModalCardMobile("right")}
+                    disabled={currentIdx === totalCards - 1}
+                    class="px-5 py-2 rounded-full bg-white/90 text-sm font-medium shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                    다음
+                </button>
+            </div>
         </div>
     </div>
 {/if}
