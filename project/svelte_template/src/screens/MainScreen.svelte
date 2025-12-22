@@ -69,18 +69,26 @@
         }
     }
 
+    function generateUniqueChatId() {
+        // 타임스탬프 + 랜덤 문자열로 유니크한 ID 생성
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substring(2, 9);
+        return `chat-${timestamp}-${random}`;
+    }
+
     function createChatHistory(firstUserMessage) {
         const title =
             firstUserMessage.slice(0, 30) +
             (firstUserMessage.length > 30 ? "..." : "");
         const timestamp = new Date().toISOString();
         
-        // API에서 sessionId를 받았으면 사용, 아니면 새로 생성
-        const chatId = sessionId || `chat-${Date.now()}`;
-        sessionId = chatId;
+        // sessionId가 없으면 새로 생성 (중복 방지)
+        if (!sessionId) {
+            sessionId = generateUniqueChatId();
+        }
 
         const chatData = {
-            id: chatId,
+            id: sessionId,
             title,
             timestamp,
             messages: [...messages],
@@ -179,7 +187,10 @@
 
         try {
             const response = await apiSendMessage(sessionId, trimmedText);
-            sessionId = response.sessionId;
+            // API에서 받은 sessionId가 있으면 사용
+            if (response.sessionId) {
+                sessionId = response.sessionId;
+            }
             const newCards = response.cards;
 
             const messagesWithoutLoading = messages.slice(0, -1);
