@@ -27,8 +27,11 @@
 
     // 바코드 생성 함수
     function generateBarcodes() {
-        card.coupons.forEach((coupon, index) => {
-            const canvas = document.getElementById(`barcode-${index}`);
+        const mode = isCompact ? 'compact' : 'full';
+        const coupons = isCompact ? card.coupons.slice(0, 2) : card.coupons;
+        
+        coupons.forEach((coupon, index) => {
+            const canvas = document.getElementById(`barcode-${mode}-${index}`);
             if (canvas) {
                 try {
                     JsBarcode(canvas, coupon.barcode, {
@@ -92,7 +95,7 @@
                     </div>
                     <!-- 바코드 -->
                     <div class="bg-white rounded p-2 flex justify-center">
-                        <canvas id="barcode-{index}" class="max-w-full"></canvas>
+                        <canvas id="barcode-compact-{index}" class="max-w-full"></canvas>
                     </div>
                     <div class="text-xs text-purple-600 font-mono text-center mt-2">
                         {coupon.barcode}
@@ -116,7 +119,7 @@
                     
                     <!-- 바코드 -->
                     <div class="bg-white rounded-lg p-4 flex flex-col items-center">
-                        <canvas id="barcode-{index}" class="max-w-full"></canvas>
+                        <canvas id="barcode-full-{index}" class="max-w-full"></canvas>
                         <div class="text-lg text-gray-900 font-mono mt-3 tracking-wider">
                             {coupon.barcode}
                         </div>
