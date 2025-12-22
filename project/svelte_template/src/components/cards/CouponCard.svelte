@@ -118,11 +118,12 @@
                     </div>
                     
                     <!-- 바코드 -->
-                    <div class="bg-white rounded-lg p-4 flex flex-col items-center">
+                    <div class="bg-white rounded-lg p-4 flex justify-center">
                         <canvas id="barcode-full-{index}" class="max-w-full"></canvas>
-                        <div class="text-lg text-gray-900 font-mono mt-3 tracking-wider">
-                            {coupon.barcode}
-                        </div>
+                    </div>
+                    
+                    <div class="text-base text-purple-600 font-mono text-center mt-3">
+                        {coupon.barcode}
                     </div>
                     
                     <div class="text-sm text-gray-500 mt-3 text-center">클릭하여 복사</div>
