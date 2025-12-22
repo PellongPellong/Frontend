@@ -26,11 +26,6 @@ export async function sendMessage(sessionId, message) {
         const json = await response.json();
         console.log("API Response:", json);
 
-        // CREATED 상태 체크
-        if (json.status !== "CREATED") {
-            throw new Error(`Unexpected status: ${json.status}`);
-        }
-
         // errorMessage 체크
         if (json.errorMessage) {
             throw new Error(json.errorMessage);
