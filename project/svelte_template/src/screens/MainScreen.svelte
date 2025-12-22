@@ -1035,15 +1035,6 @@
             </button>
 
             <div class="relative flex flex-col items-center">
-                <button
-                    on:click={closeCardModal}
-                    class="absolute -top-12 right-0 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition"
-                >
-                    <span class="text-2xl text-gray-600 hover:text-gray-900"
-                        >×</span
-                    >
-                </button>
-
                 <div
                     class="w-[500px] h-[500px] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden"
                 >
