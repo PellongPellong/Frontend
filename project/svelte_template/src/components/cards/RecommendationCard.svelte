@@ -26,15 +26,15 @@
     </div>
 </div>
 
-<h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
+<h3 class="text-2xl font-bold text-gray-900 mb-3">{card.locationName}</h3>
 
 <div class="flex-1 {isCompact ? 'overflow-hidden' : 'overflow-auto'}">
     {#if isCompact}
         <p class="text-sm text-gray-700 leading-relaxed line-clamp-6">
-            {card.content}
+            {card.story}
         </p>
     {:else}
-        <p class="text-lg text-gray-800 leading-relaxed">{card.content}</p>
+        <p class="text-lg text-gray-800 leading-relaxed">{card.story}</p>
     {/if}
 </div>
 
