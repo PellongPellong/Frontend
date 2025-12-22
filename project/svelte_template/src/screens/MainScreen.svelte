@@ -51,7 +51,7 @@
                 type: "text",
                 role: "assistant",
                 content:
-                    "안녕하세요! 제주숙곡 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                    "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
                 suggestions: getRandomSuggestions(3),
             },
         ];
@@ -151,7 +151,7 @@
                 type: "text",
                 role: "assistant",
                 content:
-                    "안녕하세요! 제주숙곡 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                    "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
                 suggestions: getRandomSuggestions(3),
             },
         ];
@@ -378,7 +378,7 @@
             return `${statusName}의 혼잡도`;
         } else if (card.type === "recommendation") {
             // "추천 지역 김녕"
-            return `추천 지역 ${recommendationName}`;
+            return `${recommendationName}에 가보셔요`;
         } else if (card.type === "places") {
             // "김녕 관련 주변 명소"
             return `${recommendationName} 관련 주변 명소`;
@@ -505,7 +505,7 @@
                     alt="백록이"
                     class="w-8 h-8 object-contain"
                 />
-                <span>제주숙곡 AI</span>
+                <span>제주숨곳 AI</span>
             </h1>
             <button
                 class="mt-4 w-full rounded-lg border border-[#444] py-2 px-4 text-left text-sm hover:bg-[#333] transition-colors"
