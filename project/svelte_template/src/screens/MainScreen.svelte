@@ -9,7 +9,7 @@
     import NavigationCard from "../components/cards/NavigationCard.svelte";
     import SearchBar from "../components/SearchBar.svelte";
     import FavoriteButton from "../components/FavoriteButton.svelte";
-    import SkeletonLoader from "../components/SkeletonLoader.svelte";
+    import SkeletonCard from "../components/cards/SkeletonCard.svelte";
     import { allSuggestions } from "../constants/suggestions.js";
     import { sendMessage as apiSendMessage } from "../lib/api.js";
     import { favorites } from "../stores/favorites.js";
@@ -845,9 +845,9 @@
                             disabled={isLoading}
                         />
                     {:else if message.type === "loading"}
-                        <div class="fade-in-up flex items-start gap-3">
+                        <div class="fade-in-up">
                             <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0"
+                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0 mb-3"
                             >
                                 <img
                                     src="/images/mascot.png"
@@ -855,7 +855,47 @@
                                     class="w-8 h-8 object-contain"
                                 />
                             </div>
-                            <SkeletonLoader type="card" />
+                            <div class="w-full overflow-hidden">
+                                <!-- 네비게이션 버튼 (비활성화) -->
+                                <div
+                                    class="flex items-center justify-between mb-4"
+                                >
+                                    <button
+                                        class="w-10 h-10 bg-gray-200 rounded-full shadow-lg flex items-center justify-center opacity-50 cursor-not-allowed"
+                                        disabled
+                                    >
+                                        <span class="text-gray-400 font-bold"
+                                            >←</span
+                                        >
+                                    </button>
+                                    <div
+                                        class="text-sm text-gray-400 font-medium"
+                                    >
+                                        로딩 중...
+                                    </div>
+                                    <button
+                                        class="w-10 h-10 bg-gray-200 rounded-full shadow-lg flex items-center justify-center opacity-50 cursor-not-allowed"
+                                        disabled
+                                    >
+                                        <span class="text-gray-400 font-bold"
+                                            >→</span
+                                        >
+                                    </button>
+                                </div>
+                                <!-- 3개의 스켈레톤 카드 -->
+                                <div class="relative h-[420px] overflow-hidden">
+                                    {#each [0, 1, 2] as idx}
+                                        <div
+                                            class="absolute transition-all duration-500 ease-out"
+                                            style="left: {(idx - 1) *
+                                                252}px; z-index: {3 -
+                                                Math.abs(idx - 1)}; opacity: 1;"
+                                        >
+                                            <SkeletonCard />
+                                        </div>
+                                    {/each}
+                                </div>
+                            </div>
                         </div>
                     {:else if message.type === "cards"}
                         {@const activeIdx = currentCardIndex[i] || 0}
