@@ -25,8 +25,8 @@
     const randomMessage =
         couponMessages[Math.floor(Math.random() * couponMessages.length)];
 
-    // 바코드 생성
-    onMount(() => {
+    // 바코드 생성 함수
+    function generateBarcodes() {
         card.coupons.forEach((coupon, index) => {
             const canvas = document.getElementById(`barcode-${index}`);
             if (canvas) {
@@ -44,7 +44,18 @@
                 }
             }
         });
+    }
+
+    // 초기 마운트 시 바코드 생성
+    onMount(() => {
+        generateBarcodes();
     });
+
+    // isCompact 변경 시 바코드 재생성
+    $: if (card && isCompact !== undefined) {
+        // DOM이 업데이트된 후 바코드 재생성
+        setTimeout(() => generateBarcodes(), 0);
+    }
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
