@@ -765,7 +765,7 @@
 
             <div class="flex-1 flex items-center justify-center">
                 <div
-                    class="mx-auto max-w-[800px] w-full flex items-center justify-between px-4"
+                    class="mx-auto max-w-[800px] w-full flex items-center justify-center md:justify-between px-4"
                 >
                     <div></div>
                     <h2
