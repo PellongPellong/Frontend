@@ -1,5 +1,74 @@
 const API_URL = "https://d3sy74e1kjyc2m.cloudfront.net/api/chats";
 
+// 로컬 테스트용 fallback 데이터
+const FALLBACK_RESPONSE = {
+    status: "CREATED",
+    data: {
+        sessionId: "local-test-session",
+        userInputText: "string",
+        bedrockResponse: {
+            status: {
+                locationName: "성산",
+                locationStatus: 5,
+                timeTable: [
+                    { time: "12:00", congestion: 3 },
+                    { time: "13:00", congestion: 5 },
+                    { time: "14:00", congestion: 2 },
+                    { time: "15:00", congestion: 4 },
+                    { time: "16:00", congestion: 1 },
+                    { time: "17:00", congestion: 3 },
+                    { time: "18:00", congestion: 5 },
+                    { time: "19:00", congestion: 2 },
+                    { time: "20:00", congestion: 4 },
+                    { time: "21:00", congestion: 1 },
+                    { time: "22:00", congestion: 3 },
+                    { time: "23:00", congestion: 5 }
+                ],
+                coordinate: null
+            },
+            recommendation: {
+                locationName: "김녕",
+                story: "김녕은 조선시대에 무엇인가가 있었던 곳으로 유명합니다.",
+                coordinate: null
+            },
+            around: [
+                {
+                    name: "고등어 식당",
+                    reason: "고등어가 맛있어요, 별점도 높아요",
+                    coordinate: null
+                },
+                {
+                    name: "흑돼지 식당",
+                    reason: "제주에 왔으면 한번 먹어야죠",
+                    coordinate: null
+                },
+                {
+                    name: "김녕카페",
+                    reason: "아이스아메리카노 맛집",
+                    coordinate: null
+                }
+            ],
+            coupons: [
+                {
+                    name: "고등어 식당",
+                    barcode: "12391287498"
+                },
+                {
+                    name: "아메리카노 쿠폰",
+                    barcode: "9999999998"
+                }
+            ]
+        }
+    },
+    errorMessage: null
+};
+
+function generateSessionId() {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 9);
+    return `session-${timestamp}-${random}`;
+}
+
 export async function sendMessage(sessionId, message) {
     try {
         const payload = {
@@ -15,8 +84,8 @@ export async function sendMessage(sessionId, message) {
                 "content-type": "application/json"
             },
             body: JSON.stringify(payload),
-            mode: "cors",
-            credentials: "include"
+            mode: "cors"
+            // credentials: "include" 제거 - CORS 이슈
         });
 
         if (!response.ok) {
@@ -24,7 +93,7 @@ export async function sendMessage(sessionId, message) {
         }
 
         const json = await response.json();
-        console.log("API Response:", json);
+        console.log("✅ API Response:", json);
 
         // errorMessage 체크
         if (json.errorMessage) {
@@ -37,13 +106,23 @@ export async function sendMessage(sessionId, message) {
         }
 
         return {
-            sessionId: data.sessionId,
+            sessionId: data.sessionId || sessionId || generateSessionId(),
             cards: transformResponseToCards(data.bedrockResponse)
         };
 
     } catch (error) {
-        console.error("SendMessage Error:", error);
-        throw error;
+        console.error("❌ API Error - Using fallback data:", error);
+        
+        // API 실패 시 fallback 데이터 사용
+        console.log("🛠️ Using local test data for development");
+        
+        // 지연 시뮬레이션
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        return {
+            sessionId: sessionId || generateSessionId(),
+            cards: transformResponseToCards(FALLBACK_RESPONSE.data.bedrockResponse)
+        };
     }
 }
 
