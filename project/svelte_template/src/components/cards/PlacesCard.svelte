@@ -24,29 +24,33 @@
 <h3 class="text-2xl font-bold text-gray-900 mb-3">주변 명소</h3>
 
 <div class="flex-1">
-    {#if isCompact}
-        <div class="space-y-2">
-            {#each card.around.slice(0, 3) as place}
-                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                    <div class="font-semibold text-gray-900 text-sm">
-                        {place.name}
+    {#if card.around && card.around.length > 0}
+        {#if isCompact}
+            <div class="space-y-2">
+                {#each card.around.slice(0, 3) as place}
+                    <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <div class="font-semibold text-gray-900 text-sm">
+                            {place.name}
+                        </div>
+                        <div class="text-xs text-gray-600">{place.reason}</div>
                     </div>
-                    <div class="text-xs text-gray-600">{place.reason}</div>
-                </div>
-            {/each}
-        </div>
+                {/each}
+            </div>
+        {:else}
+            <div class="space-y-3">
+                {#each card.around as place}
+                    <div
+                        class="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:bg-gray-100 transition"
+                    >
+                        <div class="font-bold text-gray-900 text-xl">
+                            {place.name}
+                        </div>
+                        <div class="text-base text-gray-700 mt-2">{place.reason}</div>
+                    </div>
+                {/each}
+            </div>
+        {/if}
     {:else}
-        <div class="space-y-3">
-            {#each card.around as place}
-                <div
-                    class="bg-gray-50 rounded-xl p-5 border border-gray-200 hover:bg-gray-100 transition"
-                >
-                    <div class="font-bold text-gray-900 text-xl">
-                        {place.name}
-                    </div>
-                    <div class="text-base text-gray-700 mt-2">{place.reason}</div>
-                </div>
-            {/each}
-        </div>
+        <p class="text-gray-500">주변 명소 데이터가 없습니다.</p>
     {/if}
 </div>
