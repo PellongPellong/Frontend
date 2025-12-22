@@ -26,12 +26,12 @@
     function generateBarcodePattern(barcode) {
         const seed = barcode.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
         const bars = [];
-        const barCount = 40;
+        const barCount = 50; // 바 개수 증가
         
         for (let i = 0; i < barCount; i++) {
-            const height = 60 + ((seed + i * 7) % 40);
-            const width = 2 + ((seed + i * 3) % 4);
-            const x = i * 6;
+            const height = 50 + ((seed + i * 7) % 50); // 높이 범위 증가
+            const width = 3 + ((seed + i * 3) % 3); // 폭 증가
+            const x = i * 7; // 간격 증가
             bars.push({ x, width, height });
         }
         
@@ -101,28 +101,28 @@
                     role="button"
                     tabindex="0"
                 >
-                    <div class="font-bold text-gray-900 text-xl">
+                    <div class="font-bold text-gray-900 text-xl mb-4">
                         {coupon.name}
                     </div>
                     
                     <!-- 바코드 시각화 -->
-                    <div class="my-4 bg-white rounded-lg p-4 flex justify-center">
-                        <svg width="280" height="80" class="barcode-svg">
+                    <div class="my-4 bg-white rounded-lg p-4 flex flex-col items-center">
+                        <svg width="350" height="100" class="barcode-svg" viewBox="0 0 350 100" preserveAspectRatio="xMidYMid meet">
                             {#each generateBarcodePattern(coupon.barcode) as bar}
                                 <rect
                                     x={bar.x}
-                                    y={80 - bar.height}
+                                    y={100 - bar.height}
                                     width={bar.width}
                                     height={bar.height}
                                     fill="#000"
                                 />
                             {/each}
                         </svg>
+                        <div class="text-lg text-gray-900 font-mono mt-3 tracking-wider">
+                            {coupon.barcode}
+                        </div>
                     </div>
                     
-                    <div class="text-base text-purple-700 font-mono mt-2 text-center">
-                        {coupon.barcode}
-                    </div>
                     <div class="text-sm text-gray-500 mt-2 text-center">클릭하여 복사</div>
                 </div>
             {/each}
@@ -133,5 +133,7 @@
 <style>
     .barcode-svg {
         filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        max-width: 100%;
+        height: auto;
     }
 </style>
