@@ -21,6 +21,28 @@
 
     const randomMessage =
         couponMessages[Math.floor(Math.random() * couponMessages.length)];
+
+    // 바코드 형태의 SVG 생성 함수
+    function generateBarcodePattern(barcode) {
+        const seed = barcode.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const bars = [];
+        const barCount = 40;
+        
+        for (let i = 0; i < barCount; i++) {
+            const height = 60 + ((seed + i * 7) % 40);
+            const width = 2 + ((seed + i * 3) % 4);
+            const x = i * 6;
+            bars.push({ x, width, height });
+        }
+        
+        return bars;
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('쿠폰 코드가 복사되었습니다!');
+        });
+    }
 </script>
 
 <!-- 백록이 대화 -->
@@ -49,7 +71,21 @@
                     <div class="font-semibold text-gray-900 text-sm">
                         {coupon.name}
                     </div>
-                    <div class="text-xs text-purple-600 font-mono">
+                    <!-- 바코드 시각화 -->
+                    <div class="my-2 bg-white rounded p-2 flex justify-center">
+                        <svg width="200" height="60" class="barcode-svg">
+                            {#each generateBarcodePattern(coupon.barcode) as bar}
+                                <rect
+                                    x={bar.x}
+                                    y={60 - bar.height}
+                                    width={bar.width}
+                                    height={bar.height}
+                                    fill="#000"
+                                />
+                            {/each}
+                        </svg>
+                    </div>
+                    <div class="text-xs text-purple-600 font-mono text-center">
                         {coupon.barcode}
                     </div>
                 </div>
@@ -60,16 +96,42 @@
             {#each card.coupons as coupon}
                 <div
                     class="bg-purple-50 rounded-xl p-5 border border-purple-200 cursor-pointer hover:bg-purple-100 transition"
+                    on:click={() => copyToClipboard(coupon.barcode)}
+                    on:keydown={(e) => e.key === 'Enter' && copyToClipboard(coupon.barcode)}
+                    role="button"
+                    tabindex="0"
                 >
                     <div class="font-bold text-gray-900 text-xl">
                         {coupon.name}
                     </div>
-                    <div class="text-base text-purple-700 font-mono mt-2">
-                        CODE: {coupon.barcode}
+                    
+                    <!-- 바코드 시각화 -->
+                    <div class="my-4 bg-white rounded-lg p-4 flex justify-center">
+                        <svg width="280" height="80" class="barcode-svg">
+                            {#each generateBarcodePattern(coupon.barcode) as bar}
+                                <rect
+                                    x={bar.x}
+                                    y={80 - bar.height}
+                                    width={bar.width}
+                                    height={bar.height}
+                                    fill="#000"
+                                />
+                            {/each}
+                        </svg>
                     </div>
-                    <div class="text-sm text-gray-500 mt-2">클릭하여 복사</div>
+                    
+                    <div class="text-base text-purple-700 font-mono mt-2 text-center">
+                        {coupon.barcode}
+                    </div>
+                    <div class="text-sm text-gray-500 mt-2 text-center">클릭하여 복사</div>
                 </div>
             {/each}
         </div>
     {/if}
 </div>
+
+<style>
+    .barcode-svg {
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
+</style>
