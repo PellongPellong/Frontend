@@ -388,16 +388,16 @@
             return `${statusName}의 혼잡도`;
         } else if (card.type === "recommendation") {
             // "추천 지역 김녕"
-            return `${recommendationName}에 가보셔요`;
+            return `${recommendationName}에 방문해보세요`;
         } else if (card.type === "places") {
             // "김녕 관련 주변 명소"
             return `${recommendationName} 관련 주변 명소`;
         } else if (card.type === "navigation") {
             // "성산에서 김녕까지 가는 길"
-            return `${statusName}에서 ${recommendationName}까지 가는 길`;
+            return `${recommendationName}에 가는 길`;
         } else if (card.type === "coupon") {
             // "김녕 주변의 사용 가능 쿠폰"
-            return `${recommendationName} 주변의 사용 가능 쿠폰`;
+            return `${recommendationName} 주변의 쿠폰`;
         }
         return "카드";
     }

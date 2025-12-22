@@ -35,10 +35,10 @@
         <!-- 닫기 버튼 -->
         <button
             on:click={onClose}
-            class="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition"
+            class="close-btn absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300"
             aria-label="닫기"
         >
-            <span class="text-2xl text-gray-600 hover:text-gray-900">×</span>
+            <span class="text-2xl text-gray-500 hover:text-gray-800">×</span>
         </button>
 
         <!-- 내부 컨텐츠 (스크롤 가능) -->
@@ -141,5 +141,13 @@
     .modal-scrollbar {
         scrollbar-width: none;
         -ms-overflow-style: none;
+    }
+
+    .close-btn:hover {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.5);
     }
 </style>
