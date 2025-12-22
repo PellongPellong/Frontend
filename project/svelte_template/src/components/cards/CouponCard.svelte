@@ -12,6 +12,17 @@
     ];
     const randomSource =
         couponSources[Math.floor(Math.random() * couponSources.length)];
+    
+    // 백록이 메시지 바리에이션
+    const couponMessages = [
+        `<span class="font-bold">${randomSource}</span>에서 쿠폰을 찾아왔어요! 할인 받으세요 🎫`,
+        `특별한 할인 쿠폰을 발견했어요! 꿀팁이에요 💛`,
+        `저렴하게 여행하는 비결! 쿠폰 사용하세요 💰`,
+        `<span class="font-bold">${randomSource}</span>에 좋은 쿠폰이 있네요! 지금 바로 사용하세요 ✨`,
+        `할인 쿠폰 찾았어요! 합리적인 여행을 도와드릴게요 🚀`
+    ];
+    
+    const randomMessage = couponMessages[Math.floor(Math.random() * couponMessages.length)];
 </script>
 
 <!-- 백록이 대화 -->
@@ -23,7 +34,7 @@
     />
     <div class="flex-1">
         <div class="text-sm text-indigo-900 leading-relaxed">
-            <span class="font-bold">{randomSource}</span>에서 쿠폰을 찾아왔어요!
+            {@html randomMessage}
         </div>
     </div>
 </div>
