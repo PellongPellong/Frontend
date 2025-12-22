@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
+<h3 class="text-2xl font-bold text-gray-900 mb-3">사용 가능 쿠폰</h3>
 
 <div class="flex-1 overflow-hidden">
     {#if isCompact}
@@ -41,7 +41,7 @@
                         {coupon.name}
                     </div>
                     <div class="text-xs text-purple-600 font-mono">
-                        {coupon.code}
+                        {coupon.barcode}
                     </div>
                 </div>
             {/each}
@@ -56,7 +56,7 @@
                         {coupon.name}
                     </div>
                     <div class="text-base text-purple-700 font-mono mt-2">
-                        CODE: {coupon.code}
+                        CODE: {coupon.barcode}
                     </div>
                     <div class="text-sm text-gray-500 mt-2">클릭하여 복사</div>
                 </div>
