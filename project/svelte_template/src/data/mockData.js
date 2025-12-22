@@ -26,7 +26,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -49,7 +48,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -57,7 +55,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -70,7 +67,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -87,7 +83,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -110,7 +105,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -118,7 +112,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -131,7 +124,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -148,7 +140,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -171,7 +162,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -179,7 +169,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -192,7 +181,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -209,7 +197,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -232,7 +219,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -240,7 +226,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -253,7 +238,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -270,7 +254,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -293,7 +276,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -301,7 +283,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -314,7 +295,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -331,7 +311,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -354,7 +333,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -362,7 +340,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -375,7 +352,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -392,7 +368,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -415,7 +390,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -423,7 +397,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -436,7 +409,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -453,7 +425,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -476,7 +447,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -484,7 +454,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -497,7 +466,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -514,7 +482,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -537,7 +504,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -545,7 +511,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -558,7 +523,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -575,7 +539,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -598,7 +561,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -606,7 +568,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -619,7 +580,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -636,7 +596,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -659,7 +618,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -667,7 +625,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -680,7 +637,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -697,7 +653,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -720,7 +675,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -728,7 +682,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -741,7 +694,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -758,7 +710,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -781,7 +732,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -789,7 +739,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -802,7 +751,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -819,7 +767,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -842,7 +789,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -850,7 +796,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -863,7 +808,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -880,7 +824,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -903,7 +846,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -911,7 +853,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -924,7 +865,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -941,7 +881,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -964,7 +903,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -972,7 +910,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -985,7 +922,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
@@ -1002,7 +938,6 @@ export const mockResponses = {
                 subtitle: "혼잡도 5점",
                 icon: "📍",
                 content: "현재 매우 혼잡합니다",
-                recommendation: "월령지",
                 time_table: [
                     { time: "9시", level: 5 },
                     { time: "10시", level: 5 },
@@ -1025,7 +960,6 @@ export const mockResponses = {
                 icon: "✨",
                 content:
                     "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-                recommendation: "월령지",
             },
             {
                 type: "places",
@@ -1033,7 +967,6 @@ export const mockResponses = {
                 subtitle: "3곳 추천",
                 icon: "🌿",
                 content: "",
-                recommendation: "월령지",
                 places: [
                     { name: "성읍도", tag: "한적한 해변" },
                     { name: "광치기해변", tag: "로컬 비치" },
@@ -1046,7 +979,6 @@ export const mockResponses = {
                 subtitle: "2개",
                 icon: "🎫",
                 content: "월령지 입장료 20% 할인",
-                recommendation: "월령지",
                 coupons: [
                     { name: "월령지 20% 할인", code: "1234-5678-9012" },
                     { name: "카페 음료 무료", code: "9876-5432-1098" },
