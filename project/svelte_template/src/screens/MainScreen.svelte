@@ -10,7 +10,7 @@
     import SearchBar from "../components/SearchBar.svelte";
     import FavoriteButton from "../components/FavoriteButton.svelte";
     import SkeletonLoader from "../components/SkeletonLoader.svelte";
-    import { allSuggestions } from "../data/mockData.js";
+    import { allSuggestions } from "../constants/suggestions.js";
     import { sendMessage as apiSendMessage } from "../lib/api.js";
     import { favorites } from "../stores/favorites.js";
 
