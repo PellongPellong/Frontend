@@ -1098,6 +1098,7 @@
             >
                 <div class="absolute inset-0 overflow-hidden">
                     <CardWrapper
+                        onClose={closeCardModal}
                         card={expandedCardMobile.card}
                         isCompact={false}
                         isModal={true}
