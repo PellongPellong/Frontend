@@ -234,14 +234,14 @@
         if (!message || !message.cards) return;
         const currentIdx = currentCardIndex[messageIdx] || 0;
         const totalCards = message.cards.length;
-        
+
         let newIdx;
         if (direction === "left") {
             newIdx = currentIdx === 0 ? totalCards - 1 : currentIdx - 1;
         } else {
             newIdx = currentIdx === totalCards - 1 ? 0 : currentIdx + 1;
         }
-        
+
         currentCardIndex[messageIdx] = newIdx;
     }
 
@@ -252,7 +252,7 @@
 
         const currentIdx = expandedCard.cardIdx;
         const totalCards = message.cards.length;
-        
+
         let newIdx;
         if (direction === "left") {
             newIdx = currentIdx === 0 ? totalCards - 1 : currentIdx - 1;
@@ -275,7 +275,7 @@
 
         const currentIdx = expandedCardMobile.cardIdx;
         const totalCards = message.cards.length;
-        
+
         let newIdx;
         if (direction === "left") {
             newIdx = currentIdx === 0 ? totalCards - 1 : currentIdx - 1;
@@ -365,26 +365,30 @@
 
     function getCardDisplayTitle(card, messageCards) {
         // recommendation 타입 카드에서 locationName 추출
-        const recommendCard = messageCards?.find(c => c.type === 'recommendation');
+        const recommendCard = messageCards?.find(
+            (c) => c.type === "recommendation",
+        );
         const recommendationName = recommendCard?.locationName || "";
-        
-        if (card.type === 'status') {
+
+        if (card.type === "status") {
             return card.locationName || "카드";
-        } else if (card.type === 'recommendation') {
+        } else if (card.type === "recommendation") {
             return card.locationName || "카드";
-        } else if (card.type === 'places') {
+        } else if (card.type === "places") {
             if (recommendationName) {
                 return `${recommendationName} 관련 주변 명소`;
             }
             return "주변 명소";
-        } else if (card.type === 'coupon') {
+        } else if (card.type === "coupon") {
             return "사용 가능 쿠폰";
         }
         return "카드";
     }
 
     function getRecommendationFromMessage(messageCards) {
-        const recommendCard = messageCards?.find(c => c.type === 'recommendation');
+        const recommendCard = messageCards?.find(
+            (c) => c.type === "recommendation",
+        );
         return recommendCard?.locationName || "이 지역";
     }
 
@@ -440,33 +444,34 @@
     function loadLikedCard(item) {
         const chat = chatHistory.find((c) => c.id === item.threadId);
         if (!chat) return;
-        
+
         // cardId는 "sessionId-messageIdx-cardIdx" 형식
-        const parts = item.id.split('-');
+        const parts = item.id.split("-");
         // sessionId는 "chat-timestamp-random" 형식이므로 마지막 2개 요소가 인덱스
         const cardIdx = parseInt(parts[parts.length - 1]);
         const messageIdx = parseInt(parts[parts.length - 2]);
-        
+
         // 대화 로드
         sessionId = chat.id;
         messages = [...chat.messages];
         currentCardIndex = { ...chat.cardIndex };
-        
+
         // 해당 카드로 네비게이션
         if (!isNaN(messageIdx) && !isNaN(cardIdx)) {
             currentCardIndex[messageIdx] = cardIdx;
         }
-        
+
         isSidebarOpen = false;
-        
+
         // 해당 메시지로 스크롤
         setTimeout(() => {
             if (chatContainer) {
-                const messageElements = chatContainer.querySelectorAll('.fade-in-up');
+                const messageElements =
+                    chatContainer.querySelectorAll(".fade-in-up");
                 if (messageElements[messageIdx]) {
-                    messageElements[messageIdx].scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center' 
+                    messageElements[messageIdx].scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
                     });
                 }
             }
@@ -631,12 +636,18 @@
                             </button>
                         </div>
                     {:else}
-                        {@const chat = chatHistory.find((c) => c.id === item.data.threadId)}
-                        {@const messageCards = chat?.messages?.find((m, idx) => {
-                            const parts = item.data.id.split('-');
-                            const messageIdx = parseInt(parts[parts.length - 2]);
-                            return idx === messageIdx;
-                        })?.cards}
+                        {@const chat = chatHistory.find(
+                            (c) => c.id === item.data.threadId,
+                        )}
+                        {@const messageCards = chat?.messages?.find(
+                            (m, idx) => {
+                                const parts = item.data.id.split("-");
+                                const messageIdx = parseInt(
+                                    parts[parts.length - 2],
+                                );
+                                return idx === messageIdx;
+                            },
+                        )?.cards}
                         <div class="relative group">
                             <button
                                 class="w-full text-left rounded-lg p-3 text-sm hover:bg-[#333] transition-colors flex items-start gap-2"
@@ -649,7 +660,10 @@
                                     <div
                                         class="font-medium text-white truncate"
                                     >
-                                        {getCardDisplayTitle(item.data.card, messageCards)}
+                                        {getCardDisplayTitle(
+                                            item.data.card,
+                                            messageCards,
+                                        )}
                                     </div>
                                     <div class="text-xs text-gray-400 mt-1">
                                         {formatDate(item.data.timestamp)}
@@ -783,7 +797,9 @@
                         </div>
                     {:else if message.type === "cards"}
                         {@const activeIdx = currentCardIndex[i] || 0}
-                        {@const recommendation = getRecommendationFromMessage(message.cards)}
+                        {@const recommendation = getRecommendationFromMessage(
+                            message.cards,
+                        )}
                         <div class="fade-in-up">
                             <div
                                 class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0 mb-3"
@@ -854,14 +870,22 @@
                                                 {isHovered}
                                                 {recommendation}
                                                 onClick={() => {
-                                                    currentCardIndex[i] = cardIdx;
-                                                    openCardModal(i, cardIdx, card);
+                                                    currentCardIndex[i] =
+                                                        cardIdx;
+                                                    openCardModal(
+                                                        i,
+                                                        cardIdx,
+                                                        card,
+                                                    );
                                                 }}
-                                                onMouseEnter={() => (hoveredCard = `${i}-${cardIdx}`)}
-                                                onMouseLeave={() => (hoveredCard = null)}
+                                                onMouseEnter={() =>
+                                                    (hoveredCard = `${i}-${cardIdx}`)}
+                                                onMouseLeave={() =>
+                                                    (hoveredCard = null)}
                                                 showFavorite={true}
                                                 {isLiked}
-                                                onFavoriteClick={() => toggleLike(i, cardIdx)}
+                                                onFavoriteClick={() =>
+                                                    toggleLike(i, cardIdx)}
                                             />
                                         </div>
                                     {/each}
@@ -972,7 +996,11 @@
                         {recommendation}
                         showFavorite={true}
                         {isLiked}
-                        onFavoriteClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
+                        onFavoriteClick={() =>
+                            toggleLike(
+                                expandedCard.messageIdx,
+                                expandedCard.cardIdx,
+                            )}
                     />
                 </div>
 
@@ -1033,7 +1061,11 @@
                         {recommendation}
                         showFavorite={true}
                         {isLiked}
-                        onFavoriteClick={() => toggleLike(expandedCardMobile.messageIdx, expandedCardMobile.cardIdx)}
+                        onFavoriteClick={() =>
+                            toggleLike(
+                                expandedCardMobile.messageIdx,
+                                expandedCardMobile.cardIdx,
+                            )}
                     />
                 </div>
             </div>
@@ -1065,21 +1097,10 @@
 {/if}
 
 <style>
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        border-radius: 3px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background-color: transparent;
+    .custom-scrollbar {
+        scrollbar-width: none;
     }
 
-    .modal-scrollbar::-webkit-scrollbar {
-        width: 0px;
-    }
     .modal-scrollbar {
         scrollbar-width: none;
     }
