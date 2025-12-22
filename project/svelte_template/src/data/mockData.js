@@ -22,54 +22,70 @@ export const mockResponses = {
         cards: [
             {
                 type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
+                locationName: "성산일출봉",
+                locationStatus: 5,
+                coordinate: {
+                    lat: 33.4608,
+                    lng: 126.9423
+                },
+                timeTable: [
+                    { time: "9시", congestion: 5 },
+                    { time: "10시", congestion: 5 },
+                    { time: "11시", congestion: 4 },
+                    { time: "12시", congestion: 3 },
+                    { time: "13시", congestion: 4 },
+                    { time: "14시", congestion: 5 },
+                    { time: "15시", congestion: 4 },
+                    { time: "16시", congestion: 3 },
+                    { time: "17시", congestion: 2 },
+                    { time: "18시", congestion: 2 },
+                    { time: "19시", congestion: 1 },
+                    { time: "20시", congestion: 1 },
                 ],
             },
             {
                 type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
+                locationName: "월령지",
+                story: "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
+                coordinate: {
+                    lat: 33.4512,
+                    lng: 126.8234
+                }
             },
             {
                 type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
+                around: [
+                    { 
+                        name: "성읍도", 
+                        reason: "한적한 해변",
+                        coordinate: {
+                            lat: 33.4123,
+                            lng: 126.8567
+                        }
+                    },
+                    { 
+                        name: "광치기해변", 
+                        reason: "로컬 비치",
+                        coordinate: {
+                            lat: 33.4234,
+                            lng: 126.8678
+                        }
+                    },
+                    { 
+                        name: "표선해변", 
+                        reason: "풀빌라",
+                        coordinate: {
+                            lat: 33.4345,
+                            lng: 126.8789
+                        }
+                    },
                 ],
             },
             {
                 type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
                 coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
+                    { name: "월령지 20% 할인", barcode: "1234-5678-9012" },
+                    { name: "카페 음료 무료", barcode: "9876-5432-1098" },
                 ],
             },
         ],
@@ -79,852 +95,70 @@ export const mockResponses = {
         cards: [
             {
                 type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
+                locationName: "성산일출봉",
+                locationStatus: 5,
+                coordinate: {
+                    lat: 33.4608,
+                    lng: 126.9423
+                },
+                timeTable: [
+                    { time: "9시", congestion: 5 },
+                    { time: "10시", congestion: 5 },
+                    { time: "11시", congestion: 4 },
+                    { time: "12시", congestion: 3 },
+                    { time: "13시", congestion: 4 },
+                    { time: "14시", congestion: 5 },
+                    { time: "15시", congestion: 4 },
+                    { time: "16시", congestion: 3 },
+                    { time: "17시", congestion: 2 },
+                    { time: "18시", congestion: 2 },
+                    { time: "19시", congestion: 1 },
+                    { time: "20시", congestion: 1 },
                 ],
             },
             {
                 type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
+                locationName: "월령지",
+                story: "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
+                coordinate: {
+                    lat: 33.4512,
+                    lng: 126.8234
+                }
             },
             {
                 type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
+                around: [
+                    { 
+                        name: "성읍도", 
+                        reason: "한적한 해변",
+                        coordinate: {
+                            lat: 33.4123,
+                            lng: 126.8567
+                        }
+                    },
+                    { 
+                        name: "광치기해변", 
+                        reason: "로컬 비치",
+                        coordinate: {
+                            lat: 33.4234,
+                            lng: 126.8678
+                        }
+                    },
+                    { 
+                        name: "표선해변", 
+                        reason: "풀빌라",
+                        coordinate: {
+                            lat: 33.4345,
+                            lng: 126.8789
+                        }
+                    },
                 ],
             },
             {
                 type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
                 coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "가족": {
-        session_id: "mock-session-003",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "오름": {
-        session_id: "mock-session-004",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "맛집": {
-        session_id: "mock-session-005",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "해변": {
-        session_id: "mock-session-006",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "사진": {
-        session_id: "mock-session-007",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "일출": {
-        session_id: "mock-session-008",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "일몽": {
-        session_id: "mock-session-009",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "산책": {
-        session_id: "mock-session-010",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "휴양": {
-        session_id: "mock-session-011",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "드라이브": {
-        session_id: "mock-session-012",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "역사": {
-        session_id: "mock-session-013",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "스파": {
-        session_id: "mock-session-014",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "축제": {
-        session_id: "mock-session-015",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
-                ],
-            },
-        ],
-    },
-    "꽃": {
-        session_id: "mock-session-016",
-        cards: [
-            {
-                type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
-                ],
-            },
-            {
-                type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
-            },
-            {
-                type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
-                ],
-            },
-            {
-                type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
-                coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
+                    { name: "월령지 20% 할인", barcode: "1234-5678-9012" },
+                    { name: "카페 음료 무료", barcode: "9876-5432-1098" },
                 ],
             },
         ],
@@ -934,54 +168,70 @@ export const mockResponses = {
         cards: [
             {
                 type: "status",
-                title: "성산일출봉",
-                subtitle: "혼잡도 5점",
-                icon: "📍",
-                content: "현재 매우 혼잡합니다",
-                time_table: [
-                    { time: "9시", level: 5 },
-                    { time: "10시", level: 5 },
-                    { time: "11시", level: 4 },
-                    { time: "12시", level: 3 },
-                    { time: "13시", level: 4 },
-                    { time: "14시", level: 5 },
-                    { time: "15시", level: 4 },
-                    { time: "16시", level: 3 },
-                    { time: "17시", level: 2 },
-                    { time: "18시", level: 2 },
-                    { time: "19시", level: 1 },
-                    { time: "20시", level: 1 },
+                locationName: "성산일출봉",
+                locationStatus: 5,
+                coordinate: {
+                    lat: 33.4608,
+                    lng: 126.9423
+                },
+                timeTable: [
+                    { time: "9시", congestion: 5 },
+                    { time: "10시", congestion: 5 },
+                    { time: "11시", congestion: 4 },
+                    { time: "12시", congestion: 3 },
+                    { time: "13시", congestion: 4 },
+                    { time: "14시", congestion: 5 },
+                    { time: "15시", congestion: 4 },
+                    { time: "16시", congestion: 3 },
+                    { time: "17시", congestion: 2 },
+                    { time: "18시", congestion: 2 },
+                    { time: "19시", congestion: 1 },
+                    { time: "20시", congestion: 1 },
                 ],
             },
             {
                 type: "recommendation",
-                title: "월령지",
-                subtitle: "대신 추천",
-                icon: "✨",
-                content:
-                    "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
+                locationName: "월령지",
+                story: "조선시대 목마장으로 조용하고 평화로운 산책로. 관광객이 적고 평화로운 분위기를 즐길 수 있어요.",
+                coordinate: {
+                    lat: 33.4512,
+                    lng: 126.8234
+                }
             },
             {
                 type: "places",
-                title: "주변 명소",
-                subtitle: "3곳 추천",
-                icon: "🌿",
-                content: "",
-                places: [
-                    { name: "성읍도", tag: "한적한 해변" },
-                    { name: "광치기해변", tag: "로컬 비치" },
-                    { name: "표선해변", tag: "풀빌라" },
+                around: [
+                    { 
+                        name: "성읍도", 
+                        reason: "한적한 해변",
+                        coordinate: {
+                            lat: 33.4123,
+                            lng: 126.8567
+                        }
+                    },
+                    { 
+                        name: "광치기해변", 
+                        reason: "로컬 비치",
+                        coordinate: {
+                            lat: 33.4234,
+                            lng: 126.8678
+                        }
+                    },
+                    { 
+                        name: "표선해변", 
+                        reason: "풀빌라",
+                        coordinate: {
+                            lat: 33.4345,
+                            lng: 126.8789
+                        }
+                    },
                 ],
             },
             {
                 type: "coupon",
-                title: "사용 가능 쿠폰",
-                subtitle: "2개",
-                icon: "🎫",
-                content: "월령지 입장료 20% 할인",
                 coupons: [
-                    { name: "월령지 20% 할인", code: "1234-5678-9012" },
-                    { name: "카페 음료 무료", code: "9876-5432-1098" },
+                    { name: "월령지 20% 할인", barcode: "1234-5678-9012" },
+                    { name: "카페 음료 무료", barcode: "9876-5432-1098" },
                 ],
             },
         ],
