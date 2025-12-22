@@ -42,9 +42,7 @@
             {:else if card.type === "places"}
                 <PlacesCard {card} {isCompact} {recommendation} />
             {:else if card.type === "coupon"}
-                {#key isCompact}
-                    <CouponCard {card} {isCompact} />
-                {/key}
+                <CouponCard {card} {isCompact} />
             {:else if card.type === "navigation"}
                 {#key isCompact}
                     <NavigationCard {card} {isCompact} />
