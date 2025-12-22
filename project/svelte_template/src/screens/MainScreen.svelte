@@ -1039,6 +1039,7 @@
                     class="w-[500px] h-[500px] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden"
                 >
                     <CardWrapper
+                        onClose={closeCardModal}
                         card={expandedCard.card}
                         isCompact={false}
                         isModal={true}
