@@ -79,6 +79,18 @@ function createFavoritesStore() {
             });
         },
 
+        // 특정 좋아요 카드 제거
+        removeLike: (cardId) => {
+            update(state => {
+                const newState = {
+                    ...state,
+                    likedCards: state.likedCards.filter(item => item.id !== cardId)
+                };
+                saveToStorage(newState);
+                return newState;
+            });
+        },
+
         // 특정 스레드 제거 시 관련 좋아요도 제거
         removeThread: (threadId) => {
             update(state => {
