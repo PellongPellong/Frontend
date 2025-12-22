@@ -27,9 +27,8 @@
     let isSidebarOpen = false;
     let chatHistory = [];
     
-    // 새로운 상태들
-    let sidebarTab = "chats"; // "chats" | "favorites"
-    let favoritesFilter = "all"; // "all" | "bookmarks" | "likes"
+    let sidebarTab = "chats";
+    let favoritesFilter = "all";
     let searchQuery = "";
 
     const STORAGE_KEY = "jeju-chat-history";
@@ -271,13 +270,11 @@
         favorites.toggleLike(cardId, card, sessionId);
     }
 
-    // 필터링된 채팅 목록
     $: filteredChats = chatHistory.filter(chat => {
         if (!searchQuery) return true;
         return chat.title.toLowerCase().includes(searchQuery.toLowerCase());
     });
 
-    // 필터링된 즐겨찾기 아이템
     $: filteredFavorites = (() => {
         let items = [];
         
@@ -296,7 +293,6 @@
             items = [...items, ...likedCards];
         }
 
-        // 검색 필터 적용
         if (searchQuery) {
             items = items.filter(item => {
                 if (item.type === "bookmark") {
@@ -308,7 +304,6 @@
             });
         }
 
-        // 타임스탬프로 정렬
         return items.sort((a, b) => {
             const timeA = a.type === "bookmark" ? a.data.timestamp : a.data.timestamp;
             const timeB = b.type === "bookmark" ? b.data.timestamp : b.data.timestamp;
@@ -327,7 +322,6 @@
 <svelte:window on:keydown={handleKeyDown} />
 
 <div class="flex h-screen w-full bg-white">
-    <!-- 사이드바 -->
     <aside
         class="{isSidebarOpen
             ? 'translate-x-0'
@@ -348,7 +342,6 @@
             >
         </div>
 
-        <!-- 탭 전환 -->
         <div class="px-4 flex gap-2 mb-2">
             <button
                 class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors {sidebarTab === 'chats'
@@ -368,7 +361,6 @@
             </button>
         </div>
 
-        <!-- 검색바 -->
         <div class="px-4 mb-2">
             <SearchBar 
                 bind:value={searchQuery}
@@ -377,7 +369,6 @@
             />
         </div>
 
-        <!-- Favorites 필터 -->
         {#if sidebarTab === 'favorites'}
             <div class="px-4 mb-2 flex gap-1">
                 <button
@@ -407,7 +398,6 @@
             </div>
         {/if}
 
-        <!-- 리스트 영역 -->
         <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar">
             {#if sidebarTab === 'chats'}
                 {#each filteredChats as chat (chat.id)}
@@ -506,7 +496,6 @@
         </div>
     </aside>
 
-    <!-- 모바일 오버레이 -->
     {#if isSidebarOpen}
         <div
             class="fixed inset-0 bg-black/50 z-30 md:hidden"
@@ -641,7 +630,8 @@
                                                     onMouseLeave={() =>
                                                         (hoveredCard = null)}
                                                 />
-                                                <div class="absolute top-2 right-2">
+                                                <!-- 카드 내부에 하트 버튼 추가 -->
+                                                <div class="absolute top-3 right-3 z-10">
                                                     <FavoriteButton 
                                                         isLiked={isLiked}
                                                         onClick={() => toggleLike(i, cardIdx)}
@@ -738,7 +728,7 @@
                 <span class="text-gray-700 font-bold text-xl">←</span>
             </button>
 
-            <div class="relative">
+            <div class="relative flex flex-col items-center">
                 <button
                     on:click={closeCardModal}
                     class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center transition hover:bg-gray-100 rounded-lg"
@@ -747,14 +737,6 @@
                         >×</span
                     >
                 </button>
-
-                <div class="absolute top-4 right-16 z-10">
-                    <FavoriteButton 
-                        isLiked={isLiked}
-                        onClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
-                        size="lg"
-                    />
-                </div>
 
                 <div
                     class="w-[500px] h-[500px] overflow-y-auto modal-scrollbar flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in"
@@ -787,11 +769,15 @@
                     {/if}
                 </div>
 
-                <div
-                    class="absolute -bottom-8 left-0 right-0 flex justify-center"
-                >
+                <!-- 모달 하단에 좋아요 버튼 배치 -->
+                <div class="mt-4 flex items-center gap-4">
+                    <FavoriteButton 
+                        isLiked={isLiked}
+                        onClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
+                        size="lg"
+                    />
                     <div
-                        class="text-sm text-white font-medium bg-black/50 px-4 py-1 rounded-full"
+                        class="text-sm text-white font-medium bg-black/50 px-4 py-2 rounded-full"
                     >
                         {currentIdx + 1} / {totalCards}
                     </div>
