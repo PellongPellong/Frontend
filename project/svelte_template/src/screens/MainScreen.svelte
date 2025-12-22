@@ -852,6 +852,7 @@
                                                 isCompact={true}
                                                 {isActive}
                                                 {isHovered}
+                                                {recommendation}
                                                 onClick={() => {
                                                     currentCardIndex[i] = cardIdx;
                                                     openCardModal(i, cardIdx, card);
@@ -968,6 +969,7 @@
                         card={expandedCard.card}
                         isCompact={false}
                         isModal={true}
+                        {recommendation}
                         showFavorite={true}
                         {isLiked}
                         onFavoriteClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
@@ -1028,6 +1030,7 @@
                         card={expandedCardMobile.card}
                         isCompact={false}
                         isModal={true}
+                        {recommendation}
                         showFavorite={true}
                         {isLiked}
                         onFavoriteClick={() => toggleLike(expandedCardMobile.messageIdx, expandedCardMobile.cardIdx)}
