@@ -26,6 +26,30 @@
 
     // PlacesCard에 전달할 recommendation 이름
     export let recommendation = "이 지역";
+
+    // 카드 컴포넌트를 한 번만 렌더링하도록 공용 함수로 분리
+    function renderCardContent() {
+        if (isSkeleton) {
+            return { component: SkeletonCard, props: {} };
+        }
+        
+        switch (card?.type) {
+            case "status":
+                return { component: StatusCard, props: { card, isCompact } };
+            case "recommendation":
+                return { component: RecommendationCard, props: { card, isCompact } };
+            case "places":
+                return { component: PlacesCard, props: { card, isCompact, recommendation } };
+            case "coupon":
+                return { component: CouponCard, props: { card, isCompact } };
+            case "navigation":
+                return { component: NavigationCard, props: { card, isCompact } };
+            default:
+                return null;
+        }
+    }
+
+    $: cardContent = renderCardContent();
 </script>
 
 {#if isModal}
@@ -33,18 +57,10 @@
     <div class="w-full h-full flex flex-col bg-white">
         <!-- 내부 컨텐츠 (스크롤 가능) -->
         <div class="flex-1 overflow-y-auto p-6 modal-scrollbar">
-            {#if isSkeleton}
-                <SkeletonCard />
-            {:else if card.type === "status"}
-                <StatusCard {card} {isCompact} />
-            {:else if card.type === "recommendation"}
-                <RecommendationCard {card} {isCompact} />
-            {:else if card.type === "places"}
-                <PlacesCard {card} {isCompact} {recommendation} />
-            {:else if card.type === "coupon"}
-                <CouponCard {card} {isCompact} />
-            {:else if card.type === "navigation"}
-                <NavigationCard {card} {isCompact} />
+            {#if cardContent}
+                {#key card?.id}
+                    <svelte:component this={cardContent.component} {...cardContent.props} />
+                {/key}
             {/if}
         </div>
 
@@ -104,18 +120,10 @@
 
             <!-- 카드 내용 -->
             <div class="flex-1 overflow-hidden">
-                {#if isSkeleton}
-                    <SkeletonCard />
-                {:else if card.type === "status"}
-                    <StatusCard {card} {isCompact} />
-                {:else if card.type === "recommendation"}
-                    <RecommendationCard {card} {isCompact} />
-                {:else if card.type === "places"}
-                    <PlacesCard {card} {isCompact} {recommendation} />
-                {:else if card.type === "coupon"}
-                    <CouponCard {card} {isCompact} />
-                {:else if card.type === "navigation"}
-                    <NavigationCard {card} {isCompact} />
+                {#if cardContent}
+                    {#key card?.id}
+                        <svelte:component this={cardContent.component} {...cardContent.props} />
+                    {/key}
                 {/if}
             </div>
         </div>
