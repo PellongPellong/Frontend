@@ -30,7 +30,7 @@
     // 동적 그라디언트 생성 함수
     function generateGradientStops() {
         if (timeTable.length === 0) return [];
-        
+
         return timeTable.map((slot, i) => {
             const offset = (i / (timeTable.length - 1)) * 100;
             const color = getColor(slot.level);
@@ -242,9 +242,3 @@
         <p class="text-gray-500">혼잡도 데이터가 없습니다.</p>
     {/if}
 </div>
-
-{#if isCompact}
-    <div class="mt-3 text-center text-xs text-gray-500 hidden sm:block">
-        클릭하여 자세히 보기
-    </div>
-{/if}
