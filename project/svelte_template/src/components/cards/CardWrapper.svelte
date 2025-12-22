@@ -4,6 +4,7 @@
     import PlacesCard from './PlacesCard.svelte';
     import CouponCard from './CouponCard.svelte';
     import NavigationCard from './NavigationCard.svelte';
+    import FavoriteButton from '../FavoriteButton.svelte';
     
     export let card;
     export let isCompact = true;
@@ -12,16 +13,28 @@
     export let onClick = () => {};
     export let onMouseEnter = () => {};
     export let onMouseLeave = () => {};
+    
+    // For favorites
+    export let cardId = null;
+    export let threadId = null;
+    export let threadTitle = '';
 </script>
 
 <div 
-    class="w-[360px] h-[400px] flex flex-col p-6 bg-white border-2 border-gray-200 rounded-3xl shadow-lg transition-all duration-300 cursor-pointer overflow-visible {isActive ? 'scale-100' : 'scale-95'} {isHovered ? 'scale-105 shadow-2xl border-indigo-300' : ''}"
+    class="w-[360px] h-[400px] flex flex-col p-6 bg-white border-2 border-gray-200 rounded-3xl shadow-lg transition-all duration-300 cursor-pointer overflow-visible relative {isActive ? 'scale-100' : 'scale-95'} {isHovered ? 'scale-105 shadow-2xl border-indigo-300' : ''}"
     on:click={onClick}
     on:mouseenter={onMouseEnter}
     on:mouseleave={onMouseLeave}
     role="button"
     tabindex="0"
 >
+    <!-- Favorite Button (top-right corner) -->
+    {#if cardId && threadId}
+        <div class="absolute top-4 right-4 z-10">
+            <FavoriteButton {cardId} {card} {threadId} {threadTitle} compact={true} />
+        </div>
+    {/if}
+
     {#if card.type === 'status'}
         <StatusCard {card} {isCompact} />
     {:else if card.type === 'recommendation'}
