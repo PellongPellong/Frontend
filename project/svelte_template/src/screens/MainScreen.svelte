@@ -7,8 +7,12 @@
     import PlacesCard from "../components/cards/PlacesCard.svelte";
     import CouponCard from "../components/cards/CouponCard.svelte";
     import NavigationCard from "../components/cards/NavigationCard.svelte";
+    import SearchBar from "../components/SearchBar.svelte";
+    import FavoriteButton from "../components/FavoriteButton.svelte";
+    import SkeletonLoader from "../components/SkeletonLoader.svelte";
     import { allSuggestions } from "../data/mockData.js";
     import { sendMessage as apiSendMessage } from "../lib/api.js";
+    import { favorites } from "../stores/favorites.js";
 
     export let goTo;
 
@@ -22,11 +26,19 @@
     let hoveredCard = null;
     let isSidebarOpen = false;
     let chatHistory = [];
+    
+    // 새로운 상태들
+    let sidebarTab = "chats"; // "chats" | "favorites"
+    let favoritesFilter = "all"; // "all" | "bookmarks" | "likes"
+    let searchQuery = "";
+    let $favorites;
+
+    favorites.subscribe(value => {
+        $favorites = value;
+    });
 
     const STORAGE_KEY = "jeju-chat-history";
     const MAX_HISTORY = 20;
-
-    // 제안 버튼 목업 데이터 15개
 
     function getRandomSuggestions(count = 3) {
         const shuffled = [...allSuggestions].sort(() => 0.5 - Math.random());
@@ -99,6 +111,7 @@
 
     function deleteChat(chatId, event) {
         event.stopPropagation();
+        favorites.removeThread(chatId);
         chatHistory = chatHistory.filter((h) => h.id !== chatId);
         saveChatHistory();
         if (sessionId === chatId) {
@@ -111,6 +124,7 @@
         messages = [...chat.messages];
         currentCardIndex = { ...chat.cardIndex };
         isSidebarOpen = false;
+        sidebarTab = "chats";
         setTimeout(() => scrollToBottom(), 100);
     }
 
@@ -158,10 +172,8 @@
         scrollToBottom();
 
         try {
-            // Real API Call
             const response = await apiSendMessage(sessionId, trimmedText);
-
-            sessionId = response.sessionId; // Update session ID
+            sessionId = response.sessionId;
             const newCards = response.cards;
 
             const messagesWithoutLoading = messages.slice(0, -1);
@@ -228,15 +240,18 @@
         if (window.innerWidth < 768) return;
         expandedCard = { messageIdx, cardIdx, card };
     }
+
     function closeCardModal() {
         expandedCard = null;
     }
+
     function scrollToBottom() {
         setTimeout(() => {
             if (chatContainer)
                 chatContainer.scrollTop = chatContainer.scrollHeight;
         }, 100);
     }
+
     function handleKeyDown(e) {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -246,6 +261,70 @@
         if (expandedCard) {
             if (e.key === "ArrowLeft") navigateModalCard("left");
             if (e.key === "ArrowRight") navigateModalCard("right");
+        }
+    }
+
+    function toggleBookmark(chatId) {
+        favorites.toggleBookmark(chatId);
+    }
+
+    function toggleLike(messageIdx, cardIdx) {
+        const message = messages[messageIdx];
+        if (!message || !message.cards) return;
+        const card = message.cards[cardIdx];
+        const cardId = `${sessionId}-${messageIdx}-${cardIdx}`;
+        favorites.toggleLike(cardId, card, sessionId);
+    }
+
+    // 필터링된 채팅 목록
+    $: filteredChats = chatHistory.filter(chat => {
+        if (!searchQuery) return true;
+        return chat.title.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+
+    // 필터링된 즐겨찾기 아이템
+    $: filteredFavorites = (() => {
+        let items = [];
+        
+        if (favoritesFilter === "all" || favoritesFilter === "bookmarks") {
+            const bookmarkedChats = chatHistory.filter(chat => 
+                $favorites.bookmarkedThreads.includes(chat.id)
+            ).map(chat => ({ type: "bookmark", data: chat }));
+            items = [...items, ...bookmarkedChats];
+        }
+        
+        if (favoritesFilter === "all" || favoritesFilter === "likes") {
+            const likedCards = $favorites.likedCards.map(item => ({ 
+                type: "like", 
+                data: item 
+            }));
+            items = [...items, ...likedCards];
+        }
+
+        // 검색 필터 적용
+        if (searchQuery) {
+            items = items.filter(item => {
+                if (item.type === "bookmark") {
+                    return item.data.title.toLowerCase().includes(searchQuery.toLowerCase());
+                } else {
+                    const cardText = JSON.stringify(item.data.card).toLowerCase();
+                    return cardText.includes(searchQuery.toLowerCase());
+                }
+            });
+        }
+
+        // 타임스탬프로 정렬
+        return items.sort((a, b) => {
+            const timeA = a.type === "bookmark" ? a.data.timestamp : a.data.timestamp;
+            const timeB = b.type === "bookmark" ? b.data.timestamp : b.data.timestamp;
+            return new Date(timeB) - new Date(timeA);
+        });
+    })();
+
+    function loadLikedCard(item) {
+        const chat = chatHistory.find(c => c.id === item.threadId);
+        if (chat) {
+            loadChat(chat);
         }
     }
 </script>
@@ -273,44 +352,157 @@
                 on:click={startNewChat}>+ 새 대화</button
             >
         </div>
+
+        <!-- 탭 전환 -->
+        <div class="px-4 flex gap-2 mb-2">
+            <button
+                class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors {sidebarTab === 'chats'
+                    ? 'bg-[#444] text-white'
+                    : 'text-gray-400 hover:text-white hover:bg-[#333]'}"
+                on:click={() => sidebarTab = 'chats'}
+            >
+                🏠 채팅
+            </button>
+            <button
+                class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors {sidebarTab === 'favorites'
+                    ? 'bg-[#444] text-white'
+                    : 'text-gray-400 hover:text-white hover:bg-[#333]'}"
+                on:click={() => sidebarTab = 'favorites'}
+            >
+                ⭐ Favorites
+            </button>
+        </div>
+
+        <!-- 검색바 -->
+        <div class="px-4 mb-2">
+            <SearchBar 
+                bind:value={searchQuery}
+                placeholder={sidebarTab === 'chats' ? '채팅 검색...' : 'Favorites 검색...'}
+                onClear={() => searchQuery = ''}
+            />
+        </div>
+
+        <!-- Favorites 필터 -->
+        {#if sidebarTab === 'favorites'}
+            <div class="px-4 mb-2 flex gap-1">
+                <button
+                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter === 'all'
+                        ? 'bg-indigo-500 text-white'
+                        : 'bg-[#333] text-gray-400 hover:text-white'}"
+                    on:click={() => favoritesFilter = 'all'}
+                >
+                    모두
+                </button>
+                <button
+                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter === 'bookmarks'
+                        ? 'bg-indigo-500 text-white'
+                        : 'bg-[#333] text-gray-400 hover:text-white'}"
+                    on:click={() => favoritesFilter = 'bookmarks'}
+                >
+                    북마크
+                </button>
+                <button
+                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter === 'likes'
+                        ? 'bg-indigo-500 text-white'
+                        : 'bg-[#333] text-gray-400 hover:text-white'}"
+                    on:click={() => favoritesFilter = 'likes'}
+                >
+                    좋아요
+                </button>
+            </div>
+        {/if}
+
+        <!-- 리스트 영역 -->
         <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar">
-            {#each chatHistory as chat (chat.id)}
-                <div class="relative group">
-                    <button
-                        class="w-full text-left rounded-lg p-3 pr-10 text-sm hover:bg-[#333] transition-colors {sessionId ===
-                        chat.id
-                            ? 'bg-[#333]'
-                            : ''}"
-                        on:click={() => loadChat(chat)}
-                    >
-                        <div class="font-medium text-white truncate">
-                            {chat.title}
-                        </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            {formatDate(chat.timestamp)}
-                        </div>
-                    </button>
-                    <button
-                        class="absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all rounded-r-lg"
-                        on:click={(e) => deleteChat(chat.id, e)}
-                        title="삭제"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 text-red-500"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
+            {#if sidebarTab === 'chats'}
+                {#each filteredChats as chat (chat.id)}
+                    <div class="relative group">
+                        <button
+                            class="w-full text-left rounded-lg p-3 pr-20 text-sm hover:bg-[#333] transition-colors {sessionId ===
+                            chat.id
+                                ? 'bg-[#333]'
+                                : ''}"
+                            on:click={() => loadChat(chat)}
                         >
-                            <path
-                                fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            {/each}
+                            <div class="font-medium text-white truncate">
+                                {chat.title}
+                            </div>
+                            <div class="text-xs text-gray-400 mt-1">
+                                {formatDate(chat.timestamp)}
+                            </div>
+                        </button>
+                        <div class="absolute right-0 top-0 bottom-0 flex items-center">
+                            <button
+                                class="w-10 h-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-yellow-500/20 transition-all"
+                                on:click={(e) => { e.stopPropagation(); toggleBookmark(chat.id); }}
+                                title={$favorites.bookmarkedThreads.includes(chat.id) ? '북마크 해제' : '북마크'}
+                            >
+                                <span class="text-lg {$favorites.bookmarkedThreads.includes(chat.id) ? 'text-yellow-400' : 'text-gray-500'}">
+                                    {$favorites.bookmarkedThreads.includes(chat.id) ? '📌' : '📍'}
+                                </span>
+                            </button>
+                            <button
+                                class="w-10 h-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all rounded-r-lg"
+                                on:click={(e) => deleteChat(chat.id, e)}
+                                title="삭제"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5 text-red-500"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                        clip-rule="evenodd"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                {/each}
+            {:else}
+                {#each filteredFavorites as item (item.type === 'bookmark' ? item.data.id : item.data.id)}
+                    {#if item.type === 'bookmark'}
+                        <div class="relative group">
+                            <button
+                                class="w-full text-left rounded-lg p-3 text-sm hover:bg-[#333] transition-colors flex items-start gap-2"
+                                on:click={() => loadChat(item.data)}
+                            >
+                                <span class="text-yellow-400 text-sm flex-shrink-0">📌</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-medium text-white truncate">
+                                        {item.data.title}
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1">
+                                        {formatDate(item.data.timestamp)}
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    {:else}
+                        <div class="relative group">
+                            <button
+                                class="w-full text-left rounded-lg p-3 text-sm hover:bg-[#333] transition-colors flex items-start gap-2"
+                                on:click={() => loadLikedCard(item.data)}
+                            >
+                                <span class="text-red-400 text-sm flex-shrink-0">❤️</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-medium text-white truncate">
+                                        {item.data.card.title || '카드'}
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1">
+                                        {formatDate(item.data.timestamp)}
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    {/if}
+                {/each}
+            {/if}
         </nav>
+
         <div class="p-2 border-t border-[#444]">
             <button
                 class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors w-full"
@@ -367,21 +559,7 @@
                                     class="w-8 h-8 object-contain"
                                 />
                             </div>
-                            <div
-                                class="rounded-t-2xl rounded-br-2xl bg-[#F0F0F0] text-[#212121] p-4"
-                            >
-                                <div class="flex items-center space-x-1 p-2">
-                                    <div
-                                        class="h-2 w-2 rounded-full bg-gray-500 typing-dot"
-                                    ></div>
-                                    <div
-                                        class="h-2 w-2 rounded-full bg-gray-500 typing-dot"
-                                    ></div>
-                                    <div
-                                        class="h-2 w-2 rounded-full bg-gray-500 typing-dot"
-                                    ></div>
-                                </div>
-                            </div>
+                            <SkeletonLoader type="card" />
                         </div>
                     {:else if message.type === "cards"}
                         {@const activeIdx = currentCardIndex[i] || 0}
@@ -437,6 +615,8 @@
                                         {@const zIndex = isHovered
                                             ? 9999
                                             : baseZ}
+                                        {@const cardId = `${sessionId}-${i}-${cardIdx}`}
+                                        {@const isLiked = $favorites.likedCards.some(item => item.id === cardId)}
 
                                         <div
                                             class="absolute transition-all duration-500 ease-out"
@@ -446,25 +626,34 @@
                                                 ? 0
                                                 : 1};"
                                         >
-                                            <CardWrapper
-                                                {card}
-                                                isCompact={true}
-                                                {isActive}
-                                                {isHovered}
-                                                onClick={() => {
-                                                    currentCardIndex[i] =
-                                                        cardIdx;
-                                                    openCardModal(
-                                                        i,
-                                                        cardIdx,
-                                                        card,
-                                                    );
-                                                }}
-                                                onMouseEnter={() =>
-                                                    (hoveredCard = `${i}-${cardIdx}`)}
-                                                onMouseLeave={() =>
-                                                    (hoveredCard = null)}
-                                            />
+                                            <div class="relative">
+                                                <CardWrapper
+                                                    {card}
+                                                    isCompact={true}
+                                                    {isActive}
+                                                    {isHovered}
+                                                    onClick={() => {
+                                                        currentCardIndex[i] =
+                                                            cardIdx;
+                                                        openCardModal(
+                                                            i,
+                                                            cardIdx,
+                                                            card,
+                                                        );
+                                                    }}
+                                                    onMouseEnter={() =>
+                                                        (hoveredCard = `${i}-${cardIdx}`)}
+                                                    onMouseLeave={() =>
+                                                        (hoveredCard = null)}
+                                                />
+                                                <div class="absolute top-2 right-2">
+                                                    <FavoriteButton 
+                                                        isLiked={isLiked}
+                                                        onClick={() => toggleLike(i, cardIdx)}
+                                                        size="sm"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
                                     {/each}
                                 </div>
@@ -487,7 +676,6 @@
                         >
                     </div>{/if}
 
-                <!-- 입력 컨테이너 -->
                 <div
                     class="flex rounded-xl border {isLoading
                         ? 'border-gray-300 bg-gray-50'
@@ -539,13 +727,14 @@
     {@const message = messages[expandedCard.messageIdx]}
     {@const totalCards = message?.cards?.length || 0}
     {@const currentIdx = expandedCard.cardIdx}
+    {@const cardId = `${sessionId}-${expandedCard.messageIdx}-${expandedCard.cardIdx}`}
+    {@const isLiked = $favorites.likedCards.some(item => item.id === cardId)}
 
     <div
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in"
         on:click={closeCardModal}
     >
         <div class="relative flex items-center gap-5" on:click|stopPropagation>
-            <!-- 왼쪽 네비게이션 버튼 -->
             <button
                 on:click={() => navigateModalCard("left")}
                 disabled={currentIdx === 0}
@@ -554,9 +743,7 @@
                 <span class="text-gray-700 font-bold text-xl">←</span>
             </button>
 
-            <!-- 카드 컨테이너 -->
             <div class="relative">
-                <!-- X 버튼 (우측 상단) -->
                 <button
                     on:click={closeCardModal}
                     class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center transition hover:bg-gray-100 rounded-lg"
@@ -566,7 +753,14 @@
                     >
                 </button>
 
-                <!-- 확대된 카드 -->
+                <div class="absolute top-4 right-16 z-10">
+                    <FavoriteButton 
+                        isLiked={isLiked}
+                        onClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
+                        size="lg"
+                    />
+                </div>
+
                 <div
                     class="w-[500px] h-[500px] overflow-y-auto modal-scrollbar flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in"
                 >
@@ -598,7 +792,6 @@
                     {/if}
                 </div>
 
-                <!-- 카드 인디케이터 (하단) -->
                 <div
                     class="absolute -bottom-8 left-0 right-0 flex justify-center"
                 >
@@ -610,7 +803,6 @@
                 </div>
             </div>
 
-            <!-- 오른쪽 네비게이션 버튼 -->
             <button
                 on:click={() => navigateModalCard("right")}
                 disabled={currentIdx === totalCards - 1}
@@ -677,26 +869,6 @@
         to {
             opacity: 1;
             transform: scale(1);
-        }
-    }
-    .typing-dot {
-        animation: typing-blink 1.4s infinite both;
-    }
-    .typing-dot:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-    .typing-dot:nth-child(3) {
-        animation-delay: 0.4s;
-    }
-    @keyframes typing-blink {
-        0% {
-            opacity: 0.2;
-        }
-        20% {
-            opacity: 1;
-        }
-        100% {
-            opacity: 0.2;
         }
     }
 </style>
