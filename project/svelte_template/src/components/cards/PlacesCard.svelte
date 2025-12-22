@@ -4,17 +4,17 @@
     export let recommendation = "이 지역"; // 외부에서 전달받음
 
     const placeCount = card.around?.length || 0;
-    
+
     // 백록이 메시지 바리에이션
     const placeMessages = [
-        `<span class="font-bold">${recommendation}</span> 주변의 가볼 만한 곳 <span class="font-bold">${placeCount}곳</span>을 찾았어요! 🌏`,
-        `이 근처에 <span class="font-bold">${placeCount}곳</span>의 멋진 장소가 있네요! 함께 둘러보세요 ✨`,
-        `<span class="font-bold">${recommendation}</span> 근처 숨은 보석들을 발견했어요! 💎`,
-        `이왔으면 께 들러보세요! <span class="font-bold">${placeCount}곳</span>의 특별한 장소가 있어요 💚`,
-        `주변 명소 <span class="font-bold">${placeCount}곳</span>을 찾았어요! 한 곳씩 둘러보는 재미가 있을 거예요 🗺️`
+        `<span class="font-bold">${recommendation}</span> 주변의 가볼 만한 곳 <span class="font-bold">${placeCount}곳</span>을 찾았어요!`,
+        `<span class="font-bold">${recommendation}</span> 근처에 <span class="font-bold">${placeCount}곳</span>의 멋진 장소가 있네요! 함께 둘러보세요`,
+        `<span class="font-bold">${recommendation}</span> 근처 숨은 보석들을 발견했어요!`,
+        `<span class="font-bold">${recommendation}</span> 주변 명소 <span class="font-bold">${placeCount}곳</span>을 찾았어요!`,
     ];
-    
-    const randomMessage = placeMessages[Math.floor(Math.random() * placeMessages.length)];
+
+    const randomMessage =
+        placeMessages[Math.floor(Math.random() * placeMessages.length)];
 </script>
 
 <!-- 백록이 대화 -->
@@ -38,7 +38,9 @@
         {#if isCompact}
             <div class="space-y-2">
                 {#each card.around.slice(0, 3) as place}
-                    <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                    <div
+                        class="bg-gray-50 rounded-lg p-3 border border-gray-200"
+                    >
                         <div class="font-semibold text-gray-900 text-sm">
                             {place.name}
                         </div>
@@ -55,7 +57,9 @@
                         <div class="font-bold text-gray-900 text-xl">
                             {place.name}
                         </div>
-                        <div class="text-base text-gray-700 mt-2">{place.reason}</div>
+                        <div class="text-base text-gray-700 mt-2">
+                            {place.reason}
+                        </div>
                     </div>
                 {/each}
             </div>
