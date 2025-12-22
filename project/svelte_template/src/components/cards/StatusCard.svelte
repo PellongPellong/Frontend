@@ -2,11 +2,11 @@
     export let card;
     export let isCompact = true;
 
-    const timeTable = card.time_table || card.timeTable || [];
+    const timeTable = card.timeTable || [];
     const avgLevel =
         timeTable.length > 0
             ? Math.round(
-                  timeTable.reduce((sum, slot) => sum + slot.level, 0) /
+                  timeTable.reduce((sum, slot) => sum + slot.congestion, 0) /
                       timeTable.length,
               )
             : 0;
@@ -33,7 +33,7 @@
 
         return timeTable.map((slot, i) => {
             const offset = (i / (timeTable.length - 1)) * 100;
-            const color = getColor(slot.level);
+            const color = getColor(slot.congestion);
             return { offset, color };
         });
     }
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<h3 class="text-2xl font-bold text-gray-900 mb-3">{card.title}</h3>
+<h3 class="text-2xl font-bold text-gray-900 mb-3">{card.locationName}</h3>
 
 <div class="flex-1">
     {#if timeTable.length > 0}
@@ -83,7 +83,7 @@
                         points={timeTable
                             .map(
                                 (slot, i) =>
-                                    `${i * (400 / (timeTable.length - 1))},${120 - slot.level * 24}`,
+                                    `${i * (400 / (timeTable.length - 1))},${120 - slot.congestion * 24}`,
                             )
                             .join(" ")}
                         fill="none"
@@ -98,7 +98,7 @@
                         points="{timeTable
                             .map(
                                 (slot, i) =>
-                                    `${i * (400 / (timeTable.length - 1))},${120 - slot.level * 24}`,
+                                    `${i * (400 / (timeTable.length - 1))},${120 - slot.congestion * 24}`,
                             )
                             .join(' ')} 400,120 0,120"
                         fill="url(#areaGradient-dynamic)"
@@ -108,19 +108,19 @@
                     <!-- 점 -->
                     {#each timeTable as slot, i}
                         {@const x = i * (400 / (timeTable.length - 1))}
-                        {@const y = 120 - slot.level * 24}
+                        {@const y = 120 - slot.congestion * 24}
                         <circle
                             cx={x}
                             cy={y}
                             r="4"
                             fill="white"
-                            stroke={getColor(slot.level)}
+                            stroke={getColor(slot.congestion)}
                             stroke-width="2"
                             class="cursor-pointer transition-all hover:r-6"
                             on:mouseenter={() =>
                                 (hoveredPoint = {
                                     time: slot.time,
-                                    level: slot.level,
+                                    level: slot.congestion,
                                     index: i,
                                 })}
                             on:mouseleave={() => (hoveredPoint = null)}
