@@ -610,35 +610,28 @@
                                                 ? 0
                                                 : 1};"
                                         >
-                                            <div class="relative">
-                                                <CardWrapper
-                                                    {card}
-                                                    isCompact={true}
-                                                    {isActive}
-                                                    {isHovered}
-                                                    onClick={() => {
-                                                        currentCardIndex[i] =
-                                                            cardIdx;
-                                                        openCardModal(
-                                                            i,
-                                                            cardIdx,
-                                                            card,
-                                                        );
-                                                    }}
-                                                    onMouseEnter={() =>
-                                                        (hoveredCard = `${i}-${cardIdx}`)}
-                                                    onMouseLeave={() =>
-                                                        (hoveredCard = null)}
-                                                />
-                                                <!-- 카드 내부에 하트 버튼 추가 -->
-                                                <div class="absolute top-3 right-3 z-10">
-                                                    <FavoriteButton 
-                                                        isLiked={isLiked}
-                                                        onClick={() => toggleLike(i, cardIdx)}
-                                                        size="sm"
-                                                    />
-                                                </div>
-                                            </div>
+                                            <CardWrapper
+                                                {card}
+                                                isCompact={true}
+                                                {isActive}
+                                                {isHovered}
+                                                onClick={() => {
+                                                    currentCardIndex[i] =
+                                                        cardIdx;
+                                                    openCardModal(
+                                                        i,
+                                                        cardIdx,
+                                                        card,
+                                                    );
+                                                }}
+                                                onMouseEnter={() =>
+                                                    (hoveredCard = `${i}-${cardIdx}`)}
+                                                onMouseLeave={() =>
+                                                    (hoveredCard = null)}
+                                                showFavorite={true}
+                                                {isLiked}
+                                                onFavoriteClick={() => toggleLike(i, cardIdx)}
+                                            />
                                         </div>
                                     {/each}
                                 </div>
