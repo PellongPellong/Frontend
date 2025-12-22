@@ -847,49 +847,21 @@
                                                 ? 0
                                                 : 1};"
                                         >
-                                            {#if card.type === 'places'}
-                                                <div 
-                                                    class="w-[360px] h-[400px] flex flex-col p-6 bg-white border-2 border-gray-200 rounded-3xl shadow-lg transition-all duration-300 cursor-pointer overflow-visible relative {isActive ? 'scale-100' : 'scale-95'} {isHovered ? 'scale-105 shadow-2xl border-indigo-300' : ''}"
-                                                    on:click={() => {
-                                                        currentCardIndex[i] = cardIdx;
-                                                        openCardModal(i, cardIdx, card);
-                                                    }}
-                                                    on:mouseenter={() => (hoveredCard = `${i}-${cardIdx}`)}
-                                                    on:mouseleave={() => (hoveredCard = null)}
-                                                    role="button"
-                                                    tabindex="0"
-                                                >
-                                                    <div class="absolute top-3 right-3 z-10">
-                                                        <FavoriteButton 
-                                                            {isLiked}
-                                                            onClick={() => toggleLike(i, cardIdx)}
-                                                            size="sm"
-                                                        />
-                                                    </div>
-                                                    <div class="flex-1 overflow-hidden">
-                                                        <PlacesCard {card} isCompact={true} {recommendation} />
-                                                    </div>
-                                                </div>
-                                                <span class="block mt-[1.5px] text-center text-xs text-gray-500">
-                                                    클릭하여 자세히 보기
-                                                </span>
-                                            {:else}
-                                                <CardWrapper
-                                                    {card}
-                                                    isCompact={true}
-                                                    {isActive}
-                                                    {isHovered}
-                                                    onClick={() => {
-                                                        currentCardIndex[i] = cardIdx;
-                                                        openCardModal(i, cardIdx, card);
-                                                    }}
-                                                    onMouseEnter={() => (hoveredCard = `${i}-${cardIdx}`)}
-                                                    onMouseLeave={() => (hoveredCard = null)}
-                                                    showFavorite={true}
-                                                    {isLiked}
-                                                    onFavoriteClick={() => toggleLike(i, cardIdx)}
-                                                />
-                                            {/if}
+                                            <CardWrapper
+                                                {card}
+                                                isCompact={true}
+                                                {isActive}
+                                                {isHovered}
+                                                onClick={() => {
+                                                    currentCardIndex[i] = cardIdx;
+                                                    openCardModal(i, cardIdx, card);
+                                                }}
+                                                onMouseEnter={() => (hoveredCard = `${i}-${cardIdx}`)}
+                                                onMouseLeave={() => (hoveredCard = null)}
+                                                showFavorite={true}
+                                                {isLiked}
+                                                onFavoriteClick={() => toggleLike(i, cardIdx)}
+                                            />
                                         </div>
                                     {/each}
                                 </div>
@@ -992,29 +964,14 @@
                 <div
                     class="w-[500px] h-[500px] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden"
                 >
-                    {#if expandedCard.card.type === 'places'}
-                        <div class="w-full h-full flex flex-col bg-white">
-                            <div class="flex-1 overflow-y-auto p-6 modal-scrollbar">
-                                <PlacesCard card={expandedCard.card} isCompact={false} {recommendation} />
-                            </div>
-                            <div class="px-6 pb-6 pt-4 border-t border-gray-200 flex justify-center flex-shrink-0">
-                                <FavoriteButton 
-                                    {isLiked}
-                                    onClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
-                                    size="lg"
-                                />
-                            </div>
-                        </div>
-                    {:else}
-                        <CardWrapper
-                            card={expandedCard.card}
-                            isCompact={false}
-                            isModal={true}
-                            showFavorite={true}
-                            {isLiked}
-                            onFavoriteClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
-                        />
-                    {/if}
+                    <CardWrapper
+                        card={expandedCard.card}
+                        isCompact={false}
+                        isModal={true}
+                        showFavorite={true}
+                        {isLiked}
+                        onFavoriteClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
+                    />
                 </div>
 
                 <div class="mt-4">
@@ -1067,29 +1024,14 @@
                 on:touchend={handleTouchEnd}
             >
                 <div class="absolute inset-0 overflow-hidden">
-                    {#if expandedCardMobile.card.type === 'places'}
-                        <div class="w-full h-full flex flex-col bg-white">
-                            <div class="flex-1 overflow-y-auto p-6 modal-scrollbar">
-                                <PlacesCard card={expandedCardMobile.card} isCompact={false} {recommendation} />
-                            </div>
-                            <div class="px-6 pb-6 pt-4 border-t border-gray-200 flex justify-center flex-shrink-0">
-                                <FavoriteButton 
-                                    {isLiked}
-                                    onClick={() => toggleLike(expandedCardMobile.messageIdx, expandedCardMobile.cardIdx)}
-                                    size="lg"
-                                />
-                            </div>
-                        </div>
-                    {:else}
-                        <CardWrapper
-                            card={expandedCardMobile.card}
-                            isCompact={false}
-                            isModal={true}
-                            showFavorite={true}
-                            {isLiked}
-                            onFavoriteClick={() => toggleLike(expandedCardMobile.messageIdx, expandedCardMobile.cardIdx)}
-                        />
-                    {/if}
+                    <CardWrapper
+                        card={expandedCardMobile.card}
+                        isCompact={false}
+                        isModal={true}
+                        showFavorite={true}
+                        {isLiked}
+                        onFavoriteClick={() => toggleLike(expandedCardMobile.messageIdx, expandedCardMobile.cardIdx)}
+                    />
                 </div>
             </div>
 
