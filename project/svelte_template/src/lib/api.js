@@ -16,7 +16,7 @@ export async function sendMessage(sessionId, message) {
     // Mock 모드 활성화 시
     if (USE_MOCK_DATA) {
         console.log('🧪 Using mock data (test mode)');
-        // 실제 API 호출처럼 지연 시뮬레이션
+        // 실제 API 호출처럼 지연 시뮤레이션
         await new Promise(resolve => setTimeout(resolve, 800));
         
         // sessionId가 없으면 새로 생성, 있으면 그대로 유지
@@ -87,13 +87,12 @@ function transformResponseToCards(data) {
     if (bedrockData.status) {
         cards.push({
             type: "status",
-            title: bedrockData.status.locationName || "여행지 현황",
-            subtitle: `혼잡도 ${bedrockData.status.locationStatus}점`,
-            icon: "📍",
-            content: `현재 혼잡도는 ${bedrockData.status.locationStatus}점 입니다.`,
-            time_table: (bedrockData.status.timeTable || []).map(t => ({
+            locationName: bedrockData.status.locationName || "여행지 현황",
+            locationStatus: bedrockData.status.locationStatus || 3,
+            coordinate: bedrockData.status.coordinate || null,
+            timeTable: (bedrockData.status.timeTable || []).map(t => ({
                 time: t.time.includes(":") ? t.time.split(":")[0] + "시" : t.time,
-                level: t.congestion
+                congestion: t.congestion
             }))
         });
     }
@@ -102,27 +101,26 @@ function transformResponseToCards(data) {
     if (bedrockData.recommendation) {
         cards.push({
             type: "recommendation",
-            title: bedrockData.recommendation.locationName,
-            subtitle: "AI 추천",
-            icon: "✨",
-            content: bedrockData.recommendation.story
+            locationName: bedrockData.recommendation.locationName,
+            story: bedrockData.recommendation.story,
+            coordinate: bedrockData.recommendation.coordinate || null
         });
     }
 
     // 3. Navigation Card (if recommendation has coordinates)
     if (bedrockData.recommendation && 
-        (bedrockData.recommendation.lat || bedrockData.recommendation.latitude) && 
-        (bedrockData.recommendation.lon || bedrockData.recommendation.lng || bedrockData.recommendation.longitude)) {
+        (bedrockData.recommendation.coordinate?.lat || bedrockData.recommendation.lat || bedrockData.recommendation.latitude) && 
+        (bedrockData.recommendation.coordinate?.lng || bedrockData.recommendation.lon || bedrockData.recommendation.lng || bedrockData.recommendation.longitude)) {
         
-        const lat = bedrockData.recommendation.lat || bedrockData.recommendation.latitude;
-        const lng = bedrockData.recommendation.lon || bedrockData.recommendation.lng || bedrockData.recommendation.longitude;
+        const lat = bedrockData.recommendation.coordinate?.lat || bedrockData.recommendation.lat || bedrockData.recommendation.latitude;
+        const lng = bedrockData.recommendation.coordinate?.lng || bedrockData.recommendation.lon || bedrockData.recommendation.lng || bedrockData.recommendation.longitude;
         
         // around 장소들의 좌표 수집 (추가 마커용)
         const additionalPlaces = [];
         if (bedrockData.around && bedrockData.around.length > 0) {
             bedrockData.around.forEach(place => {
-                const placeLat = place.lat || place.latitude;
-                const placeLng = place.lon || place.lng || place.longitude;
+                const placeLat = place.coordinate?.lat || place.lat || place.latitude;
+                const placeLng = place.coordinate?.lng || place.lon || place.lng || place.longitude;
                 
                 if (placeLat && placeLng) {
                     additionalPlaces.push({
@@ -136,9 +134,6 @@ function transformResponseToCards(data) {
         
         cards.push({
             type: "navigation",
-            title: "길찾기",
-            subtitle: bedrockData.recommendation.locationName,
-            icon: "🗺️",
             placeName: bedrockData.recommendation.locationName,
             lat: lat,
             lng: lng,
@@ -150,13 +145,10 @@ function transformResponseToCards(data) {
     if (bedrockData.around && bedrockData.around.length > 0) {
         cards.push({
             type: "places",
-            title: "주변 명소",
-            subtitle: `${bedrockData.around.length}곳 추천`,
-            icon: "🌿",
-            content: "",
-            places: bedrockData.around.map(p => ({
+            around: bedrockData.around.map(p => ({
                 name: p.name,
-                tag: p.reason
+                reason: p.reason,
+                coordinate: p.coordinate || null
             }))
         });
     }
@@ -165,13 +157,9 @@ function transformResponseToCards(data) {
     if (bedrockData.coupons && bedrockData.coupons.length > 0) {
         cards.push({
             type: "coupon",
-            title: "사용 가능 쿠폰",
-            subtitle: `${bedrockData.coupons.length}개`,
-            icon: "🎫",
-            content: "할인 혜택을 확인하세요",
             coupons: bedrockData.coupons.map(c => ({
                 name: c.name,
-                code: c.barcode
+                barcode: c.barcode
             }))
         });
     }
