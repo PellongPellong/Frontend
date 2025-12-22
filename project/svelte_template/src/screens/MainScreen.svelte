@@ -26,7 +26,7 @@
     let hoveredCard = null;
     let isSidebarOpen = false;
     let chatHistory = [];
-    
+
     let sidebarTab = "chats";
     let favoritesFilter = "all";
     let searchQuery = "";
@@ -164,10 +164,10 @@
     async function sendMessage(text = userInput) {
         if (!text.trim() || isLoading) return;
         const trimmedText = text.trim();
-        
+
         // 첫 메시지 여부 확인 (assistant 초기 메시지 외에 user 메시지가 없으면 첫 메시지)
         const isFirstMessage = messages.length === 1;
-        
+
         messages = [
             ...messages,
             { type: "text", role: "user", content: trimmedText },
@@ -191,7 +191,7 @@
                 ...messagesWithoutLoading,
                 { type: "cards", role: "assistant", cards: newCards },
             ];
-            
+
             // 첫 메시지일 경우 사이드바에 추가
             if (isFirstMessage) {
                 createOrUpdateChatHistory(trimmedText);
@@ -290,55 +290,65 @@
         favorites.toggleLike(cardId, card, sessionId);
     }
 
-    $: filteredChats = chatHistory.filter(chat => {
+    $: filteredChats = chatHistory.filter((chat) => {
         if (!searchQuery) return true;
         return chat.title.toLowerCase().includes(searchQuery.toLowerCase());
     });
 
     $: filteredFavorites = (() => {
         let items = [];
-        
+
         if (favoritesFilter === "all" || favoritesFilter === "bookmarks") {
-            const bookmarkedChats = chatHistory.filter(chat => 
-                $favorites.bookmarkedThreads.includes(chat.id)
-            ).map(chat => ({ type: "bookmark", data: chat }));
+            const bookmarkedChats = chatHistory
+                .filter((chat) =>
+                    $favorites.bookmarkedThreads.includes(chat.id),
+                )
+                .map((chat) => ({ type: "bookmark", data: chat }));
             items = [...items, ...bookmarkedChats];
         }
-        
+
         if (favoritesFilter === "all" || favoritesFilter === "likes") {
-            const likedCards = $favorites.likedCards.map(item => ({ 
-                type: "like", 
-                data: item 
+            const likedCards = $favorites.likedCards.map((item) => ({
+                type: "like",
+                data: item,
             }));
             items = [...items, ...likedCards];
         }
 
         if (searchQuery) {
-            items = items.filter(item => {
+            items = items.filter((item) => {
                 if (item.type === "bookmark") {
-                    return item.data.title.toLowerCase().includes(searchQuery.toLowerCase());
+                    return item.data.title
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase());
                 } else {
-                    const cardText = JSON.stringify(item.data.card).toLowerCase();
+                    const cardText = JSON.stringify(
+                        item.data.card,
+                    ).toLowerCase();
                     return cardText.includes(searchQuery.toLowerCase());
                 }
             });
         }
 
         return items.sort((a, b) => {
-            const timeA = a.type === "bookmark" ? a.data.timestamp : a.data.timestamp;
-            const timeB = b.type === "bookmark" ? b.data.timestamp : b.data.timestamp;
+            const timeA =
+                a.type === "bookmark" ? a.data.timestamp : a.data.timestamp;
+            const timeB =
+                b.type === "bookmark" ? b.data.timestamp : b.data.timestamp;
             return new Date(timeB) - new Date(timeA);
         });
     })();
 
     function loadLikedCard(item) {
-        const chat = chatHistory.find(c => c.id === item.threadId);
+        const chat = chatHistory.find((c) => c.id === item.threadId);
         if (chat) {
             loadChat(chat);
         }
     }
 
-    $: isBookmarked = sessionId ? $favorites.bookmarkedThreads.includes(sessionId) : false;
+    $: isBookmarked = sessionId
+        ? $favorites.bookmarkedThreads.includes(sessionId)
+        : false;
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
@@ -366,54 +376,61 @@
 
         <div class="px-4 flex gap-2 mb-2">
             <button
-                class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors {sidebarTab === 'chats'
+                class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors {sidebarTab ===
+                'chats'
                     ? 'bg-[#444] text-white'
                     : 'text-gray-400 hover:text-white hover:bg-[#333]'}"
-                on:click={() => sidebarTab = 'chats'}
+                on:click={() => (sidebarTab = "chats")}
             >
                 🏠 채팅
             </button>
             <button
-                class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors {sidebarTab === 'favorites'
+                class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors {sidebarTab ===
+                'favorites'
                     ? 'bg-[#444] text-white'
                     : 'text-gray-400 hover:text-white hover:bg-[#333]'}"
-                on:click={() => sidebarTab = 'favorites'}
+                on:click={() => (sidebarTab = "favorites")}
             >
                 ⭐ Favorites
             </button>
         </div>
 
         <div class="px-4 mb-2">
-            <SearchBar 
+            <SearchBar
                 bind:value={searchQuery}
-                placeholder={sidebarTab === 'chats' ? '채팅 검색...' : 'Favorites 검색...'}
-                onClear={() => searchQuery = ''}
+                placeholder={sidebarTab === "chats"
+                    ? "채팅 검색..."
+                    : "Favorites 검색..."}
+                onClear={() => (searchQuery = "")}
             />
         </div>
 
-        {#if sidebarTab === 'favorites'}
+        {#if sidebarTab === "favorites"}
             <div class="px-4 mb-2 flex gap-1">
                 <button
-                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter === 'all'
+                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter ===
+                    'all'
                         ? 'bg-indigo-500 text-white'
                         : 'bg-[#333] text-gray-400 hover:text-white'}"
-                    on:click={() => favoritesFilter = 'all'}
+                    on:click={() => (favoritesFilter = "all")}
                 >
                     모두
                 </button>
                 <button
-                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter === 'bookmarks'
+                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter ===
+                    'bookmarks'
                         ? 'bg-indigo-500 text-white'
                         : 'bg-[#333] text-gray-400 hover:text-white'}"
-                    on:click={() => favoritesFilter = 'bookmarks'}
+                    on:click={() => (favoritesFilter = "bookmarks")}
                 >
                     북마크
                 </button>
                 <button
-                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter === 'likes'
+                    class="flex-1 py-1 px-2 rounded text-xs transition-colors {favoritesFilter ===
+                    'likes'
                         ? 'bg-indigo-500 text-white'
                         : 'bg-[#333] text-gray-400 hover:text-white'}"
-                    on:click={() => favoritesFilter = 'likes'}
+                    on:click={() => (favoritesFilter = "likes")}
                 >
                     좋아요
                 </button>
@@ -421,7 +438,7 @@
         {/if}
 
         <nav class="flex-grow overflow-y-auto px-2 space-y-1 custom-scrollbar">
-            {#if sidebarTab === 'chats'}
+            {#if sidebarTab === "chats"}
                 {#each filteredChats as chat (chat.id)}
                     <div class="relative group">
                         <button
@@ -438,7 +455,9 @@
                                 {formatDate(chat.timestamp)}
                             </div>
                         </button>
-                        <div class="absolute right-0 top-0 bottom-0 flex items-center">
+                        <div
+                            class="absolute right-0 top-0 bottom-0 flex items-center"
+                        >
                             <button
                                 class="w-12 h-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all rounded-r-lg"
                                 on:click={(e) => deleteChat(chat.id, e)}
@@ -461,16 +480,21 @@
                     </div>
                 {/each}
             {:else}
-                {#each filteredFavorites as item (item.type === 'bookmark' ? item.data.id : item.data.id)}
-                    {#if item.type === 'bookmark'}
+                {#each filteredFavorites as item (item.type === "bookmark" ? item.data.id : item.data.id)}
+                    {#if item.type === "bookmark"}
                         <div class="relative group">
                             <button
                                 class="w-full text-left rounded-lg p-3 text-sm hover:bg-[#333] transition-colors flex items-start gap-2"
                                 on:click={() => loadChat(item.data)}
                             >
-                                <span class="text-yellow-400 text-sm flex-shrink-0">📌</span>
+                                <span
+                                    class="text-yellow-400 text-sm flex-shrink-0"
+                                    >📌</span
+                                >
                                 <div class="flex-1 min-w-0">
-                                    <div class="font-medium text-white truncate">
+                                    <div
+                                        class="font-medium text-white truncate"
+                                    >
                                         {item.data.title}
                                     </div>
                                     <div class="text-xs text-gray-400 mt-1">
@@ -485,10 +509,14 @@
                                 class="w-full text-left rounded-lg p-3 text-sm hover:bg-[#333] transition-colors flex items-start gap-2"
                                 on:click={() => loadLikedCard(item.data)}
                             >
-                                <span class="text-red-400 text-sm flex-shrink-0">❤️</span>
+                                <span class="text-red-400 text-sm flex-shrink-0"
+                                    >❤️</span
+                                >
                                 <div class="flex-1 min-w-0">
-                                    <div class="font-medium text-white truncate">
-                                        {item.data.card.title || '카드'}
+                                    <div
+                                        class="font-medium text-white truncate"
+                                    >
+                                        {item.data.card.title || "카드"}
                                     </div>
                                     <div class="text-xs text-gray-400 mt-1">
                                         {formatDate(item.data.timestamp)}
@@ -525,23 +553,31 @@
                 on:click={() => (isSidebarOpen = !isSidebarOpen)}
                 ><span class="text-2xl">☰</span></button
             >
-            
+
             <div class="flex-1 flex items-center justify-center">
-                <div class="mx-auto max-w-[800px] w-full flex items-center justify-between px-4">
+                <div
+                    class="mx-auto max-w-[800px] w-full flex items-center justify-between px-4"
+                >
                     <div></div>
-                    <h2 class="text-lg font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent">
+                    <h2
+                        class="text-lg font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent"
+                    >
                         제주 여행 AI 어시스턴트
                     </h2>
                     <button
-                        class="p-2 rounded-lg hover:bg-gray-100 transition-colors {sessionId ? '' : 'opacity-50 cursor-not-allowed'}"
+                        class="p-2 rounded-lg hover:bg-gray-100 transition-colors {sessionId
+                            ? ''
+                            : 'opacity-50 cursor-not-allowed'}"
                         on:click={() => sessionId && toggleBookmark(sessionId)}
                         disabled={!sessionId}
-                        title={isBookmarked ? '북마크 해제' : '북마크'}
+                        title={isBookmarked ? "북마크 해제" : "북마크"}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="w-6 h-6 transition-colors {isBookmarked ? 'text-yellow-400' : 'text-gray-400'}"
-                            fill={isBookmarked ? 'currentColor' : 'none'}
+                            class="w-6 h-6 transition-colors {isBookmarked
+                                ? 'text-yellow-400'
+                                : 'text-gray-400'}"
+                            fill={isBookmarked ? "currentColor" : "none"}
                             viewBox="0 0 24 24"
                             stroke="currentColor"
                             stroke-width="2"
@@ -555,7 +591,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <div class="md:hidden"></div>
         </header>
 
@@ -563,7 +599,7 @@
             bind:this={chatContainer}
             class="flex-1 overflow-y-auto custom-scrollbar"
         >
-            <div class="mx-auto max-w-[800px] p-5 md:py-10 space-y-6">
+            <div class="mx-auto max-w-[800px] p-5 pt-2 md:py-10 space-y-6">
                 {#each messages as message, i (i)}
                     {#if message.type === "text"}
                         <ChatMessage
@@ -639,7 +675,10 @@
                                             ? 9999
                                             : baseZ}
                                         {@const cardId = `${sessionId}-${i}-${cardIdx}`}
-                                        {@const isLiked = $favorites.likedCards.some(item => item.id === cardId)}
+                                        {@const isLiked =
+                                            $favorites.likedCards.some(
+                                                (item) => item.id === cardId,
+                                            )}
 
                                         <div
                                             class="absolute transition-all duration-500 ease-out"
@@ -669,7 +708,8 @@
                                                     (hoveredCard = null)}
                                                 showFavorite={true}
                                                 {isLiked}
-                                                onFavoriteClick={() => toggleLike(i, cardIdx)}
+                                                onFavoriteClick={() =>
+                                                    toggleLike(i, cardIdx)}
                                             />
                                         </div>
                                     {/each}
@@ -744,7 +784,7 @@
     {@const totalCards = message?.cards?.length || 0}
     {@const currentIdx = expandedCard.cardIdx}
     {@const cardId = `${sessionId}-${expandedCard.messageIdx}-${expandedCard.cardIdx}`}
-    {@const isLiked = $favorites.likedCards.some(item => item.id === cardId)}
+    {@const isLiked = $favorites.likedCards.some((item) => item.id === cardId)}
 
     <div
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in"
@@ -769,14 +809,20 @@
                     >
                 </button>
 
-                <div class="w-[500px] h-[500px] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden">
+                <div
+                    class="w-[500px] h-[500px] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden"
+                >
                     <CardWrapper
                         card={expandedCard.card}
                         isCompact={false}
                         isModal={true}
                         showFavorite={true}
                         {isLiked}
-                        onFavoriteClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
+                        onFavoriteClick={() =>
+                            toggleLike(
+                                expandedCard.messageIdx,
+                                expandedCard.cardIdx,
+                            )}
                     />
                 </div>
 
