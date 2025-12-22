@@ -9,10 +9,10 @@
     import NavigationCard from "../components/cards/NavigationCard.svelte";
     import SearchBar from "../components/SearchBar.svelte";
     import FavoriteButton from "../components/FavoriteButton.svelte";
-    import SkeletonCard from "../components/cards/SkeletonCard.svelte";
     import { allSuggestions } from "../constants/suggestions.js";
     import { sendMessage as apiSendMessage } from "../lib/api.js";
     import { favorites } from "../stores/favorites.js";
+    import LoadingSpinner from "../components/LoadingSpinner.svelte";
 
     export let goTo;
 
@@ -836,6 +836,7 @@
             bind:this={chatContainer}
             class="flex-1 overflow-y-auto custom-scrollbar"
         >
+            <!-- 렌더링 부분 수정 -->
             <div class="mx-auto max-w-[800px] p-5 pb-3 md:py-10 space-y-6">
                 {#each messages as message, i (i)}
                     {#if message.type === "text"}
@@ -845,9 +846,9 @@
                             disabled={isLoading}
                         />
                     {:else if message.type === "loading"}
-                        <div class="fade-in-up">
+                        <div class="fade-in-up flex items-start gap-3">
                             <div
-                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0 mb-3"
+                                class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0"
                             >
                                 <img
                                     src="/images/mascot.png"
@@ -855,57 +856,14 @@
                                     class="w-8 h-8 object-contain"
                                 />
                             </div>
-                            <div class="w-full overflow-hidden">
-                                <!-- 네비게이션 버튼 (비활성화) -->
-                                <div
-                                    class="flex items-center justify-between mb-4"
-                                >
-                                    <button
-                                        class="w-10 h-10 bg-gray-200 rounded-full shadow-lg flex items-center justify-center opacity-50 cursor-not-allowed"
-                                        disabled
-                                    >
-                                        <span class="text-gray-400 font-bold"
-                                            >←</span
-                                        >
-                                    </button>
-                                    <div
-                                        class="text-sm text-gray-400 font-medium"
-                                    >
-                                        로딩 중...
-                                    </div>
-                                    <button
-                                        class="w-10 h-10 bg-gray-200 rounded-full shadow-lg flex items-center justify-center opacity-50 cursor-not-allowed"
-                                        disabled
-                                    >
-                                        <span class="text-gray-400 font-bold"
-                                            >→</span
-                                        >
-                                    </button>
-                                </div>
-                                <!-- 3개의 스켈레톤 카드 -->
-                                <div class="relative h-[420px] overflow-hidden">
-                                    {#each [0, 1, 2] as idx}
-                                        {@const offset = (idx - 1) * 252}
-                                        {@const zIndex = 3 - Math.abs(idx - 1)}
-                                        <div
-                                            class="absolute transition-all duration-500 ease-out"
-                                            style="left: {offset}px; z-index: {zIndex};"
-                                        >
-                                            <CardWrapper
-                                                isSkeleton={true}
-                                                isCompact={true}
-                                                isActive={idx === 1}
-                                            />
-                                        </div>
-                                    {/each}
-                                </div>
-                            </div>
+                            <LoadingSpinner />
                         </div>
                     {:else if message.type === "cards"}
                         {@const activeIdx = currentCardIndex[i] || 0}
                         {@const recommendation = getRecommendationFromMessage(
                             message.cards,
                         )}
+
                         <div class="fade-in-up">
                             <div
                                 class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-cyan-100 flex-shrink-0 mb-3"
@@ -1009,14 +967,6 @@
             class="bg-white p-5 pt-3 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] flex-shrink-0"
         >
             <div class="mx-auto max-w-[800px] relative">
-                {#if isLoading}<div
-                        class="absolute top-0 left-0 right-0 -mt-8 text-center"
-                    >
-                        <span class="text-sm text-gray-500"
-                            >AI가 응답하는 중입니다...</span
-                        >
-                    </div>{/if}
-
                 <div
                     class="flex rounded-xl border {isLoading
                         ? 'border-gray-300 bg-gray-50'
