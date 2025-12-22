@@ -137,7 +137,11 @@
         currentCardIndex = { ...chat.cardIndex };
         isSidebarOpen = false;
         sidebarTab = "chats";
-        setTimeout(() => scrollToBottom(), 100);
+        setTimeout(() => {
+            if (chatContainer) {
+                chatContainer.scrollTop = 0;
+            }
+        }, 100);
     }
 
     function startNewChat() {
@@ -420,9 +424,38 @@
 
     function loadLikedCard(item) {
         const chat = chatHistory.find((c) => c.id === item.threadId);
-        if (chat) {
-            loadChat(chat);
+        if (!chat) return;
+        
+        // cardId는 "sessionId-messageIdx-cardIdx" 형식
+        const parts = item.id.split('-');
+        // sessionId는 "chat-timestamp-random" 형식이므로 마지막 2개 요소가 인덱스
+        const cardIdx = parseInt(parts[parts.length - 1]);
+        const messageIdx = parseInt(parts[parts.length - 2]);
+        
+        // 대화 로드
+        sessionId = chat.id;
+        messages = [...chat.messages];
+        currentCardIndex = { ...chat.cardIndex };
+        
+        // 해당 카드로 네비게이션
+        if (!isNaN(messageIdx) && !isNaN(cardIdx)) {
+            currentCardIndex[messageIdx] = cardIdx;
         }
+        
+        isSidebarOpen = false;
+        
+        // 해당 메시지로 스크롤
+        setTimeout(() => {
+            if (chatContainer) {
+                const messageElements = chatContainer.querySelectorAll('.fade-in-up');
+                if (messageElements[messageIdx]) {
+                    messageElements[messageIdx].scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }
+            }
+        }, 100);
     }
 
     $: isBookmarked = sessionId
