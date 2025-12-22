@@ -43,6 +43,17 @@
         const shuffled = [...allSuggestions].sort(() => 0.5 - Math.random());
         return shuffled.slice(0, count);
     }
+    function getRandomGreeting() {
+        const greetings = [
+            "안녕하세요! 제주숨곳 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+            "반갑습니다! 제주의 숨은 명소를 찾아주는 백록이에요.\n현지인만 아는 특별한 장소들을 소개해드릴게요.\n어떤 여행지가 궁금하신가요?",
+            "안녕하세요! 백록이입니다.\n관광객들이 잘 모르는 매력적인 곳들을 알려드릴게요.\n어디로 떠나보실래요?",
+            "제주숨곳 AI 백록이입니다!\n남들이 모르는 제주의 진짜 매력을 보여드릴게요.\n어느 지역이 궁금하신가요?",
+            "환영합니다! 제주의 숨겨진 이야기를 들려주는 백록이에요.\n가이드북에 없는 특별한 장소들을 추천해드릴게요.\n어떤 곳을 찾고 계신가요?",
+        ];
+
+        return greetings[Math.floor(Math.random() * greetings.length)];
+    }
 
     onMount(() => {
         loadChatHistory();
@@ -50,8 +61,7 @@
             {
                 type: "text",
                 role: "assistant",
-                content:
-                    "안녕하세요! 제주숙곡 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                content: getRandomGreeting(),
                 suggestions: getRandomSuggestions(3),
             },
         ];
@@ -160,8 +170,7 @@
             {
                 type: "text",
                 role: "assistant",
-                content:
-                    "안녕하세요! 제주숙곡 AI 백록이입니다.\n많이 알려지지 않은 유니크한 제주 여행지를 추천해드릴게요.\n어느곳을 방문해보고 싶으신가요?",
+                content: getRandomGreeting(),
                 suggestions: getRandomSuggestions(3),
             },
         ];
