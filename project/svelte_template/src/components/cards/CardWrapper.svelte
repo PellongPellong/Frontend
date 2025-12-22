@@ -14,10 +14,10 @@
     export let onMouseEnter = () => {};
     export let onMouseLeave = () => {};
     
-    // For favorites
-    export let cardId = null;
-    export let threadId = null;
-    export let threadTitle = '';
+    // Favorite props
+    export let showFavorite = false;
+    export let isLiked = false;
+    export let onFavoriteClick = () => {};
 </script>
 
 <div 
@@ -28,10 +28,14 @@
     role="button"
     tabindex="0"
 >
-    <!-- Favorite Button (top-right corner) -->
-    {#if cardId && threadId}
-        <div class="absolute top-4 right-4 z-10">
-            <FavoriteButton {cardId} {card} {threadId} {threadTitle} compact={true} />
+    <!-- Favorite Button (카드 내부에 포함) -->
+    {#if showFavorite}
+        <div class="absolute top-3 right-3 z-10">
+            <FavoriteButton 
+                {isLiked}
+                onClick={onFavoriteClick}
+                size="sm"
+            />
         </div>
     {/if}
 
