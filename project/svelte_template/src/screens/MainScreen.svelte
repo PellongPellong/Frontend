@@ -317,6 +317,8 @@
             loadChat(chat);
         }
     }
+
+    $: isBookmarked = sessionId ? $favorites.bookmarkedThreads.includes(sessionId) : false;
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
@@ -403,7 +405,7 @@
                 {#each filteredChats as chat (chat.id)}
                     <div class="relative group">
                         <button
-                            class="w-full text-left rounded-lg p-3 pr-20 text-sm hover:bg-[#333] transition-colors {sessionId ===
+                            class="w-full text-left rounded-lg p-3 pr-12 text-sm hover:bg-[#333] transition-colors {sessionId ===
                             chat.id
                                 ? 'bg-[#333]'
                                 : ''}"
@@ -418,16 +420,7 @@
                         </button>
                         <div class="absolute right-0 top-0 bottom-0 flex items-center">
                             <button
-                                class="w-10 h-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-yellow-500/20 transition-all"
-                                on:click={(e) => { e.stopPropagation(); toggleBookmark(chat.id); }}
-                                title={$favorites.bookmarkedThreads.includes(chat.id) ? '북마크 해제' : '북마크'}
-                            >
-                                <span class="text-lg {$favorites.bookmarkedThreads.includes(chat.id) ? 'text-yellow-400' : 'text-gray-500'}">
-                                    {$favorites.bookmarkedThreads.includes(chat.id) ? '📌' : '📍'}
-                                </span>
-                            </button>
-                            <button
-                                class="w-10 h-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all rounded-r-lg"
+                                class="w-12 h-full flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all rounded-r-lg"
                                 on:click={(e) => deleteChat(chat.id, e)}
                                 title="삭제"
                             >
@@ -512,12 +505,28 @@
                 on:click={() => (isSidebarOpen = !isSidebarOpen)}
                 ><span class="text-2xl">☰</span></button
             >
-            <h2
-                class="absolute left-1/2 -translate-x-1/2 text-lg font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent"
-            >
-                제주 여행 AI 어시스턴트
-            </h2>
-            <div></div>
+            
+            <!-- 헤더 컨텐트: 제목 + 북마크 버튼 -->
+            <div class="flex-1 flex items-center justify-center">
+                <div class="mx-auto max-w-[800px] w-full flex items-center justify-between px-4">
+                    <div></div>
+                    <h2 class="text-lg font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 bg-clip-text text-transparent">
+                        제주 여행 AI 어시스턴트
+                    </h2>
+                    <button
+                        class="p-2 rounded-lg hover:bg-gray-100 transition-colors {sessionId ? '' : 'opacity-50 cursor-not-allowed'}"
+                        on:click={() => sessionId && toggleBookmark(sessionId)}
+                        disabled={!sessionId}
+                        title={isBookmarked ? '북마크 해제' : '북마크'}
+                    >
+                        <span class="text-2xl {isBookmarked ? 'text-yellow-400' : 'text-gray-400'}">
+                            {isBookmarked ? '📌' : '📍'}
+                        </span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="md:hidden"></div>
         </header>
 
         <div
