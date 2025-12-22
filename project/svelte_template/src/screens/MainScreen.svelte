@@ -724,51 +724,25 @@
             <div class="relative flex flex-col items-center">
                 <button
                     on:click={closeCardModal}
-                    class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center transition hover:bg-gray-100 rounded-lg"
+                    class="absolute -top-12 right-0 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition"
                 >
-                    <span class="text-3xl text-gray-600 hover:text-gray-900"
+                    <span class="text-2xl text-gray-600 hover:text-gray-900"
                         >×</span
                     >
                 </button>
 
-                <div
-                    class="w-[500px] h-[500px] overflow-y-auto modal-scrollbar flex flex-col p-8 bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in"
-                >
-                    {#if expandedCard.card.type === "status"}
-                        <StatusCard
-                            card={expandedCard.card}
-                            isCompact={false}
-                        />
-                    {:else if expandedCard.card.type === "recommendation"}
-                        <RecommendationCard
-                            card={expandedCard.card}
-                            isCompact={false}
-                        />
-                    {:else if expandedCard.card.type === "places"}
-                        <PlacesCard
-                            card={expandedCard.card}
-                            isCompact={false}
-                        />
-                    {:else if expandedCard.card.type === "coupon"}
-                        <CouponCard
-                            card={expandedCard.card}
-                            isCompact={false}
-                        />
-                    {:else if expandedCard.card.type === "navigation"}
-                        <NavigationCard
-                            card={expandedCard.card}
-                            isCompact={false}
-                        />
-                    {/if}
+                <div class="w-[500px] h-[500px] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden">
+                    <CardWrapper
+                        card={expandedCard.card}
+                        isCompact={false}
+                        isModal={true}
+                        showFavorite={true}
+                        {isLiked}
+                        onFavoriteClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
+                    />
                 </div>
 
-                <!-- 모달 하단에 좋아요 버튼 배치 -->
-                <div class="mt-4 flex items-center gap-4">
-                    <FavoriteButton 
-                        isLiked={isLiked}
-                        onClick={() => toggleLike(expandedCard.messageIdx, expandedCard.cardIdx)}
-                        size="lg"
-                    />
+                <div class="mt-4">
                     <div
                         class="text-sm text-white font-medium bg-black/50 px-4 py-2 rounded-full"
                     >
