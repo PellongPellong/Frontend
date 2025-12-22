@@ -14,6 +14,7 @@
     export let onClick = () => {};
     export let onMouseEnter = () => {};
     export let onMouseLeave = () => {};
+    export let onClose = () => {}; // 모달 닫기 함수
 
     // Favorite props
     export let showFavorite = false;
@@ -30,7 +31,16 @@
 
 {#if isModal}
     <!-- 모달 모드: 간소화된 구조 -->
-    <div class="w-full h-full flex flex-col bg-white">
+    <div class="w-full h-full flex flex-col bg-white relative">
+        <!-- 닫기 버튼 -->
+        <button
+            on:click={onClose}
+            class="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition"
+            aria-label="닫기"
+        >
+            <span class="text-2xl text-gray-600 hover:text-gray-900">×</span>
+        </button>
+
         <!-- 내부 컨텐츠 (스크롤 가능) -->
         <div class="flex-1 overflow-y-auto p-6 modal-scrollbar">
             {#if isSkeleton}
