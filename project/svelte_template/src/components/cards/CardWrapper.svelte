@@ -41,7 +41,7 @@
     {/if}
 
     <!-- 카드 내용 -->
-    <div class="{isModal ? 'flex-1 overflow-y-auto' : ''}">
+    <div class="{isModal ? 'flex-1 overflow-y-auto' : 'flex-1'}">
         {#if card.type === 'status'}
             <StatusCard {card} {isCompact} />
         {:else if card.type === 'recommendation'}
@@ -54,6 +54,13 @@
             <NavigationCard {card} {isCompact} />
         {/if}
     </div>
+
+    <!-- 클릭하여 자세히 보기 텍스트 (Compact 모드일 때만) -->
+    {#if isCompact && !isModal}
+        <span class="block mt-[1.5px] text-center text-xs text-gray-500">
+            클릭하여 자세히 보기
+        </span>
+    {/if}
 
     <!-- 모달 모드: 하단에 하트 버튼 -->
     {#if showFavorite && isModal}
