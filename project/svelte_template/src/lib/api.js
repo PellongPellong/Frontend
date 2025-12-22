@@ -24,28 +24,43 @@ const FALLBACK_RESPONSE = {
                     { time: "22:00", congestion: 3 },
                     { time: "23:00", congestion: 5 }
                 ],
-                coordinate: null
+                coordinate: {
+                    lat: 33.4645,
+                    lng: 126.9418
+                }
             },
             recommendation: {
                 locationName: "김녕",
                 story: "김녕은 조선시대에 무엇인가가 있었던 곳으로 유명합니다.",
-                coordinate: null
+                coordinate: {
+                    lat: 33.5569,
+                    lng: 126.7594
+                }
             },
             around: [
                 {
                     name: "고등어 식당",
                     reason: "고등어가 맛있어요, 별점도 높아요",
-                    coordinate: null
+                    coordinate: {
+                        lat: 33.5573,
+                        lng: 126.7602
+                    }
                 },
                 {
-                    name: "흑돼지 식당",
+                    name: "흙돼지 식당",
                     reason: "제주에 왔으면 한번 먹어야죠",
-                    coordinate: null
+                    coordinate: {
+                        lat: 33.5565,
+                        lng: 126.7585
+                    }
                 },
                 {
                     name: "김녕카페",
                     reason: "아이스아메리카노 맛집",
-                    coordinate: null
+                    coordinate: {
+                        lat: 33.5580,
+                        lng: 126.7610
+                    }
                 }
             ],
             coupons: [
