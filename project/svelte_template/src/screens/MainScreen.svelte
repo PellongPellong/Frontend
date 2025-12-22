@@ -391,7 +391,7 @@
             return `${recommendationName}에 방문해보세요`;
         } else if (card.type === "places") {
             // "김녕 관련 주변 명소"
-            return `${recommendationName} 관련 주변 명소`;
+            return `${recommendationName} 주변 명소`;
         } else if (card.type === "navigation") {
             // "성산에서 김녕까지 가는 길"
             return `${recommendationName}에 가는 길`;
