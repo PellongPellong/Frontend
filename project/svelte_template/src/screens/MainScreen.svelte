@@ -1090,13 +1090,6 @@
             class="relative flex-1 flex flex-col items-center w-full max-w-[520px]"
             on:click|stopPropagation
         >
-            <button
-                on:click={closeCardModalMobile}
-                class="absolute -top-10 right-2 z-10 w-9 h-9 flex items-center justify-center bg-white rounded-full shadow-lg hover:bg-gray-100 transition"
-            >
-                <span class="text-xl text-gray-600 hover:text-gray-900">×</span>
-            </button>
-
             <div
                 class="w-full h-[80vh] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden relative"
                 on:touchstart={handleTouchStart}
