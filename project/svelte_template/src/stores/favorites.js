@@ -1,30 +1,25 @@
-import { writable } from 'svelte';
+import { writable } from 'svelte/store';
 
-const STORAGE_KEY = 'jeju-favorites';
+const FAVORITES_KEY = 'jeju-favorites';
 
 function createFavoritesStore() {
-    // Load from localStorage
+    // localStorage에서 초기 데이터 로드
     const loadFromStorage = () => {
         try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                return JSON.parse(saved);
-            }
+            const saved = localStorage.getItem(FAVORITES_KEY);
+            return saved ? JSON.parse(saved) : { bookmarkedThreads: [], likedCards: [] };
         } catch (e) {
             console.error('Failed to load favorites:', e);
+            return { bookmarkedThreads: [], likedCards: [] };
         }
-        return {
-            bookmarkedThreads: [],
-            likedCards: []
-        };
     };
 
-    const { subscribe, set, update } = writable(loadFromStorage());
+    const { subscribe, update } = writable(loadFromStorage());
 
-    // Save to localStorage
-    const saveToStorage = (state) => {
+    // localStorage에 저장
+    const saveToStorage = (data) => {
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            localStorage.setItem(FAVORITES_KEY, JSON.stringify(data));
         } catch (e) {
             console.error('Failed to save favorites:', e);
         }
@@ -32,80 +27,65 @@ function createFavoritesStore() {
 
     return {
         subscribe,
-        
-        // Bookmark thread
+
+        // 스레드 북마크 토글
         toggleBookmark: (threadId) => {
             update(state => {
                 const isBookmarked = state.bookmarkedThreads.includes(threadId);
-                const newState = {
-                    ...state,
-                    bookmarkedThreads: isBookmarked
-                        ? state.bookmarkedThreads.filter(id => id !== threadId)
-                        : [...state.bookmarkedThreads, threadId]
-                };
+                const newBookmarks = isBookmarked
+                    ? state.bookmarkedThreads.filter(id => id !== threadId)
+                    : [...state.bookmarkedThreads, threadId];
+                
+                const newState = { ...state, bookmarkedThreads: newBookmarks };
                 saveToStorage(newState);
                 return newState;
             });
         },
 
+        // 카드 좋아요 토글
+        toggleLike: (cardId, cardData, threadId) => {
+            update(state => {
+                const existingIndex = state.likedCards.findIndex(item => item.id === cardId);
+                let newLikedCards;
+
+                if (existingIndex >= 0) {
+                    // 이미 좋아요한 카드면 제거
+                    newLikedCards = state.likedCards.filter(item => item.id !== cardId);
+                } else {
+                    // 새로 좋아요
+                    newLikedCards = [
+                        {
+                            id: cardId,
+                            card: cardData,
+                            timestamp: new Date().toISOString(),
+                            threadId: threadId
+                        },
+                        ...state.likedCards
+                    ];
+                }
+
+                const newState = { ...state, likedCards: newLikedCards };
+                saveToStorage(newState);
+                return newState;
+            });
+        },
+
+        // 북마크 확인
         isBookmarked: (threadId, currentState) => {
             return currentState.bookmarkedThreads.includes(threadId);
         },
 
-        // Like card
-        toggleLike: (cardId, card, threadId, threadTitle) => {
-            update(state => {
-                const existingIndex = state.likedCards.findIndex(c => c.id === cardId);
-                let newLikedCards;
-                
-                if (existingIndex >= 0) {
-                    // Remove like
-                    newLikedCards = state.likedCards.filter(c => c.id !== cardId);
-                } else {
-                    // Add like
-                    newLikedCards = [
-                        ...state.likedCards,
-                        {
-                            id: cardId,
-                            card,
-                            threadId,
-                            threadTitle,
-                            timestamp: new Date().toISOString()
-                        }
-                    ];
-                }
-                
-                const newState = {
-                    ...state,
-                    likedCards: newLikedCards
-                };
-                saveToStorage(newState);
-                return newState;
-            });
-        },
-
+        // 좋아요 확인
         isLiked: (cardId, currentState) => {
-            return currentState.likedCards.some(c => c.id === cardId);
+            return currentState.likedCards.some(item => item.id === cardId);
         },
 
-        // Remove bookmark when thread is deleted
-        removeBookmark: (threadId) => {
+        // 스레드 삭제 시 관련 데이터 정리
+        removeThread: (threadId) => {
             update(state => {
                 const newState = {
-                    ...state,
-                    bookmarkedThreads: state.bookmarkedThreads.filter(id => id !== threadId)
-                };
-                saveToStorage(newState);
-                return newState;
-            });
-        },
-
-        // Remove liked cards from deleted thread
-        removeLikedCardsFromThread: (threadId) => {
-            update(state => {
-                const newState = {
-                    ...state,
-                    likedCards: state.likedCards.filter(c => c.threadId !== threadId)
+                    bookmarkedThreads: state.bookmarkedThreads.filter(id => id !== threadId),
+                    likedCards: state.likedCards.filter(item => item.threadId !== threadId)
                 };
                 saveToStorage(newState);
                 return newState;
