@@ -4,10 +4,11 @@
     export let card;
     export let isCompact = true;
 
-    const mockDestination = {
+    // card prop에서 직접 데이터 추출 (하드코딩된 fallback 제거)
+    const destination = {
         name: card.placeName || "목적지",
-        lat: card.lat || 33.450701,
-        lng: card.lng || 126.570667,
+        lat: card.lat,
+        lng: card.lng,
     };
 
     // 주변 장소들 (card.additionalPlaces에서 가져옴)
@@ -21,6 +22,9 @@
     let isLoading = true;
     let mapContainer;
     let map;
+
+    // 좌표 유효성 검사
+    const hasValidCoordinates = destination.lat && destination.lng;
 
     // 카카오맵 SDK 로드
     function loadKakaoMapScript() {
@@ -135,13 +139,13 @@
 
     // 카카오맵 초기화 및 경로 표시
     async function initializeMap() {
-        if (!mapContainer || !userLocation) return;
+        if (!mapContainer || !userLocation || !hasValidCoordinates) return;
 
         const kakao = window.kakao;
 
         // 중간 지점 계산
-        const centerLat = (userLocation.lat + mockDestination.lat) / 2;
-        const centerLng = (userLocation.lng + mockDestination.lng) / 2;
+        const centerLat = (userLocation.lat + destination.lat) / 2;
+        const centerLng = (userLocation.lng + destination.lng) / 2;
 
         const mapOption = {
             center: new kakao.maps.LatLng(centerLat, centerLng),
@@ -164,14 +168,14 @@
         // 목적지 마커 (기본 레드)
         const endMarker = new kakao.maps.Marker({
             position: new kakao.maps.LatLng(
-                mockDestination.lat,
-                mockDestination.lng,
+                destination.lat,
+                destination.lng,
             ),
             map: map,
         });
 
         const endInfowindow = new kakao.maps.InfoWindow({
-            content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${mockDestination.name}</div>`,
+            content: `<div style="padding:5px;font-size:12px;font-weight:bold;">${destination.name}</div>`,
             zIndex: 1,
         });
         endInfowindow.open(map, endMarker);
@@ -212,8 +216,8 @@
         const routeData = await getCarRoute(
             userLocation.lat,
             userLocation.lng,
-            mockDestination.lat,
-            mockDestination.lng,
+            destination.lat,
+            destination.lng,
         );
 
         let linePath;
@@ -226,7 +230,7 @@
             // 폴백: 직선 경로
             linePath = [
                 new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
-                new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng),
+                new kakao.maps.LatLng(destination.lat, destination.lng),
             ];
         }
 
@@ -246,7 +250,7 @@
             new kakao.maps.LatLng(userLocation.lat, userLocation.lng),
         );
         bounds.extend(
-            new kakao.maps.LatLng(mockDestination.lat, mockDestination.lng),
+            new kakao.maps.LatLng(destination.lat, destination.lng),
         );
 
         // 주변 장소들도 bounds에 포함
@@ -259,6 +263,13 @@
 
     // 길찾기 정보 가져오기
     async function getRouteInfo() {
+        // 좌표가 없으면 에러 처리
+        if (!hasValidCoordinates) {
+            error = "목적지 좌표 정보가 없습니다.";
+            isLoading = false;
+            return;
+        }
+
         try {
             const [location] = await Promise.all([
                 getCurrentLocation(),
@@ -271,8 +282,8 @@
             const dist = calculateDistance(
                 location.lat,
                 location.lng,
-                mockDestination.lat,
-                mockDestination.lng,
+                destination.lat,
+                destination.lng,
             );
 
             distance =
@@ -331,7 +342,7 @@
             </div>
             <div>
                 <h3 class="text-lg font-bold text-gray-800">길찾기</h3>
-                <p class="text-xs text-gray-500">{mockDestination.name}</p>
+                <p class="text-xs text-gray-500">{destination.name}</p>
             </div>
         </div>
     </div>
