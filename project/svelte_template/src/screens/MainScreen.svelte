@@ -350,6 +350,16 @@
         favorites.toggleLike(cardId, card, sessionId);
     }
 
+    function getCardDisplayTitle(card) {
+        const recommendation = card.recommendation;
+        const title = card.title || "카드";
+        
+        if (recommendation) {
+            return `${recommendation} 관련 ${title}`;
+        }
+        return title;
+    }
+
     $: filteredChats = chatHistory.filter((chat) => {
         if (!searchQuery) return true;
         return chat.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -576,12 +586,12 @@
                                     <div
                                         class="font-medium text-white truncate"
                                     >
-                                        {item.data.card.title || "카드"}
+                                        {getCardDisplayTitle(item.data.card)}
                                     </div>
                                     <div class="text-xs text-gray-400 mt-1">
                                         {formatDate(item.data.timestamp)}
                                     </div>
-                                </</div>
+                                </div>
                             </button>
                         </div>
                     {/if}
