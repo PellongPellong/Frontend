@@ -6,13 +6,26 @@ const API_URL = "https://d3sy74e1kjyc2m.cloudfront.net/api/chats";
 // 환경 변수로 설정하려면: import.meta.env.VITE_USE_MOCK === 'true'
 const USE_MOCK_DATA = true;
 
+function generateMockSessionId() {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 9);
+    return `mock-${timestamp}-${random}`;
+}
+
 export async function sendMessage(sessionId, message) {
     // Mock 모드 활성화 시
     if (USE_MOCK_DATA) {
         console.log('🧪 Using mock data (test mode)');
         // 실제 API 호출처럼 지연 시뮬레이션
         await new Promise(resolve => setTimeout(resolve, 800));
-        return mockChatResponse;
+        
+        // sessionId가 없으면 새로 생성, 있으면 그대로 유지
+        const finalSessionId = sessionId || generateMockSessionId();
+        
+        return {
+            ...mockChatResponse,
+            sessionId: finalSessionId
+        };
     }
 
     try {
