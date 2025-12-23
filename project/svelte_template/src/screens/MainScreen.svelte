@@ -610,7 +610,55 @@
                         </div>
                     </div>
                 {/each}
+            {:else if filteredFavorites.length === 0}
+                <!-- 북마크가 비어있을 때 안내 문구 -->
+                <div
+                    class="flex flex-col items-center justify-center p-6 pt-10 text-center"
+                >
+                    <div class="space-y-1">
+                        <p class="text-sm text-gray-300 leading-snug">
+                            오른쪽 위의
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                class="w-4 h-4 text-yellow-400 inline align-text-bottom mx-0.5"
+                                fill="none"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                                />
+                            </svg>
+                            로 채팅을
+                        </p>
+                        <p class="text-sm text-gray-300 leading-snug">
+                            카드에 있는
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="w-4 h-4 text-red-400 inline align-text-bottom mx-0.5"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            로 카드를
+                        </p>
+                        <p
+                            class="text-sm text-gray-100 font-medium pt-1 leading-snug"
+                        >
+                            북마크할 수 있어요!
+                        </p>
+                    </div>
+                </div>
             {:else}
+                <!-- 기존 북마크 리스트 -->
                 {#each filteredFavorites as item (item.type === "bookmark" ? item.data.id : item.data.id)}
                     {#if item.type === "bookmark"}
                         <div class="relative group">
@@ -720,6 +768,7 @@
                 {/each}
             {/if}
         </nav>
+
         <div class="p-2 border-t border-[#444]">
             <button
                 class="flex items-center gap-3 rounded-lg p-3 text-sm hover:bg-[#333] transition-colors w-full"
@@ -934,7 +983,8 @@
                                                 {isLiked}
                                                 onFavoriteClick={() =>
                                                     toggleLike(i, cardIdx)}
-                                                onSwipe={(direction) => navigateCard(i, direction)}
+                                                onSwipe={(direction) =>
+                                                    navigateCard(i, direction)}
                                             />
                                         </div>
                                     {/each}
@@ -1076,7 +1126,7 @@
         >
             <div
                 class="w-full h-[80vh] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden relative"
-
+            >
                 <div class="absolute inset-0 overflow-hidden">
                     <CardWrapper
                         onClose={closeCardModalMobile}
