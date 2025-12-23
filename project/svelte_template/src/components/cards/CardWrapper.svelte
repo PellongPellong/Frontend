@@ -16,6 +16,9 @@
     export let onMouseLeave = () => {};
     export let onClose = () => {}; // 모달 닫기 함수
 
+    // Swipe navigation
+    export let onSwipe = null; // (direction: 'left' | 'right') => void
+
     // Favorite props
     export let showFavorite = false;
     export let isLiked = false;
@@ -27,11 +30,45 @@
 
     // PlacesCard에 전달할 recommendation 이름
     export let recommendation = "이 지역";
+
+    // 터치 스와이프 관련
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function handleTouchStart(e) {
+        touchStartX = e.touches[0].clientX;
+        touchEndX = touchStartX;
+    }
+
+    function handleTouchMove(e) {
+        touchEndX = e.touches[0].clientX;
+    }
+
+    function handleTouchEnd() {
+        const diff = touchEndX - touchStartX;
+        const threshold = 40;
+
+        if (Math.abs(diff) > threshold && onSwipe) {
+            if (diff < 0) {
+                onSwipe("right");
+            } else {
+                onSwipe("left");
+            }
+        }
+
+        touchStartX = 0;
+        touchEndX = 0;
+    }
 </script>
 
 {#if isModal}
     <!-- 모달 모드: 간소화된 구조 -->
-    <div class="w-full h-full flex flex-col bg-white relative">
+    <div 
+        class="w-full h-full flex flex-col bg-white relative"
+        on:touchstart={handleTouchStart}
+        on:touchmove={handleTouchMove}
+        on:touchend={handleTouchEnd}
+    >
         <!-- 닫기 버튼 -->
         <button
             on:click={onClose}
@@ -97,6 +134,9 @@
             on:click={isSkeleton ? undefined : onClick}
             on:mouseenter={isSkeleton ? undefined : onMouseEnter}
             on:mouseleave={isSkeleton ? undefined : onMouseLeave}
+            on:touchstart={handleTouchStart}
+            on:touchmove={handleTouchMove}
+            on:touchend={handleTouchEnd}
             role="button"
             tabindex="0"
         >
