@@ -13,6 +13,7 @@
     import { sendMessage as apiSendMessage } from "../lib/api.js";
     import { favorites } from "../stores/favorites.js";
     import LoadingSpinner from "../components/LoadingSpinner.svelte";
+    import LocationModal from "../components/LocationModal.svelte";
 
     export let goTo;
 
@@ -27,6 +28,20 @@
     let hoveredCard = null;
     let isSidebarOpen = false;
     let chatHistory = [];
+    let showLocationModal = false;
+    let selectedLocation = null;
+
+    // 랜덤 문구 배열
+    const randomPhrases = [
+        "이 혼잡한지 궁금해",
+        "혼잡한지 확인해줘",
+        "가 붐비려나?",
+        "사람이 많을까?",
+        "지금 혼잡도 어때?",
+        "혼잡할까?",
+        "가볼만할까?",
+        "는 지금 어때?",
+    ];
 
     let sidebarTab = "chats";
     let favoritesFilter = "all";
@@ -50,6 +65,33 @@
         ];
 
         return greetings[Math.floor(Math.random() * greetings.length)];
+    }
+
+    function getRandomPhrase() {
+        return randomPhrases[Math.floor(Math.random() * randomPhrases.length)];
+    }
+
+    function handleTextareaClick(e) {
+        if (isLoading) return;
+
+        e.preventDefault();
+        e.target.blur(); // 키보드 숨김
+        showLocationModal = true;
+    }
+
+    function handleLocationSelect(locationData) {
+        selectedLocation = locationData;
+
+        // 사용자에게 보여줄 자연스러운 문구
+        const displayText = `${locationData.name}${getRandomPhrase()}`;
+        userInput = displayText;
+
+        // 모달 닫기
+        showLocationModal = false;
+    }
+
+    function handleModalClose() {
+        showLocationModal = false;
     }
 
     onMount(() => {
@@ -189,15 +231,16 @@
         });
     }
 
-    async function sendMessage(text = userInput) {
-        if (!text.trim() || isLoading) return;
-        const trimmedText = text.trim();
+    async function sendMessage() {
+        if (!userInput.trim() || isLoading || !selectedLocation) return;
+        const userMessage = userInput.trim();
+        const promptToSend = selectedLocation.item_id;
 
         const isFirstMessage = messages.length === 1;
 
         messages = [
             ...messages,
-            { type: "text", role: "user", content: trimmedText },
+            { type: "text", role: "user", content: userMessage },
         ];
         userInput = "";
         isLoading = true;
@@ -206,7 +249,7 @@
         scrollToBottom();
 
         try {
-            const response = await apiSendMessage(sessionId, trimmedText);
+            const response = await apiSendMessage(sessionId, promptToSend);
             if (response.sessionId) {
                 sessionId = response.sessionId;
             }
@@ -222,10 +265,12 @@
             ];
 
             if (isFirstMessage) {
-                createChatHistory(trimmedText);
+                createChatHistory(userMessage);
             } else {
                 updateChatHistory();
             }
+
+            selectedLocation = null;
         } catch (error) {
             console.error("Error:", error);
             const messagesWithoutLoading = messages.slice(0, -1);
@@ -1007,16 +1052,18 @@
                 >
                     <textarea
                         bind:value={userInput}
+                        on:click={handleTextareaClick}
                         on:keydown={handleKeyDown}
                         class="flex-1 resize-none bg-transparent py-3 pl-4 pr-2 text-base outline-none {isLoading
                             ? 'text-gray-400 cursor-not-allowed'
                             : 'text-gray-900'}"
                         placeholder={isLoading
                             ? "응답을 기다리는 중..."
-                            : "어디로 가고싶으신가요?"}
+                            : "📍 관광지를 선택하세요"}
                         rows="1"
-                        style="max-height: 120px;"
+                        style="max-height: 120px; cursor: pointer;"
                         disabled={isLoading}
+                        readonly
                     />
                     <button
                         on:click={() => sendMessage()}
@@ -1169,6 +1216,10 @@
             </div>
         </div>
     </div>
+{/if}
+
+{#if showLocationModal}
+    <LocationModal onSelect={handleLocationSelect} onClose={handleModalClose} />
 {/if}
 
 <style>
