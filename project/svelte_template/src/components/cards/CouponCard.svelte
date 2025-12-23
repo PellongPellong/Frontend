@@ -1,6 +1,6 @@
 <script>
-    import { onMount } from 'svelte';
-    import JsBarcode from 'jsbarcode';
+    import { onMount, tick } from "svelte";
+    import JsBarcode from "jsbarcode";
 
     export let card;
     export let isCompact = true;
@@ -25,13 +25,16 @@
     const randomMessage =
         couponMessages[Math.floor(Math.random() * couponMessages.length)];
 
+    let canvasRefs = [];
+
     // 바코드 생성 함수
-    function generateBarcodes() {
-        const mode = isCompact ? 'compact' : 'full';
+    async function generateBarcodes() {
+        await tick(); // DOM 업데이트 대기
+
         const coupons = isCompact ? card.coupons.slice(0, 2) : card.coupons;
-        
+
         coupons.forEach((coupon, index) => {
-            const canvas = document.getElementById(`barcode-${mode}-${index}`);
+            const canvas = canvasRefs[index];
             if (canvas) {
                 try {
                     JsBarcode(canvas, coupon.barcode, {
@@ -40,10 +43,10 @@
                         height: isCompact ? 50 : 80,
                         displayValue: false,
                         margin: 5,
-                        background: "#ffffff"
+                        background: "#ffffff",
                     });
                 } catch (error) {
-                    console.error('바코드 생성 실패:', error);
+                    console.error("바코드 생성 실패:", error);
                 }
             }
         });
@@ -57,12 +60,12 @@
     // isCompact 변경 시 바코드 재생성
     $: if (card && isCompact !== undefined) {
         // DOM이 업데이트된 후 바코드 재생성
-        setTimeout(() => generateBarcodes(), 0);
+        generateBarcodes();
     }
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
-            alert('쿠폰 코드가 복사되었습니다!');
+            alert("쿠폰 코드가 복사되었습니다!");
         });
     }
 </script>
@@ -95,9 +98,12 @@
                     </div>
                     <!-- 바코드 -->
                     <div class="bg-white rounded p-2 flex justify-center">
-                        <canvas id="barcode-compact-{index}" class="max-w-full"></canvas>
+                        <canvas bind:this={canvasRefs[index]} class="max-w-full"
+                        ></canvas>
                     </div>
-                    <div class="text-xs text-purple-600 font-mono text-center mt-2">
+                    <div
+                        class="text-xs text-purple-600 font-mono text-center mt-2"
+                    >
                         {coupon.barcode}
                     </div>
                 </div>
@@ -109,24 +115,30 @@
                 <div
                     class="bg-purple-50 rounded-xl p-5 border border-purple-200 cursor-pointer hover:bg-purple-100 transition"
                     on:click={() => copyToClipboard(coupon.barcode)}
-                    on:keydown={(e) => e.key === 'Enter' && copyToClipboard(coupon.barcode)}
+                    on:keydown={(e) =>
+                        e.key === "Enter" && copyToClipboard(coupon.barcode)}
                     role="button"
                     tabindex="0"
                 >
                     <div class="font-bold text-gray-900 text-xl mb-4">
                         {coupon.name}
                     </div>
-                    
+
                     <!-- 바코드 -->
                     <div class="bg-white rounded-lg p-4 flex justify-center">
-                        <canvas id="barcode-full-{index}" class="max-w-full"></canvas>
+                        <canvas bind:this={canvasRefs[index]} class="max-w-full"
+                        ></canvas>
                     </div>
-                    
-                    <div class="text-base text-purple-600 font-mono text-center mt-3">
+
+                    <div
+                        class="text-base text-purple-600 font-mono text-center mt-3"
+                    >
                         {coupon.barcode}
                     </div>
-                    
-                    <div class="text-sm text-gray-500 mt-3 text-center">클릭하여 복사</div>
+
+                    <div class="text-sm text-gray-500 mt-3 text-center">
+                        클릭하여 복사
+                    </div>
                 </div>
             {/each}
         </div>

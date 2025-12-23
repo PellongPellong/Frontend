@@ -70,12 +70,12 @@ function transformResponseToCards(bedrockData) {
             coordinate: status.coordinate || null,
             timeTable: (status.timeTable || []).map(t => ({
                 time: t?.time?.includes(":") ? t.time.split(":")[0] + "시" : (t?.time || ""),
-                congestion: t?.congestion ?? 0
+                congestion: Number(t?.congestion ?? 0)
             }))
         });
     }
 
-    // 2. Recommendation Card
+    // 2. Recommendation Cards
     if (bedrockData.recommendation) {
         const rec = bedrockData.recommendation;
         cards.push({

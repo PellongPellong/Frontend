@@ -2,14 +2,11 @@
     export let card;
     export let isCompact = true;
 
-    const timeTable = card.timeTable || [];
-    const avgLevel =
-        timeTable.length > 0
-            ? Math.round(
-                  timeTable.reduce((sum, slot) => sum + slot.congestion, 0) /
-                      timeTable.length,
-              )
-            : 0;
+    $: timeTable = card.timeTable || [];
+
+    // 평균이 아닌 현재(첫번째) 시간대의 혼잡도로 판단
+    $: currentLevel =
+        timeTable.length > 0 ? Number(timeTable[0].congestion) : 0;
 
     // 혼잡도별 메시지 바리에이션
     const statusMessages = [
@@ -36,21 +33,24 @@
             messages: [
                 "지금은 매우 혼잡하니 다른 시간을 추천해요!",
                 "사람이 너무 많아요... 조금 있다가 다시 오는 게 어떨가요?",
-                "지금은 너무 불비는 시간이에요. 다른 곳은 어떠세요?",
+                "지금은 너무 붐비는 시간이에요. 다른 곳은 어떠세요?",
                 "혼잡도가 최고치네요! 조금 더 여유로운 시간을 기다려볼까요?",
             ],
         },
     ];
 
-    // 랜덤 메시지 선택
-    const getRandomMessage = () => {
-        const category = statusMessages.find((s) => avgLevel <= s.max);
+    // 랜덤 메시지 선택 (Reactive)
+    $: statusText = (() => {
+        if (timeTable.length === 0) return "혼잡도 정보를 확인할 수 없어요.";
+
+        const category = statusMessages.find((s) => currentLevel <= s.max);
         if (!category) return "혼잡도를 확인해보세요!";
         const messages = category.messages;
+        // 메시지가 계속 바뀌는 것을 방지하기 위해 card id나 고정된 시드로 선택하면 좋지만,
+        // 현재는 간단히 랜덤 유지 (Re-render시 바뀔 수 있음) 또는 메모이제이션 필요.
+        // 여기서는 문맥상 Svelte 반응성이면 충분.
         return messages[Math.floor(Math.random() * messages.length)];
-    };
-
-    const statusText = getRandomMessage();
+    })();
 
     let hoveredPoint = null;
 
@@ -61,7 +61,7 @@
     }
 
     // 동적 그라디언트 생성 함수
-    function generateGradientStops() {
+    $: gradientStops = (() => {
         if (timeTable.length === 0) return [];
 
         return timeTable.map((slot, i) => {
@@ -69,9 +69,7 @@
             const color = getColor(slot.congestion);
             return { offset, color };
         });
-    }
-
-    $: gradientStops = generateGradientStops();
+    })();
 </script>
 
 <!-- 백록이 대화 -->
