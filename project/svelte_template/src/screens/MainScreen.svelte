@@ -238,6 +238,7 @@
                     type: "text",
                     role: "assistant",
                     content:
+                        error.message ||
                         "죄송합니다. 오류가 발생했어요. 다시 시도해주세요.",
                 },
             ];
