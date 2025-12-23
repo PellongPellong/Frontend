@@ -33,9 +33,6 @@
     let searchQuery = "";
 
     // 터치 스와이프 관련
-    let touchStartX = 0;
-    let touchEndX = 0;
-
     const STORAGE_KEY = "jeju-chat-history";
     const MAX_HISTORY = 20;
 
@@ -325,31 +322,6 @@
 
     function closeCardModalMobile() {
         expandedCardMobile = null;
-    }
-
-    function handleTouchStart(e) {
-        touchStartX = e.touches[0].clientX;
-        touchEndX = touchStartX;
-    }
-
-    function handleTouchMove(e) {
-        touchEndX = e.touches[0].clientX;
-    }
-
-    function handleTouchEnd() {
-        const diff = touchEndX - touchStartX;
-        const threshold = 40;
-
-        if (Math.abs(diff) > threshold) {
-            if (diff < 0) {
-                navigateModalCardMobile("right");
-            } else {
-                navigateModalCardMobile("left");
-            }
-        }
-
-        touchStartX = 0;
-        touchEndX = 0;
     }
 
     function scrollToBottom() {
@@ -962,6 +934,7 @@
                                                 {isLiked}
                                                 onFavoriteClick={() =>
                                                     toggleLike(i, cardIdx)}
+                                                onSwipe={(direction) => navigateCard(i, direction)}
                                             />
                                         </div>
                                     {/each}
@@ -1061,6 +1034,7 @@
                                 expandedCard.messageIdx,
                                 expandedCard.cardIdx,
                             )}
+                        onSwipe={(direction) => navigateCard(i, direction)}
                     />
                 </div>
 
@@ -1102,10 +1076,7 @@
         >
             <div
                 class="w-full h-[80vh] bg-white border-2 border-gray-200 rounded-3xl shadow-2xl scale-in overflow-hidden relative"
-                on:touchstart={handleTouchStart}
-                on:touchmove={handleTouchMove}
-                on:touchend={handleTouchEnd}
-            >
+
                 <div class="absolute inset-0 overflow-hidden">
                     <CardWrapper
                         onClose={closeCardModalMobile}
